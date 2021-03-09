@@ -1,4 +1,6 @@
 import 'package:bookspace/app_localizations.dart';
+import 'package:bookspace/ui/main_view.dart';
+import 'package:bookspace/ui/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:bookspace/globals.dart' as globals;
@@ -37,7 +39,7 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: globals.primary,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Bookspace app'),
+      home: MainView(),
 
       // All App's supportes locales
       supportedLocales: [
@@ -82,61 +84,6 @@ class _MyAppState extends State<MyApp> {
         _loc = supportedLocales.first;
         return supportedLocales.first;
       },
-
-  
     );
   }
 }
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        backgroundColor: Theme.of(context).primaryColor,
-      ),
-      body: Container(
-        child: Text(AppLocalizations.of(context).translate("id"))
-      )/*Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Hello',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.access_alarm),
-      ),*/
-    );
-  }
-}
-
-
