@@ -18,7 +18,7 @@ class _PublicationsListState extends State<PublicationsList> {
 
   // TODO: publications list
   // List<Publication> _publications = [];
-  List<int> _dummyPublications = [0,1,2];
+  List<int> _dummyPublications = [0,1,2,3,4,5];
 
   void getPublications(String genre) async {
     // TODO: backend get publis
@@ -30,7 +30,7 @@ class _PublicationsListState extends State<PublicationsList> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return ListView(
       children: List.generate(_dummyPublications.length, (index) {
         return Column(
           children: <Widget>[
