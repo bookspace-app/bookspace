@@ -56,7 +56,7 @@ class _MainViewState extends State<MainView> {
       ),
       body: Container(
         padding: EdgeInsets.all(5),
-        color: Colors.green,
+        color: Colors.grey[100],
         width: double.infinity,
         child: _views[_rendered]
       ),

@@ -32,9 +32,14 @@ class _PublicationsListState extends State<PublicationsList> {
   Widget build(BuildContext context) {
     return Column(
       children: List.generate(_dummyPublications.length, (index) {
-        return InkWell(
-          child: PublicationCard(),
-          onTap: () => {},
+        return Column(
+          children: <Widget>[
+            InkWell(
+              child: PublicationCard(),
+              onTap: () => {},
+            ), 
+            Divider()
+          ]
         );
       })
     );
