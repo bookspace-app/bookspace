@@ -21,7 +21,7 @@ class _BookspaceBottomBarState extends State<BookspaceBottomBar> {
     return BottomAppBar(
        child: Container(
         height: globals.bottomBarHeight,
-        color: Colors.pink, 
+        // color: Colors.pink, 
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget> [

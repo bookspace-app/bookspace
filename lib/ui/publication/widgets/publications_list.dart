@@ -36,7 +36,7 @@ class _PublicationsListState extends State<PublicationsList> {
           children: <Widget>[
             InkWell(
               child: PublicationCard(),
-              onTap: () => {},
+              onTap: () => {}, // on tap llevar a la view de la publicacion
             ), 
             Divider()
           ]

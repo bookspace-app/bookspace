@@ -11,6 +11,17 @@ class PublicationCard extends StatefulWidget {
 }
 
 class _PublicationCardState extends State<PublicationCard> {
+
+  int _totalUpvotes = 10;
+  int _totalViews = 4;
+  int _totalResponses = 2;
+
+  bool _myVote = true;
+  bool _myFavorite = true;
+  bool _myResponse = true;
+
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,8 +32,8 @@ class _PublicationCardState extends State<PublicationCard> {
         children: <Widget> [
           Container(
             //color: Colors.green[200],
-            width: 75,
-            padding: EdgeInsets.only(right: 20),
+            width: 85,
+            padding: EdgeInsets.only(right: 15),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -34,11 +45,12 @@ class _PublicationCardState extends State<PublicationCard> {
                     Expanded(
                       child: Container(
                         child: Text(
-                          '1',
+                          '$_totalUpvotes',
                           textAlign: TextAlign.right,
                           style: TextStyle(
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold,
+                            color: _myVote ? Colors.green[400] : Colors.black,
                           ),
                         ),
                       ),
@@ -46,6 +58,7 @@ class _PublicationCardState extends State<PublicationCard> {
                     Expanded(
                       child: IconButton(
                         icon: Icon(Icons.thumb_up),
+                        color: _myVote ? Colors.green[400] : Colors.black,
                         onPressed: () => {},
                       ),
                     ),
@@ -58,11 +71,12 @@ class _PublicationCardState extends State<PublicationCard> {
                     Expanded(
                       child: Container(
                         child: Text(
-                          '2',
+                          '$_totalViews',
                           textAlign: TextAlign.right,
                           style: TextStyle(
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold,
+                            color: _myFavorite ? Colors.yellow[800] : Colors.black,
                           ),
                         ),
                       ),
@@ -70,6 +84,7 @@ class _PublicationCardState extends State<PublicationCard> {
                     Expanded(
                       child: IconButton(
                         icon: Icon(Icons.remove_red_eye),
+                        color: _myFavorite ? Colors.yellow[800] : Colors.black,
                         onPressed: () => {},
                       ),
                     ),
@@ -82,11 +97,12 @@ class _PublicationCardState extends State<PublicationCard> {
                     Expanded(
                       child: Container(
                         child: Text(
-                          '3',
+                          '$_totalResponses',
                           textAlign: TextAlign.right,
                           style: TextStyle(
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold,
+                            color: _myResponse ? Colors.green[400] : Colors.black,
                           ),
                         ),
                       ),
@@ -94,6 +110,7 @@ class _PublicationCardState extends State<PublicationCard> {
                     Expanded(
                       child: IconButton(
                         icon: Icon(Icons.reply),
+                        color: _myResponse ? Colors.green[400] : Colors.black,
                         onPressed: () => {},
                       ),
                     ),

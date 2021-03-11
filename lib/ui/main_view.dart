@@ -52,7 +52,7 @@ class _MainViewState extends State<MainView> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Bookspace'),
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Colors.white,
       ),
       body: Container(
         // padding: EdgeInsets.all(5),
