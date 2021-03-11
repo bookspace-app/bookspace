@@ -8,7 +8,7 @@ import 'package:bookspace/ui/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 
 class MainView extends StatefulWidget {
-  final int renderIndex;
+  final String renderIndex;
 
   MainView({
     Key key,
@@ -21,7 +21,7 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
 
-  int _rendered = 0;
+  String _rendered = "home";
   final Map<String, Widget> _views = {
     "home": HomeView(),
     "chatList": ChatListView(),
