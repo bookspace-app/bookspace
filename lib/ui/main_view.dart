@@ -4,15 +4,18 @@ import 'package:bookspace/ui/chat/chat_list_view.dart';
 import 'package:bookspace/ui/home/home_view.dart';
 import 'package:bookspace/ui/profile/profile_view.dart';
 import 'package:bookspace/ui/publication/create_publication_view.dart';
+import 'package:bookspace/ui/publication/publication_view.dart';
 import 'package:bookspace/ui/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 
 class MainView extends StatefulWidget {
   final String renderIndex;
+  final Widget view;
 
   MainView({
     Key key,
-    this.renderIndex
+    this.renderIndex,
+    this.view, 
   }) : super(key: key);
 
   @override
@@ -27,7 +30,7 @@ class _MainViewState extends State<MainView> {
     "chatList": ChatListView(),
     "createPublication": CreatePublicationView(),
     "activity": ActivityView(),
-    "profile": ProfileView()
+    "profile": ProfileView(),
   };
 
   @override
@@ -54,7 +57,7 @@ class _MainViewState extends State<MainView> {
         title: Text('Bookspace'),
         backgroundColor: Colors.white,
       ),
-      body: Container(
+      body: widget.view ?? Container(
         // padding: EdgeInsets.all(5),
         color: Colors.grey[100],
         width: double.infinity,

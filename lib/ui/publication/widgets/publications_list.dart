@@ -1,4 +1,7 @@
+import 'package:bookspace/ui/main_view.dart';
+import 'package:bookspace/ui/publication/publication_view.dart';
 import 'package:bookspace/ui/publication/widgets/publication_card.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class PublicationsList extends StatefulWidget {
@@ -14,6 +17,7 @@ class PublicationsList extends StatefulWidget {
   _PublicationsListState createState() => _PublicationsListState();
 }
 
+
 class _PublicationsListState extends State<PublicationsList> {
 
   // TODO: publications list
@@ -27,7 +31,6 @@ class _PublicationsListState extends State<PublicationsList> {
     // setState(() => _publications = publications);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -36,7 +39,17 @@ class _PublicationsListState extends State<PublicationsList> {
           children: <Widget>[
             InkWell(
               child: PublicationCard(),
-              onTap: () => {}, // on tap llevar a la view de la publicacion
+              onTap: () {
+                Navigator.push(
+                  context, // TODO: pass id to PublicationView
+                  MaterialPageRoute(
+                    builder: (context) => MainView(
+                      renderIndex: 'home',
+                      view: PublicationView(id: 0),
+                    )
+                  ),
+                );
+              }, // on tap llevar a la view de la publicacion
             ), 
             Divider()
           ]
