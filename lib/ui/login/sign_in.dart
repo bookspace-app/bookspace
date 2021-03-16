@@ -49,7 +49,7 @@ class SignIn extends StatelessWidget {
                   obscureText: isPasswordHiden,
                   decoration: InputDecoration(
                       labelText: 'Contraseña',
-                      fillColor: Colors.white,
+                      fillColor: Colors.red,
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.person),
                       suffixIcon: IconButton(
@@ -68,15 +68,16 @@ class SignIn extends StatelessWidget {
                       primary: Colors.blue[200], onPrimary: Colors.black),
                 )),
             Container(
+                height: 40,
                 child: ElevatedButton(
-              onPressed: () => print('Inici de sessió'),
-              child: Text('Iniciar Sesión',
-                  style: TextStyle(
-                    color: Colors.black, /*fontFamily: "Schyler"*/
-                  )),
-              style: ElevatedButton.styleFrom(
-                  primary: Colors.orangeAccent, onPrimary: Colors.black),
-            )),
+                  onPressed: () => print('Inici de sessió'),
+                  child: Text('Iniciar Sesión',
+                      style: TextStyle(
+                        color: Colors.black, /*fontFamily: "Schyler"*/
+                      )),
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.orangeAccent, onPrimary: Colors.black),
+                )),
             Container(
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
