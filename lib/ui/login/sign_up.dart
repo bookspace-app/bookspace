@@ -262,7 +262,7 @@ class _SignUpState extends State<SignUp> {
                         Navigator.push(
                           context, // TODO: pass id to PublicationView
                           MaterialPageRoute(
-                            builder: (context) => SignUp2()
+                            builder: (context) => SignUp2() 
                           ),
                         );
                         
