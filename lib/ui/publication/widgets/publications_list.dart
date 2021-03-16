@@ -51,7 +51,7 @@ class _PublicationsListState extends State<PublicationsList> {
                 );
               }, // on tap llevar a la view de la publicacion
             ), 
-            Divider()
+            Divider() 
           ]
         );
       })
