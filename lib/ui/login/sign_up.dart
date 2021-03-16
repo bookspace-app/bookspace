@@ -195,6 +195,7 @@ class _SignUpState extends State<SignUp> {
                     setState(() {
                     });
                   },
+                  obscureText: true,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Contraseña',
@@ -225,6 +226,7 @@ class _SignUpState extends State<SignUp> {
                     setState(() {
                     });
                   },
+                  obscureText: true,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Repetir Contraseña',
