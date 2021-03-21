@@ -22,6 +22,58 @@ class _SignUpState extends State<SignUp> {
   var passController = TextEditingController();
   var passRController = TextEditingController();
 
+  bool errorsUserName = false;
+  bool errorsName = false;
+  bool errorsSurName = false;
+  bool errorsEmail = false;
+  bool errorsPass = false;
+  bool errorsPassR = false;
+  bool errorsAll = false;
+
+
+  //Error Check
+  String errorUserName() {
+    if (userNameController.text.isEmpty) return "Rellena este campo";
+    else if (userNameController.text.length < 4) return "El nombre tiene que ser al menos de 4 caracteres";
+    //else if userNameController.text = nombre de otro usuario en la BD
+    return null;
+  } 
+
+  String errorName() {
+    if (nameController.text.isEmpty) return "Rellena este campo";
+    return null;
+  } 
+
+  String errorSurName() {
+    if (surNameController.text.isEmpty) return "Rellena este campo";
+    return null;
+  } 
+
+  String errorEmail() {
+    if (emailController.text.isEmpty) return "Rellena este campo";
+    else if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(emailController.text)) {
+      return "El email no tiene un formato valido";
+    }
+    //else if emailController.text = email de otro usuario en la BD
+    return null;
+  } 
+
+  String errorPass() {
+    if (passController.text.isEmpty) return "Rellena este campo";
+    else if (passController.text.length < 6) return "La contraseña tiene que ser al menos de 6 caracteres";
+    else if (!RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{6,}$').hasMatch(passController.text)) {
+      return "La contraseña tiene que contener al menos \nuna mayúscula, una minúscula, un número y un simbolo";
+    }
+    return null;
+  } 
+
+  String errorPassR() {
+    if (passRController.text.isEmpty) return "Rellena este campo";
+    else if (passRController.text != passController.text) return "Las contraseñas no coinciden";
+    return null;
+  } 
+
+
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -76,8 +128,11 @@ class _SignUpState extends State<SignUp> {
                   },
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'Nombre de Usuario',
-                    prefixIcon: Icon(Icons.person),
+                    labelText: 'Nombre de Usuario',                                                     //to-do Emoji handling
+                    prefixIcon: Icon(Icons.person),                                                     //to-do Traduciones
+                    errorText: errorsAll ?  
+                      errorUserName() 
+                      : null,
                     suffixIcon: userNameController.text.length > 0 ?
                       IconButton(
                         icon: Icon(Icons.clear),
@@ -102,13 +157,15 @@ class _SignUpState extends State<SignUp> {
                   controller: nameController,
                   onChanged: (text) {
                     setState(() {
-                      //inputText = text;
                     });
                   },
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Nombre',
                     prefixIcon: Icon(Icons.person),
+                    errorText: errorsAll ?  
+                      errorName() 
+                      : null,
                     suffixIcon: nameController.text.length > 0 ?
                       IconButton(
                         icon: Icon(Icons.clear),
@@ -139,6 +196,9 @@ class _SignUpState extends State<SignUp> {
                     border: OutlineInputBorder(),
                     labelText: 'Apellidos',
                     prefixIcon: Icon(Icons.person),
+                    errorText: errorsAll ?  
+                      errorSurName() 
+                      : null,
                     suffixIcon: surNameController.text.length > 0 ?
                       IconButton(
                         icon: Icon(Icons.clear),
@@ -169,6 +229,9 @@ class _SignUpState extends State<SignUp> {
                     border: OutlineInputBorder(),
                     labelText: 'Correo Electrónico',
                     prefixIcon: Icon(Icons.mail),
+                    errorText: errorsAll ?  
+                      errorEmail() 
+                      : null,
                     suffixIcon: emailController.text.length > 0 ?
                       IconButton(
                         icon: Icon(Icons.clear),
@@ -200,6 +263,9 @@ class _SignUpState extends State<SignUp> {
                     border: OutlineInputBorder(),
                     labelText: 'Contraseña',
                     prefixIcon: Icon(Icons.lock),
+                    errorText: errorsAll ?  
+                      errorPass() 
+                      : null,
                     suffixIcon: passController.text.length > 0 ?
                       IconButton(
                         icon: Icon(Icons.clear),
@@ -231,6 +297,9 @@ class _SignUpState extends State<SignUp> {
                     border: OutlineInputBorder(),
                     labelText: 'Repetir Contraseña',
                     prefixIcon: Icon(Icons.lock),
+                    errorText: errorsAll ?  
+                      errorPassR() 
+                      : null,
                     suffixIcon: passRController.text.length > 0 ?
                       IconButton(
                         icon: Icon(Icons.clear),
@@ -259,13 +328,26 @@ class _SignUpState extends State<SignUp> {
                     color: Colors.blue,
                     child: Text('Siguiente'),
                       onPressed: () {
-                        Navigator.push(
-                          context, // TODO: pass id to PublicationView
-                          MaterialPageRoute(
-                            builder: (context) => SignUp2()
-                          ),
-                        );
-                        
+
+
+                        setState(() {
+                            errorsUserName = userNameController.text.isEmpty; // | chechkTypeUsername();
+                            errorsName = nameController.text.isEmpty;
+                            errorsSurName = surNameController.text.isEmpty;
+                            errorsEmail = emailController.text.isEmpty;
+                            errorsPass = passController.text.isEmpty;
+                            errorsPassR = passRController.text.isEmpty | (passRController.text != passController.text);
+
+                            errorsAll = errorsUserName | errorsName | errorsSurName | errorsEmail | errorsPass | errorsPassR;
+                        });
+                        if (!errorsAll) {
+                          Navigator.push(
+                            context, // TODO: pass id to PublicationView
+                            MaterialPageRoute(
+                              builder: (context) => SignUp2()
+                            ),
+                          );
+                        }  
                       //Hacer cosas e ir a la siguiente pantalla de registro
                     }
                   )

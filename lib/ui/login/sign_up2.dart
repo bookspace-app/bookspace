@@ -1,8 +1,11 @@
+import 'dart:io';
 import 'package:bookspace/ui/login/sign_up.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:textfield_tags/textfield_tags.dart';
+import 'package:image_picker/image_picker.dart';
 
+import 'package:bookspace/globals.dart' as globals;
 
 
 class SignUp2 extends StatefulWidget {
@@ -14,6 +17,70 @@ class SignUp2 extends StatefulWidget {
 
 class _SignUp2State extends State<SignUp2> {
   var descController = TextEditingController();
+
+  File _image;
+  final picker = ImagePicker();
+
+  Future getImageCamera() async {
+    final pickedFile = await picker.getImage(source: ImageSource.camera);
+
+    setState(() {
+      _image = File(pickedFile.path);
+    });
+  }
+
+  Future getImageGallery() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      _image = File(pickedFile.path);
+    });
+  }
+
+  Future erraseImage() async {
+    setState(() {
+      _image = null;
+    });
+  }
+
+  void _showPicker(context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext bc) {
+        return SafeArea(
+          child: Container(
+            child: new Wrap(
+              children: <Widget>[
+                new ListTile(
+                    leading: new Icon(Icons.photo_library),
+                    title: new Text('Galería'),
+                    onTap: () {
+                      getImageGallery();
+                      Navigator.of(context).pop();
+                    }),
+                new ListTile(
+                  leading: new Icon(Icons.photo_camera),
+                  title: new Text('Cámara'),
+                  onTap: () {
+                    getImageCamera();
+                    Navigator.of(context).pop();
+                  },
+                ),
+                new ListTile(
+                  leading: new Icon(Icons.clear),
+                  title: new Text('Eliminar Foto'),
+                  onTap: () {
+                    erraseImage();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+    );
+  }
 
   @override
   void dispose() {
@@ -32,7 +99,7 @@ class _SignUp2State extends State<SignUp2> {
       body: ListView( 
       children: <Widget> [
         Padding(
-          padding: EdgeInsets.fromLTRB(30, 30, 10, 0),
+          padding: EdgeInsets.fromLTRB(30, 30, 30, 0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center, //Center Row contents horizontally,
             crossAxisAlignment: CrossAxisAlignment.center, //Center Row contents vertically,
@@ -47,21 +114,53 @@ class _SignUp2State extends State<SignUp2> {
           ),
         ),
         Padding(
-          padding: EdgeInsets.fromLTRB(30, 10, 10, 0),
+          padding: EdgeInsets.fromLTRB(30, 10, 30, 0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center, //Center Row contents horizontally,
             crossAxisAlignment: CrossAxisAlignment.center, //Center Row contents vertically,
             children: <Widget>[
-                CircleAvatar(
-                  radius: 60.0,
-                  backgroundColor: const Color(0xFF77BBBB)
-                  //to-do Tratamiento imagenes
-                )
+              SizedBox(
+                height: 32,
+              ),
+              Center(
+                child: GestureDetector(
+                  onTap: () {
+                    _showPicker(context);
+                  },
+                  child: CircleAvatar(
+                    radius: 60,
+                    backgroundColor: globals.primary,
+                    child: _image != null
+                        
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(60),
+                            child: Image.file(
+                              _image,
+                              width: 110,
+                              height: 110,              
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : Container(
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(60)),
+                            width: 110,
+                            height: 110,
+                            child: Icon(
+                              Icons.add_a_photo,
+                              size: 30,
+                              color: Colors.grey[800],
+                            ),
+                          ),
+                  ),
+                ),
+              )
             ],
           ),
         ),
         Padding(
-          padding: EdgeInsets.fromLTRB(30, 30, 10, 0),
+          padding: EdgeInsets.fromLTRB(30, 20, 10, 0),
           child: Row(
             //mainAxisAlignment: MainAxisAlignment.center, //Center Row contents horizontally,
             crossAxisAlignment: CrossAxisAlignment.center, //Center Row contents vertically,
@@ -93,7 +192,6 @@ class _SignUp2State extends State<SignUp2> {
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: "Explicanos quién eres y que te gusta",
-                //labelText: descController.text.length > 0 ? 'Descripción' : null,
                 counterText: '${descController.text.length}' + '/500'
               )
             )),
