@@ -176,10 +176,11 @@ class _SignUp2State extends State<SignUp2> {
         ),
         Padding(
           padding: EdgeInsets.fromLTRB(30, 10, 30, 0),
-          child: SizedBox(
+          child: Row(
             //width: ,
             //height: 10,
-            child: Expanded(child: TextFormField(
+            children: <Widget> [
+              Expanded(child: TextFormField(
               controller: descController,
               onChanged: (text) {
                 setState(() {});
@@ -195,7 +196,7 @@ class _SignUp2State extends State<SignUp2> {
                 counterText: '${descController.text.length}' + '/500'
               )
             )),
-          )
+            ])
         ),
         Padding(
           padding: EdgeInsets.fromLTRB(30, 20, 10, 0),
@@ -212,7 +213,8 @@ class _SignUp2State extends State<SignUp2> {
             ],
           ),
         ),
-        Padding(
+        Container(
+          //color: Colors.orange,
           padding: EdgeInsets.fromLTRB(30, 10, 30, 0),
           child: TextFieldTags(
             tagsStyler: TagsStyler(
@@ -230,14 +232,15 @@ class _SignUp2State extends State<SignUp2> {
             onDelete: (tag) {}
           )
         ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(10, 30, 30, 30),
+        Container(
+          //color: Colors.pink,
+          padding: EdgeInsets.symmetric(vertical: 30),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center, //Center Row contents horizontally,
             crossAxisAlignment: CrossAxisAlignment.center, //Center Row contents vertically,
             children: <Widget>[
               SizedBox(
-                width: 150,
+                width: MediaQuery.of(context).size.width * 0.45,
                 height: 35,
                 child: RaisedButton(
                   textColor: Colors.white,
