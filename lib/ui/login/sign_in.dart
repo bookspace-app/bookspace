@@ -4,7 +4,14 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:bookspace/globals.dart' as globals;
 
-class SignIn extends StatelessWidget {
+class SignIn extends StatefulWidget {
+  SignIn({Key key}) : super(key: key);
+
+  @override
+  _SignInState createState() => _SignInState();
+}
+
+class _SignInState extends State<SignIn> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   String password = '';
@@ -37,36 +44,62 @@ class SignIn extends StatelessWidget {
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.person),
                     suffixIcon: IconButton(
-                        icon: Icon(Icons.close),
-                        onPressed: () => usernameController.clear())),
+                        icon: Icon(Icons.clear),
+                        onPressed: () {
+                          setState(() {
+                            usernameController.clear();
+                          });
+                        })),
               ),
             ),
             Container(
                 margin: EdgeInsets.symmetric(horizontal: 0, vertical: 20),
                 constraints: BoxConstraints.expand(height: 50),
-                child: TextField(
+                child: TextFormField(
                   controller: passwordController,
                   obscureText: isPasswordHiden,
                   decoration: InputDecoration(
                       labelText: 'Contraseña',
-                      fillColor: Colors.red,
                       border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.person),
+                      prefixIcon: Icon(Icons.lock),
                       suffixIcon: IconButton(
-                          icon: Icon(Icons.visibility),
-                          onPressed: () => _togglePasswordView())),
+                          icon: isPasswordHiden
+                              ? Icon(Icons.visibility_off)
+                              : Icon(Icons.visibility),
+                          onPressed: () {
+                            setState(() {
+                              isPasswordHiden = !isPasswordHiden;
+                            });
+                          })),
                 )),
-            Container(
-                margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                child: ElevatedButton(
-                  onPressed: () => print('Inici de sessió amb google'),
-                  child: Text('Iniciar sesión con GOOGLE',
-                      style: TextStyle(
-                        color: Colors.black, /*fontFamily: "Schyler"*/
-                      )),
-                  style: ElevatedButton.styleFrom(
-                      primary: Colors.blue[200], onPrimary: Colors.black),
-                )),
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                splashColor: Colors.grey.withOpacity(0.3),
+                highlightColor: Colors.grey.withOpacity(0.3),
+                onTap: () {
+                  print('Inkwell');
+                },
+                child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      color: Colors.blue[200],
+                    ),
+                    margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Iniciar sesión con'),
+                          Container(
+                            constraints: BoxConstraints.expand(
+                                height: 40.0, width: 60.0),
+                            child: Image(
+                              image: AssetImage('assets/images/google.png'),
+                            ),
+                          ),
+                        ])),
+              ),
+            ),
             Container(
                 height: 40,
                 child: ElevatedButton(
@@ -76,7 +109,10 @@ class SignIn extends StatelessWidget {
                         color: Colors.black, /*fontFamily: "Schyler"*/
                       )),
                   style: ElevatedButton.styleFrom(
-                      primary: Colors.orangeAccent, onPrimary: Colors.black),
+                      primary: Colors.orangeAccent,
+                      onPrimary: Colors.black,
+                      shape: new RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(10.0))),
                 )),
             Container(
                 child: Row(
@@ -97,9 +133,5 @@ class SignIn extends StatelessWidget {
                 ]))
           ]),
     );
-  }
-
-  void _togglePasswordView() {
-    isPasswordHiden = !isPasswordHiden;
   }
 }
