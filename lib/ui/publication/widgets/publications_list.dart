@@ -1,3 +1,5 @@
+import 'package:bookspace/controllers/publication_controller.dart';
+import 'package:bookspace/models/publication.dart';
 import 'package:bookspace/ui/main_view.dart';
 import 'package:bookspace/ui/publication/publication_view.dart';
 import 'package:bookspace/ui/publication/widgets/publication_card.dart';
@@ -21,40 +23,69 @@ class PublicationsList extends StatefulWidget {
 class _PublicationsListState extends State<PublicationsList> {
 
   // TODO: publications list
-  // List<Publication> _publications = [];
-  List<int> _dummyPublications = [0,1,2,3,4,5];
+  List<Publication> _publications = [];
+  // List<int> _dummyPublications = [0,1,2,3,4,5];
 
   void getPublications(String genre) async {
     // TODO: backend get publis
-    // List<Publications> publications = await PublicationService.get ....(genre)
+    List<Publication> publications = await PublicationController.getPublications();
+    print('LAS PUBLIS');
+    print(publications);
+    if (!disposed){
+      setState(() => _publications = publications);
+    }
+    print(_publications);
+  }
 
-    // setState(() => _publications = publications);
+  @override
+  void initState() { 
+    super.initState();
+    getPublications('LOVE');
+  }
+
+  bool disposed = false;
+  @override
+  void dispose() {
+    disposed = true;
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: List.generate(_dummyPublications.length, (index) {
-        return Column(
-          children: <Widget>[
-            InkWell(
-              child: PublicationCard(),
-              onTap: () {
-                Navigator.push(
-                  context, // TODO: pass id to PublicationView
-                  MaterialPageRoute(
-                    builder: (context) => MainView(
-                      renderIndex: 'home',
-                      view: PublicationView(id: 0),
-                    )
-                  ),
-                );
-              }, // on tap llevar a la view de la publicacion
-            ), 
-            Divider() 
-          ]
-        );
-      })
-    );
+    print('HOLA DENTRO');
+    print(_publications);
+    if (_publications != null) {
+      print(_publications);
+      return ListView(
+        children: List.generate(_publications.length, (index) {
+          return Column(
+            children: <Widget>[
+              Container(height: (index == 0)?10:0),
+              InkWell(
+                child: PublicationCard(
+                  publication: _publications[index]
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context, // TODO: pass id to PublicationView
+                    MaterialPageRoute(
+                      builder: (context) => MainView(
+                        renderIndex: 'home',
+                        view: PublicationView(id: _publications[index].id),
+                      )
+                    ),
+                  );
+                }, // on tap llevar a la view de la publicacion
+              ), 
+              Divider() 
+            ]
+          );
+        })
+      );
+    } else {
+      return Container(
+       child: Text('No hay publis aun'),
+      );
+    }
   }
 }
