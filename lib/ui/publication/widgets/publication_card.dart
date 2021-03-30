@@ -1,16 +1,15 @@
+import 'package:bookspace/models/publication.dart';
+import 'package:bookspace/utils/humanize.dart';
 import 'package:flutter/material.dart';
 
-class PublicationCard extends StatefulWidget {
+class PublicationCard extends StatelessWidget {
   // Read attributes from
-  // final Publication publication;
+  final Publication publication;
 
-  PublicationCard({Key key}) : super(key: key);
-
-  @override
-  _PublicationCardState createState() => _PublicationCardState();
-}
-
-class _PublicationCardState extends State<PublicationCard> {
+  PublicationCard({
+    Key key,
+    this.publication,
+  }) : super(key: key);
 
   int _totalUpvotes = 10;
   int _totalViews = 4;
@@ -21,21 +20,20 @@ class _PublicationCardState extends State<PublicationCard> {
   bool _myResponse = true;
 
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
       //color: Colors.yellow,
       width: double.infinity,
-      height: 150,
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget> [
           Container(
-            //color: Colors.green[200],
+            // color: Colors.green[200],
             width: 85,
             padding: EdgeInsets.only(right: 15),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget> [
                 Row(
@@ -44,6 +42,7 @@ class _PublicationCardState extends State<PublicationCard> {
                   children: <Widget> [
                     Expanded(
                       child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 3),
                         child: Text(
                           '$_totalUpvotes',
                           textAlign: TextAlign.right,
@@ -56,10 +55,12 @@ class _PublicationCardState extends State<PublicationCard> {
                       ),
                     ),
                     Expanded(
-                      child: IconButton(
-                        icon: Icon(Icons.thumb_up),
-                        color: _myVote ? Colors.green[400] : Colors.black,
-                        onPressed: () => {},
+                      child: GestureDetector(
+                        onTap: () { print('Tap');},
+                        child: Icon(
+                          Icons.thumb_up,
+                          color: _myVote ? Colors.green[400] : Colors.black
+                        ),
                       ),
                     ),
                   ],
@@ -70,6 +71,7 @@ class _PublicationCardState extends State<PublicationCard> {
                   children: <Widget> [
                     Expanded(
                       child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 3),
                         child: Text(
                           '$_totalViews',
                           textAlign: TextAlign.right,
@@ -82,10 +84,12 @@ class _PublicationCardState extends State<PublicationCard> {
                       ),
                     ),
                     Expanded(
-                      child: IconButton(
-                        icon: Icon(Icons.remove_red_eye),
-                        color: _myFavorite ? Colors.yellow[800] : Colors.black,
-                        onPressed: () => {},
+                      child: GestureDetector(
+                        onTap: () { print('Tap');},
+                        child: Icon(
+                          Icons.remove_red_eye,
+                          color: _myFavorite ? Colors.yellow[800] : Colors.black,
+                        ),
                       ),
                     ),
                   ],
@@ -96,6 +100,7 @@ class _PublicationCardState extends State<PublicationCard> {
                   children: <Widget> [
                     Expanded(
                       child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 3),
                         child: Text(
                           '$_totalResponses',
                           textAlign: TextAlign.right,
@@ -108,11 +113,13 @@ class _PublicationCardState extends State<PublicationCard> {
                       ),
                     ),
                     Expanded(
-                      child: IconButton(
-                        icon: Icon(Icons.reply),
-                        color: _myResponse ? Colors.green[400] : Colors.black,
-                        onPressed: () => {},
-                      ),
+                      child: GestureDetector(
+                        onTap: () { print('Tap');},
+                        child: Icon(
+                          Icons.reply,
+                          color: _myResponse ? Colors.green[400] : Colors.black,
+                        )
+                      )
                     ),
                   ],
                 )
@@ -120,20 +127,23 @@ class _PublicationCardState extends State<PublicationCard> {
             )
           ),
           Container(
-            padding: EdgeInsets.symmetric(vertical: 15),
+            //color: Colors.yellow,
+            padding: EdgeInsets.symmetric(vertical: 0),
             child: Column(
               children: <Widget> [
                  Container(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  // color: Colors.orange,
-                  // would be publication.name
-                  child: Text(
-                    "¿Cómo establecer una embajada alienígena en la Tierra?",
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ), 
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    // color: Colors.orange,
+                    // would be publication.name
+                    child: Text(
+                      publication.title,
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 3,
+                    ), 
                  ),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.8,
@@ -151,7 +161,7 @@ class _PublicationCardState extends State<PublicationCard> {
                   // color: Colors.green,
                   // would be publication.name
                   child: Text(
-                    "Hace 8 horas @john",
+                    "${TimeAgo.timeAgoSinceDate(publication.dop)} @{publication.author}",
                     style: TextStyle(
                       fontSize: 15.0,
                     ),
