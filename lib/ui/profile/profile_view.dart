@@ -35,6 +35,27 @@ class _ProfileViewState extends State<ProfileView> {
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text('Perfil'),
+        backgroundColor: Colors.white,
+        leading: Image.asset('./assets/images/Logo.png', height: 1000, width: 1000),
+        actions: [
+          IconButton(
+              icon: Icon(Icons.more_vert),
+              iconSize: 40,
+              color: Colors.grey,
+              onPressed: () { },
+          ),
+        ],
+      ),
+      body: ListView(
+        
+
+      )
+    );
+    /*
     if (_user != null) {
       return Container(
        child: Text('hello ${_user.username}'),
@@ -44,5 +65,6 @@ class _ProfileViewState extends State<ProfileView> {
        child: Text('No hay user aun'),
       );
     }
+    */
   }
 }
