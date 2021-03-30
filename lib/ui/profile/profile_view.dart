@@ -13,7 +13,7 @@ class _ProfileViewState extends State<ProfileView> {
   User _user;
 
   void getUser() async {
-    User user = await UserController.getUser(3);
+    User user = await UserController.getUser(1);
     if (!disposed){
       setState(() => _user = user);
     }
@@ -35,36 +35,22 @@ class _ProfileViewState extends State<ProfileView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text('Perfil'),
-        backgroundColor: Colors.white,
-        leading: Image.asset('./assets/images/Logo.png', height: 1000, width: 1000),
-        actions: [
-          IconButton(
-              icon: Icon(Icons.more_vert),
-              iconSize: 40,
-              color: Colors.grey,
-              onPressed: () { },
-          ),
-        ],
-      ),
-      body: ListView(
-        
-
-      )
-    );
-    /*
     if (_user != null) {
-      return Container(
-       child: Text('hello ${_user.username}'),
+      return ListView( 
+        children: <Widget> [
+          Container(),
+          Container(),
+        ]
       );
+      /*Container(
+       child: Text('hello ${_user.username}'),
+      );*/
     } else {
       return Container(
-       child: Text('No hay user aun'),
+       child: Center(
+         child: CircularProgressIndicator()
+       )
       );
     }
-    */
   }
 }
