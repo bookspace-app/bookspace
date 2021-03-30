@@ -54,8 +54,20 @@ class _MainViewState extends State<MainView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bookspace'),
+        centerTitle: true,
+        title: Text(_rendered),
         backgroundColor: Colors.white,
+        leading: Image.asset('./assets/images/Logo.png', height: 1000, width: 1000),
+        actions: (_rendered == "profile") ? 
+          [ 
+            IconButton(
+                icon: Icon(Icons.more_vert),
+                iconSize: 40,
+                color: Colors.grey,
+                onPressed: () { },
+            ),
+          ]
+        : null,
       ),
       body: widget.view ?? Container(
         // padding: EdgeInsets.all(5),
