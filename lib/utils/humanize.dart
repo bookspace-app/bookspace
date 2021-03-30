@@ -6,7 +6,7 @@ class TimeAgo{
     final difference = date2.difference(datetime);
 
     if (difference.inDays > 8) {
-      return DateFormat('yyyy-MM-dd – kk:mm').format(datetime);
+      return DateFormat('dd/MM/yyyy').format(datetime);
     } else if ((difference.inDays / 7).floor() >= 1) {
       return (numericDates) ? '1 week ago' : 'Last week';
     } else if (difference.inDays >= 2) {
