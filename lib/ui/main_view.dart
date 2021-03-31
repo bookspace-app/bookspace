@@ -8,7 +8,7 @@ import 'package:bookspace/ui/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 
 class MainView extends StatefulWidget {
-  final int renderIndex;
+  final String renderIndex;
 
   MainView({
     Key key,
@@ -21,14 +21,14 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
 
-  int _rendered = 0;
-  final List<Widget> _views = [
-    HomeView(),
-    ChatListView(),
-    CreatePublicationView(),
-    ActivityView(),
-    ProfileView()
-  ];
+  String _rendered = "home";
+  final Map<String, Widget> _views = {
+    "home": HomeView(),
+    "chatList": ChatListView(),
+    "createPublication": CreatePublicationView(),
+    "activity": ActivityView(),
+    "profile": ProfileView()
+  };
 
   @override
   void initState() { 
@@ -41,6 +41,12 @@ class _MainViewState extends State<MainView> {
     }
   }
 
+  dynamic changeView(String newView) {
+    setState(() {
+      _rendered = newView;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,8 +54,13 @@ class _MainViewState extends State<MainView> {
         title: Text('Bookspace'),
         backgroundColor: Theme.of(context).primaryColor,
       ),
-      body: _views[_rendered],
-      bottomNavigationBar: BookspaceBottomBar(),
+      body: Container(
+        // padding: EdgeInsets.all(5),
+        color: Colors.grey[100],
+        width: double.infinity,
+        child: _views[_rendered]
+      ),
+      bottomNavigationBar: BookspaceBottomBar(callback: changeView),
     );
   }
 }
