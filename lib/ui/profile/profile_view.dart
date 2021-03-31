@@ -6,6 +6,7 @@ import 'package:bookspace/ui/main_view.dart';
 import 'package:bookspace/ui/publication/publication_view.dart';
 import 'package:bookspace/ui/publication/widgets/publication_card.dart';
 import 'package:flutter/material.dart';
+import 'package:textfield_tags/textfield_tags.dart';
 
 class ProfileView extends StatefulWidget {
   ProfileView({Key key}) : super(key: key);
@@ -61,9 +62,44 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   Widget build(BuildContext context) {
     if (_user != null) {
+      print(_user);
       return ListView( 
         children: <Widget> [
-          Container(),
+          Container(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Column(
+                      children: <Widget> [
+                        Image.asset('./assets/images/No_pic.png'),         //TO-DO if userpic == null show No_pic else userpic
+                      ]
+                    ),
+                    Column(
+                      children: [
+                        Text("@" + "${_user.username}"),
+                        Text("${_user.name}"),
+                        Text("${_user.description}"),
+                        Text("${_user.rank}" + " · " + "Se unió \n" + "FECHA REGISTRO")       //TO-DO Añadir fecha registro
+                      ],
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text("Tags favoritos"),
+                    Expanded(
+                      child: TextField(
+                      readOnly: true,
+                      //TO-DO Añadir tags favs
+                      )
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            
+          ),
           Container(
             child: Text('Mis publicaciones')
           ),
