@@ -1,3 +1,4 @@
+import 'package:bookspace/ui/publication/widgets/publications_list.dart';
 import 'package:flutter/material.dart';
 
 class HomeView extends StatefulWidget {
@@ -8,10 +9,19 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+
+  String _rendered = 'scifi';
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-       child: Text('hello home'),
+    return Column(
+      children: <Widget> [
+        Expanded(
+          child: PublicationsList(
+            genre: _rendered
+          )
+        )
+      ],
     );
   }
 }
