@@ -14,7 +14,7 @@ class PublicationController {
       
       // Define headers
       Map<String, String> headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
       };
 
@@ -37,7 +37,6 @@ class PublicationController {
 
   static Future<List<Publication>> getPublications() async {
     List<Publication> publications = [];
-    print('Hola get publications');
     try {
       Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications");
       
@@ -56,8 +55,6 @@ class PublicationController {
 
       print('Response status: $statusCode\n Response body: $requestBody\n');
       if (statusCode == 200) {
-        print('GET publis');
-        print(publications);
         json.decode(response.body).forEach((result) {
           publications.add(Publication.fromJson(result));
         });
