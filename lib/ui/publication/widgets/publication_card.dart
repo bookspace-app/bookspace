@@ -11,7 +11,7 @@ class PublicationCard extends StatelessWidget {
     this.publication,
   }) : super(key: key);
 
-  int _totalUpvotes = 10;
+  int _totalUpvotes = 100;
   int _totalViews = 4;
   int _totalResponses = 2;
 
@@ -29,8 +29,8 @@ class PublicationCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget> [
           Container(
-            // color: Colors.green[200],
-            width: 85,
+            //color: Colors.green[200],
+            width: MediaQuery.of(context).size.width *0.25,
             padding: EdgeInsets.only(right: 15),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -132,7 +132,7 @@ class PublicationCard extends StatelessWidget {
             child: Column(
               children: <Widget> [
                  Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.7,
                     // color: Colors.orange,
                     // would be publication.name
                     child: Text(
@@ -146,7 +146,7 @@ class PublicationCard extends StatelessWidget {
                     ), 
                  ),
                 Container(
-                  width: MediaQuery.of(context).size.width * 0.8,
+                  width: MediaQuery.of(context).size.width * 0.7,
                   // color: Colors.green,
                   // would be publication.name
                   child: Text(
@@ -157,11 +157,11 @@ class PublicationCard extends StatelessWidget {
                   ) 
                 ),
                 Container(
-                  width: MediaQuery.of(context).size.width * 0.8,
+                  width: MediaQuery.of(context).size.width * 0.7,
                   // color: Colors.green,
                   // would be publication.name
                   child: Text(
-                    "${TimeAgo.timeAgoSinceDate(publication.dop)} @{publication.author}",
+                    "${TimeAgo.timeAgoSinceDate(publication.dop)} @${publication.author?.username}",
                     style: TextStyle(
                       fontSize: 15.0,
                     ),

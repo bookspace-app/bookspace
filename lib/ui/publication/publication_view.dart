@@ -21,7 +21,6 @@ class _PublicationViewState extends State<PublicationView> {
 
   void getPublication(int id) async {
     Publication publication = await PublicationController.getPublication(id);
-    print('LA PUBLI');
     print(publication);
     if (!disposed){
       setState(() => _publication = publication);
@@ -44,9 +43,11 @@ class _PublicationViewState extends State<PublicationView> {
   
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    return (_publication != null)? ListView(
        children: <Widget>[
-         PublicationHero(),
+         PublicationHero(
+           publication: _publication,
+         ),
          UserCard(),
          for (var i = 0; i < 10; i++) Row(
            children: <Widget> [
@@ -55,6 +56,6 @@ class _PublicationViewState extends State<PublicationView> {
            ]
          )
        ],
-    );
+    ): Center(child:CircularProgressIndicator());
   }
 }
