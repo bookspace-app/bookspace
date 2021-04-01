@@ -29,7 +29,7 @@ class User {
   String email;
   String name;
   String username;
-  DateTime birthdate;
+  int age;
   String description;
   int rank;
   //String myPublicationsApi;
@@ -41,7 +41,7 @@ class User {
     this.email,
     this.name,
     this.username,
-    this.birthdate,
+    this.age,
     this.description,
     this.rank,
   });
@@ -51,7 +51,7 @@ class User {
         email: json["email"],
         name: json["name"],
         username: json["username"],
-        birthdate: DateTime.parse(json["dob"]),
+        age: json["int"],
         description: json["description"],
         rank: int.tryParse(json["rank"]),
       );
@@ -61,7 +61,7 @@ class User {
         "email": email,
         "name": name,
         "username": username,
-        "dob": birthdate,
+        "age": age,
         "description": description,
         "rank": rank,
       };
