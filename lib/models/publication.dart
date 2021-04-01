@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:bookspace/models/user.dart';
 import 'package:intl/intl.dart';
 
 Publication publicationFromJson(String str) => Publication.fromJson(json.decode(str));
@@ -29,7 +30,7 @@ class Publication {
   String title;
   String content;
   DateTime dop; // date of publication
-  //String author;
+  User author;
 
   //List<String> votedBy;
   //List<String> favoriteBy;
@@ -42,7 +43,7 @@ class Publication {
     this.title,
     this.content,
     this.dop,
-    //this.author,
+    this.author,
     //this.votedBy,
     //this.favoriteBy,
     //this.comments,
@@ -54,7 +55,7 @@ class Publication {
         title: json["title"],
         content: json["content"],
         dop: DateTime.parse(json["dop"]),
-        //author: json["author"],
+        author: User.fromJson(json["author"]),
         //description: json["description"],
         //category: int.tryParse(json["category"]),
       );
@@ -64,7 +65,7 @@ class Publication {
         "title": title,
         "content": content,
         "dop": dop,
-        //"author": author,
+        "author": author,
         //"category": category,
       };
 }
