@@ -29,8 +29,7 @@ class _PublicationsListState extends State<PublicationsList> {
   void getPublications(String genre) async {
     // TODO: backend get publis
     List<Publication> publications = await PublicationController.getPublications();
-    print('LAS PUBLIS');
-    print(publications);
+    
     if (!disposed){
       setState(() => _publications = publications);
     }

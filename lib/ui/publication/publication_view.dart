@@ -50,16 +50,30 @@ class _PublicationViewState extends State<PublicationView> {
          ),
          UserCard(
            author: _publication.author,
-           dop: _publication.dop
+           dop: _publication.dop,
+           principal: true,
          ),
-         for (var i = 0; i < 10; i++) Row(
-           children: <Widget> [
-             ResponseDart(),
-             /*UserCard(
-              author: _publication.author,
-              dop: _publication.dop
-             )*/
-           ]
+         Container(
+           padding: EdgeInsets.only(left: 10),
+           child: Text(
+             '${10} responses',
+             style: TextStyle(
+               fontWeight: FontWeight.bold,
+               fontSize: 15.0,
+             ),
+           ),
+         ),
+         for (var i = 0; i < 10; i++) Container(
+           child: Column(
+            children: <Widget> [
+              ResponseCard(),
+              UserCard(
+                author: _publication.author,
+                dop: _publication.dop,
+                principal: false,
+              )
+            ]
+          )
          )
        ],
     ): Center(child:CircularProgressIndicator());
