@@ -161,7 +161,7 @@ class PublicationCard extends StatelessWidget {
                   // color: Colors.green,
                   // would be publication.name
                   child: Text(
-                    "${TimeAgo.timeAgoSinceDate(publication.dop)} @{publication.author}",
+                    "${TimeAgo.timeAgoSinceDate(publication.dop)} @${publication.author?.username}",
                     style: TextStyle(
                       fontSize: 15.0,
                     ),
