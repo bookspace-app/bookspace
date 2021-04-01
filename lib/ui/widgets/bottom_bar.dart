@@ -1,7 +1,9 @@
 
 
 import 'package:bookspace/ui/main_view.dart';
+import 'package:bookspace/ui/profile/profile_view.dart';
 import 'package:bookspace/ui/publication/create_publication_view.dart';
+import 'package:bookspace/ui/publication/widgets/publications_list.dart';
 import 'package:flutter/material.dart';
 import 'package:bookspace/globals.dart' as globals;
 
@@ -29,7 +31,10 @@ class _BookspaceBottomBarState extends State<BookspaceBottomBar> {
               icon: Icon(Icons.home),
               color: globals.secondary,
               tooltip: 'Home',
-              onPressed: () => widget.callback('home'),
+              onPressed: () { 
+                widget.callback('home');
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              }
             ),
             IconButton(
               icon: Icon(Icons.chat),
@@ -53,7 +58,20 @@ class _BookspaceBottomBarState extends State<BookspaceBottomBar> {
               icon: Icon(Icons.verified_user),
               color: globals.secondary,
               tooltip: 'Profile',
-              onPressed: () => widget.callback('profile'),
+              onPressed: () {
+                widget.callback('profile');
+                //Navigator.of(context).popUntil((route) => route.isFirst);
+                /*Navigator.pushAndRemoveUntil(
+                  context, 
+                  MaterialPageRoute(
+                    builder: (context) => MainView(
+                      renderIndex: 'profile',
+                      view: ProfileView(),
+                    )
+                  ),
+                  ModalRoute.withName('/')
+                );*/
+              },
             ),
           ],
         ),

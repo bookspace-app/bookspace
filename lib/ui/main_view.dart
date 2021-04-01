@@ -45,8 +45,22 @@ class _MainViewState extends State<MainView> {
   }
 
   dynamic changeView(String newView) {
+
     setState(() {
+      print('$newView is being rendered');
+      //Navigator.of(context).popUntil((route) => route.isFirst);
       _rendered = newView;
+      print('$_rendered is being rendered');
+      Navigator.pushAndRemoveUntil(
+        context, 
+        MaterialPageRoute(
+          builder: (context) => MainView(
+            renderIndex: 'profile',
+            view: _views[_rendered],
+          )
+        ),
+        ModalRoute.withName('/')
+      );
     });
   }
 

@@ -8,7 +8,6 @@ class PublicationController {
 
   static Future<Publication> getPublication(int id) async {
     Publication publication;
-    print('Hola get publication');
     try {
       Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications/$id");
       
@@ -25,7 +24,7 @@ class PublicationController {
       int statusCode = response.statusCode;
       String requestBody = response.body;
 
-      print('Response status: $statusCode\n Response body: $requestBody\n');
+      //print('Response status: $statusCode\n Response body: $requestBody\n');
       if (statusCode == 200) {
         publication = Publication.fromJson(json.decode(response.body));
       }
@@ -53,7 +52,7 @@ class PublicationController {
       int statusCode = response.statusCode;
       String requestBody = response.body;
 
-      print('Response status: $statusCode\n Response body: $requestBody\n');
+      //print('Response status: $statusCode\n Response body: $requestBody\n');
       if (statusCode == 200) {
         json.decode(response.body).forEach((result) {
           publications.add(Publication.fromJson(result));

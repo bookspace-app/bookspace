@@ -19,7 +19,6 @@ class PublicationsList extends StatefulWidget {
   _PublicationsListState createState() => _PublicationsListState();
 }
 
-
 class _PublicationsListState extends State<PublicationsList> {
 
   // TODO: publications list
@@ -33,7 +32,6 @@ class _PublicationsListState extends State<PublicationsList> {
     if (!disposed){
       setState(() => _publications = publications);
     }
-    print(_publications);
   }
 
   @override
@@ -51,10 +49,7 @@ class _PublicationsListState extends State<PublicationsList> {
 
   @override
   Widget build(BuildContext context) {
-    print('HOLA DENTRO');
-    print(_publications);
     if (_publications != null) {
-      print(_publications);
       return ListView(
         children: List.generate(_publications.length, (index) {
           return Column(

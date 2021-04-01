@@ -10,7 +10,6 @@ class UserController {
 
   static Future<User> getUser(int id) async {
     User user;
-    print('Hola getuser');
     try {
       Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id");
       
@@ -27,7 +26,7 @@ class UserController {
       int statusCode = response.statusCode;
       String requestBody = response.body;
 
-      print('Response status: $statusCode\n Response body: $requestBody\n');
+      //print('Response status: $statusCode\n Response body: $requestBody\n');
       if (statusCode == 200) {
         user = User.fromJson(json.decode(response.body));
       }

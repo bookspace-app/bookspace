@@ -179,7 +179,10 @@ class PublicationHero extends StatelessWidget {
                           Container(
                             padding: EdgeInsets.only(left:10),
                             child: GestureDetector(
-                              onTap: () { print('Tap');},
+                              onTap: () { 
+                                print('Tap');
+                                Navigator.pop(context);
+                              },
                               child: Icon(
                                 Icons.reply,
                                 color: _myVote ? Colors.green[400] : Colors.black

@@ -28,21 +28,17 @@ class _ProfileViewState extends State<ProfileView> {
     if (!disposed){
       setState(() => _user = user);
     }
-    print(_user);
   }
 
   void getPublications(String genre) async {
     // TODO: backend get publis
     List<Publication> publications = await PublicationController.getPublications();
-    print('LAS PUBLIS');
-    print(publications);
     if (!disposed){
       //setState(() => _publications = publications);
     }
     _publications.sort((a,b) {
       return -a.dop.compareTo(b.dop);
     });
-    print(_publications);
   }
 
   @override
@@ -62,7 +58,6 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   Widget build(BuildContext context) {
     if (_user != null) {
-      print(_user);
       return ListView( 
         children: <Widget> [
           Container(
