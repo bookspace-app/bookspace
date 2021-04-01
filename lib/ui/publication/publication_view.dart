@@ -48,11 +48,17 @@ class _PublicationViewState extends State<PublicationView> {
          PublicationHero(
            publication: _publication,
          ),
-         UserCard(),
+         UserCard(
+           author: _publication.author,
+           dop: _publication.dop
+         ),
          for (var i = 0; i < 10; i++) Row(
            children: <Widget> [
              ResponseDart(),
-             UserCard()
+             /*UserCard(
+              author: _publication.author,
+              dop: _publication.dop
+             )*/
            ]
          )
        ],
