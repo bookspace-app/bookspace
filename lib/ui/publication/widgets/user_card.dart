@@ -3,12 +3,16 @@ import 'package:bookspace/utils/humanize.dart';
 import 'package:flutter/material.dart';
 
 class UserCard extends StatelessWidget {
+  
   final User author;
   final DateTime dop;
+  final bool principal;
+  
   UserCard({
     Key key,
     this.author,
     this.dop,
+    this.principal
   }) : super(key: key);
 
   Widget build(BuildContext context) {
@@ -17,9 +21,9 @@ class UserCard extends StatelessWidget {
       child: Container(
         height: 50,
         decoration: BoxDecoration(
-          color: Colors.yellow[200],
+          color: principal? Colors.yellow[200]: Colors.grey[200],
           border: Border.all(
-            color: Colors.yellow[800],
+            color: principal? Colors.yellow[800] : Colors.grey[400],
           ),
           borderRadius: BorderRadius.all(Radius.circular(5))
         ),
