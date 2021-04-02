@@ -4,15 +4,18 @@ import 'package:bookspace/ui/chat/chat_list_view.dart';
 import 'package:bookspace/ui/home/home_view.dart';
 import 'package:bookspace/ui/profile/profile_view.dart';
 import 'package:bookspace/ui/publication/create_publication_view.dart';
+import 'package:bookspace/ui/publication/publication_view.dart';
 import 'package:bookspace/ui/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 
 class MainView extends StatefulWidget {
-  final int renderIndex;
+  final String renderIndex;
+  final Widget view;
 
   MainView({
     Key key,
-    this.renderIndex
+    this.renderIndex,
+    this.view, 
   }) : super(key: key);
 
   @override
@@ -21,14 +24,14 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
 
-  int _rendered = 0;
-  final List<Widget> _views = [
-    HomeView(),
-    ChatListView(),
-    CreatePublicationView(),
-    ActivityView(),
-    ProfileView()
-  ];
+  String _rendered = "home";
+  final Map<String, Widget> _views = {
+    "home": HomeView(),
+    "chatList": ChatListView(),
+    "createPublication": CreatePublicationView(),
+    "activity": ActivityView(),
+    "profile": ProfileView(),
+  };
 
   @override
   void initState() { 
@@ -41,15 +44,52 @@ class _MainViewState extends State<MainView> {
     }
   }
 
+  dynamic changeView(String newView) {
+
+    setState(() {
+      print('$newView is being rendered');
+      //Navigator.of(context).popUntil((route) => route.isFirst);
+      _rendered = newView;
+      print('$_rendered is being rendered');
+      Navigator.pushAndRemoveUntil(
+        context, 
+        MaterialPageRoute(
+          builder: (context) => MainView(
+            renderIndex: 'profile',
+            view: _views[_rendered],
+          )
+        ),
+        ModalRoute.withName('/')
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bookspace'),
-        backgroundColor: Theme.of(context).primaryColor,
+        centerTitle: true,
+        title: Text(_rendered),
+        backgroundColor: Colors.white,
+        leading: Image.asset('./assets/images/Logo.png', height: 1000, width: 1000),
+        actions: (_rendered == "profile") ? 
+          [ 
+            IconButton(
+                icon: Icon(Icons.more_vert),
+                iconSize: 40,
+                color: Colors.grey,
+                onPressed: () { },
+            ),
+          ]
+        : null,
       ),
-      body: _views[_rendered],
-      bottomNavigationBar: BookspaceBottomBar(),
+      body: widget.view ?? Container(
+        // padding: EdgeInsets.all(5),
+        color: Colors.grey[100],
+        width: double.infinity,
+        child: _views[_rendered]
+      ),
+      bottomNavigationBar: BookspaceBottomBar(callback: changeView),
     );
   }
 }
