@@ -98,7 +98,30 @@ class PublicationController {
     return null;
   } 
 
-  //
+  // Delete publication by id
+  static Future<int> deletePublication(int id) async {
+    Publication publication;
+    try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications/$id");
+      
+      // Define headers
+      Map<String, String> headers = {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+      };
 
+      // Make GET request
+      http.Response response = await http.delete(uri, headers: headers);
+
+      // Request status and body
+      int statusCode = response.statusCode;
+
+      print('Delete response status: $statusCode\n');
+      return statusCode;
+    } catch(e) {
+      print('error caught: $e');
+    }
+    return null;
+  }
 
 }
