@@ -8,6 +8,8 @@ import 'package:bookspace/ui/publication/widgets/publication_card.dart';
 import 'package:flutter/material.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 
+import 'package:bookspace/globals.dart' as globals;
+
 class ProfileView extends StatefulWidget {
   ProfileView({Key key}) : super(key: key);
 
@@ -17,26 +19,24 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView> {
   User _user;
-  List<Publication> _publications = [
-    Publication(title: 'Hola', content: 'Hola2', dop: DateTime.parse("2021-03-30")),
-    Publication(title: 'Hola', content: 'Hola2', dop: DateTime.parse("1999-04-30")),
-    Publication(title: 'The New Age typically adopts a belief n a holistic form of divinity that imbues all of the universe, including human beings themselves. There is thus a strong emphasis on the spiritual authority of the self.', content: 'Theologically, the New Age typically adopts a belief in a holistic form of divinity that imbues all of the universe, including human beings themselves. There is thus a strong emphasis on the spiritual authority of the self.', dop: DateTime.parse("2020-12-30"))
-  ];
+
+  List<Publication> _myPublications = [];
 
   void getUser() async {
     User user = await UserController.getUser(1);
     if (!disposed){
       setState(() => _user = user);
+      getPublications(_user);
     }
   }
 
-  void getPublications(String genre) async {
+  void getPublications(User user) async {
     // TODO: backend get publis
-    List<Publication> publications = await PublicationController.getPublications();
+    List<Publication> myPublications = await PublicationController.getPublications(user.myPublicationsUri);
     if (!disposed){
-      //setState(() => _publications = publications);
+      setState(() => _myPublications = myPublications);
     }
-    _publications.sort((a,b) {
+    _myPublications.sort((a,b) {
       return -a.dop.compareTo(b.dop);
     });
   }
@@ -45,7 +45,6 @@ class _ProfileViewState extends State<ProfileView> {
   void initState() { 
     super.initState();
     getUser();
-    getPublications('h');
   }
 
   bool disposed = false;
@@ -60,50 +59,112 @@ class _ProfileViewState extends State<ProfileView> {
     if (_user != null) {
       return ListView( 
         children: <Widget> [
-          Container(
+          Container(                                                          //TO-DO Test containers paddings with different lenght fields 
             child: Column(
               children: [
                 Row(
                   children: [
                     Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget> [
-                        Image.asset('./assets/images/No_pic.png'),         //TO-DO if userpic == null show No_pic else userpic
+                        Container(
+                          padding: EdgeInsets.fromLTRB(15, 15, 10, 2),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.asset(
+                              './assets/images/No_pic.png',         //TO-DO if userpic == null show No_pic else userpic
+                              height: 170,
+                              width: 170,
+                              fit: BoxFit.fill,  
+                            ),
+                          )
+                        ),         
                       ]
                     ),
                     Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("@" + "${_user.username}"),
-                        Text("${_user.name}"),
-                        Text("${_user.description}"),
-                        Text("${_user.rank}" + " · " + "Se unió \n" + "FECHA REGISTRO")       //TO-DO Añadir fecha registro
+                        Container(
+                          padding: EdgeInsets.fromLTRB(5, 15, 5, 0),
+                          child: Text(
+                              "@" + "${_user.username}",
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0,),
+                            ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.fromLTRB(5, 10, 5, 0),                          
+                          child: Text(
+                            "${_user.name}",
+                              style: TextStyle(fontSize: 16.0,),                            
+                          )
+                        ),
+                        Container(
+                          padding: EdgeInsets.fromLTRB(5, 10, 5, 0),
+                          //color: Colors.orange,
+                          width: 185,
+                          height: 100,                            //TO-DO Reducir tamaño maximo de la descripcion
+                          child: Text(
+                            //"${_user.description}",
+                            "Soy vividor, soñador, amante de las novelas policíacas y el dramatismo.",
+                            style: TextStyle(color: Colors.grey,fontSize: 14.0,)
+                          )
+                        ),
+                        Container(
+                          padding: EdgeInsets.fromLTRB(5, 10, 5, 0),         
+                          child: RichText(
+                            text: new TextSpan(
+                              style: new TextStyle(
+                                color: Colors.grey,
+                              ),
+                              children: <TextSpan>[
+                                new TextSpan(text: "${_user.rank}", style: new TextStyle(fontWeight: FontWeight.bold)), //TO-DO Añadir fecha registro
+                                new TextSpan(text: " · " + "Se unió \n" + "FECHA REGISTRO"),
+                              ],
+                            ),
+                          )
+                        )
                       ],
                     )
                   ],
                 ),
                 Row(
                   children: [
-                    Text("Tags favoritos"),
-                    Expanded(
-                      child: TextField(
-                      readOnly: true,
-                      //TO-DO Añadir tags favs
-                      )
+                    Container (
+                      //color: Colors.orange,
+                      padding: EdgeInsets.fromLTRB(15, 5, 10, 0),
+                      child: Text(
+                        "Tags favoritos",
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Container (
+                      //color: Colors.orange,
+                      padding: EdgeInsets.fromLTRB(15, 5, 10, 0),     //Para cada tag recibida de la api un campo de texto con fondo gris y letras blancas, padding entre ellos
+                      child: Text(
+                        "Tag box placeholder",
+                      ),
                     ),
                   ],
                 ),
               ],
             ),
-            
           ),
           Container(
-            child: Text('Mis publicaciones')
+            padding: EdgeInsets.fromLTRB(15, 10, 0, 0),
+            child: Text('Mis publicaciones', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),)
           ),
-          for (var index = 0; index < _publications.length; index++) Column(
+          for (var index = 0; index < _myPublications.length; index++) Column(            //TO-DO Add left padding (15) & right padding (?) to publication cards
             children: <Widget>[
               Container(height: (index == 0)?10:0),
               InkWell(
                 child: PublicationCard(
-                  publication: _publications[index]
+                  publication: _myPublications[index]
                 ),
                 onTap: () {
                   Navigator.push(
@@ -111,7 +172,7 @@ class _ProfileViewState extends State<ProfileView> {
                     MaterialPageRoute(
                       builder: (context) => MainView(
                         renderIndex: 'home',
-                        view: PublicationView(id: _publications[index].id),
+                        view: PublicationView(id: _myPublications[index].id),
                       )
                     ),
                   );

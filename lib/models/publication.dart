@@ -30,12 +30,15 @@ class Publication {
   String title;
   String content;
   DateTime dop; // date of publication
+  int views;
+  int likes;
+  int category;
   User author;
-
-  //List<String> votedBy;
-  //List<String> favoriteBy;
-  //List<String> comments;
-  //int category;
+  String votedUsers;
+  String favUsers;
+  String comments;
+  String tags;
+  int nComments;
 
 
   Publication({
@@ -43,11 +46,15 @@ class Publication {
     this.title,
     this.content,
     this.dop,
+    this.views,
+    this.likes,
+    this.category,
     this.author,
-    //this.votedBy,
-    //this.favoriteBy,
-    //this.comments,
-    //this.category,
+    this.votedUsers,
+    this.favUsers,
+    this.comments,
+    this.tags,
+    this.nComments,
   });
 
   factory Publication.fromJson(Map<String, dynamic> json) => Publication(
@@ -55,9 +62,15 @@ class Publication {
         title: json["title"],
         content: json["content"],
         dop: DateTime.parse(json["dop"]),
+        views: json["views"],
+        likes: json["likes"],
+        category: int.tryParse(json["category"]),
         author: User.fromJson(json["author"]),
-        //description: json["description"],
-        //category: int.tryParse(json["category"]),
+        votedUsers: json["votedusers"],
+        favUsers: json["favusers"],
+        comments: json["comments"],
+        tags: json["tags"],
+        nComments: json["nComments"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -65,8 +78,11 @@ class Publication {
         "title": title,
         "content": content,
         "dop": dop,
+        "views": views,
+        "likes": likes,
+        "category": category,
         "author": author,
-        //"category": category,
+        //"nComments": nComments,
       };
 }
 
