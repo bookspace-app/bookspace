@@ -44,7 +44,7 @@ class PublicationCard extends StatelessWidget {
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 3),
                         child: Text(
-                          '${publication.likes}',
+                          '$_totalUpvotes',
                           textAlign: TextAlign.right,
                           style: TextStyle(
                             fontSize: 20.0,
@@ -73,7 +73,7 @@ class PublicationCard extends StatelessWidget {
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 3),
                         child: Text(
-                          '${publication.views}',
+                          '$_totalViews',
                           textAlign: TextAlign.right,
                           style: TextStyle(
                             fontSize: 20.0,
@@ -102,7 +102,7 @@ class PublicationCard extends StatelessWidget {
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 3),
                         child: Text(
-                          '${publication.nComments}',
+                          '$_totalResponses',
                           textAlign: TextAlign.right,
                           style: TextStyle(
                             fontSize: 20.0,

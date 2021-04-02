@@ -55,7 +55,7 @@ class _MainViewState extends State<MainView> {
         context, 
         MaterialPageRoute(
           builder: (context) => MainView(
-            renderIndex: '$_rendered',
+            renderIndex: 'profile',
             view: _views[_rendered],
           )
         ),
@@ -71,8 +71,7 @@ class _MainViewState extends State<MainView> {
         centerTitle: true,
         title: Text(_rendered),
         backgroundColor: Colors.white,
-        leadingWidth: 100,
-        leading: Image.asset('./assets/images/Logo.png', fit: BoxFit.fitHeight),     //TO-DO: Hacer mas grande el logo de la AppBar  
+        leading: Image.asset('./assets/images/Logo.png', height: 1000, width: 1000),
         actions: (_rendered == "profile") ? 
           [ 
             IconButton(

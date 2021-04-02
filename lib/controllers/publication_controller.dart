@@ -34,13 +34,10 @@ class PublicationController {
     return publication;
   }
 
-  static Future<List<Publication>> getPublications([String URI]) async {
+  static Future<List<Publication>> getPublications() async {
     List<Publication> publications = [];
     try {
-      Uri uri = Uri.https(
-        BACKEND_AUTHORITY, 
-        (URI == null) ? "$API/publications": RegExp(r"(?<=.com).*$").stringMatch(URI).toString()
-      );
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications");
       
       // Define headers
       Map<String, String> headers = {
@@ -55,7 +52,7 @@ class PublicationController {
       int statusCode = response.statusCode;
       String requestBody = response.body;
 
-      print('Response status: $statusCode\n Response body: $requestBody\n');
+      //print('Response status: $statusCode\n Response body: $requestBody\n');
       if (statusCode == 200) {
         json.decode(response.body).forEach((result) {
           publications.add(Publication.fromJson(result));
@@ -66,7 +63,5 @@ class PublicationController {
     }
     return publications;
   }
-
-  
 
 }
