@@ -20,26 +20,23 @@ class ProfileView extends StatefulWidget {
 class _ProfileViewState extends State<ProfileView> {
   User _user;
 
-  List<Publication> _publications = [
-    Publication(title: 'Hola', content: 'Hola2', dop: DateTime.parse("2021-03-30")),
-    Publication(title: 'Hola', content: 'Hola2', dop: DateTime.parse("1999-04-30")),
-    Publication(title: 'The New Age typically adopts a belief n a holistic form of divinity that imbues all of the universe, including human beings themselves. There is thus a strong emphasis on the spiritual authority of the self.', content: 'Theologically, the New Age typically adopts a belief in a holistic form of divinity that imbues all of the universe, including human beings themselves. There is thus a strong emphasis on the spiritual authority of the self.', dop: DateTime.parse("2020-12-30"))
-  ];
+  List<Publication> _myPublications = [];
 
   void getUser() async {
     User user = await UserController.getUser(1);
     if (!disposed){
       setState(() => _user = user);
+      getPublications(_user);
     }
   }
 
-  void getPublications(String genre) async {
+  void getPublications(User user) async {
     // TODO: backend get publis
-    List<Publication> publications = await PublicationController.getPublications();
+    List<Publication> myPublications = await PublicationController.getPublications(user.myPublicationsUri);
     if (!disposed){
-      //setState(() => _publications = publications);
+      setState(() => _myPublications = myPublications);
     }
-    _publications.sort((a,b) {
+    _myPublications.sort((a,b) {
       return -a.dop.compareTo(b.dop);
     });
   }
@@ -48,7 +45,6 @@ class _ProfileViewState extends State<ProfileView> {
   void initState() { 
     super.initState();
     getUser();
-    getPublications('h');
   }
 
   bool disposed = false;
@@ -161,12 +157,12 @@ class _ProfileViewState extends State<ProfileView> {
             padding: EdgeInsets.fromLTRB(15, 10, 0, 0),
             child: Text('Mis publicaciones', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),)
           ),
-          for (var index = 0; index < _publications.length; index++) Column(            //TO-DO Add left padding (15) & right padding (?) to publication cards
+          for (var index = 0; index < _myPublications.length; index++) Column(            //TO-DO Add left padding (15) & right padding (?) to publication cards
             children: <Widget>[
               Container(height: (index == 0)?10:0),
               InkWell(
                 child: PublicationCard(
-                  publication: _publications[index]
+                  publication: _myPublications[index]
                 ),
                 onTap: () {
                   Navigator.push(
@@ -174,7 +170,7 @@ class _ProfileViewState extends State<ProfileView> {
                     MaterialPageRoute(
                       builder: (context) => MainView(
                         renderIndex: 'home',
-                        view: PublicationView(id: _publications[index].id),
+                        view: PublicationView(id: _myPublications[index].id),
                       )
                     ),
                   );
