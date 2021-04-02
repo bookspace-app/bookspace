@@ -57,7 +57,8 @@ class _MainViewState extends State<MainView> {
         centerTitle: true,
         title: Text(_rendered),
         backgroundColor: Colors.white,
-        leading: Image.asset('./assets/images/Logo.png', height: 1000, width: 1000),
+        leadingWidth: 100,
+        leading: Image.asset('./assets/images/Logo.png', fit: BoxFit.fitHeight),     //TO-DO: Hacer mas grande el logo de la AppBar  
         actions: (_rendered == "profile") ? 
           [ 
             IconButton(
