@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bookspace/globals.dart' as globals;
 
@@ -9,7 +10,7 @@ class Reset extends StatefulWidget {
 }
 
 class _ResetState extends State<Reset> {
-  final TextEditingController _controller = TextEditingController();
+  final _controller = TextEditingController();
 
   @override
   void initState() {
@@ -35,6 +36,7 @@ class _ResetState extends State<Reset> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 35.0, vertical: 30.0),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -61,10 +63,13 @@ class _ResetState extends State<Reset> {
               ),
               TextField(
                 controller: _controller,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.email_outlined),
-                  suffixIcon: Icon(Icons.backspace_rounded),
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.backspace_rounded),
+                      onPressed: () => _controller.clear(),
+                  ),
                   hintText: 'Introdrueix la teva adreça electrònica',
                   labelText: 'Email *',
                 ),
@@ -112,7 +117,6 @@ class _ResetState extends State<Reset> {
                               onPressed: () {
                                 Navigator.pop(context);
                                 _controller.clear();
-                                //TODO redirigir a sign up view
                               },
                               child: const Text('OK'),
                             ),
