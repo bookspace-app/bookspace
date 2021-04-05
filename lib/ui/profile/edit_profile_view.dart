@@ -1,10 +1,14 @@
+import 'package:bookspace/controllers/user_controller.dart';
+import 'package:bookspace/models/user.dart';
 import 'package:bookspace/ui/profile/profile_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:bookspace/globals.dart' as globals;
 import 'package:bookspace/ui/widgets/custom_input_box.dart';
+import 'package:textfield_tags/textfield_tags.dart';
 
 class EditProfileView extends StatefulWidget {
   EditProfileView({Key key}) : super(key: key);
@@ -21,12 +25,30 @@ class _EditProfileViewState extends State<EditProfileView> {
   final emailController = TextEditingController();
   final bioController = TextEditingController();
 
+  bool isPasswordHiden = true;
+
   var _name;
   var _surname;
   var _username;
   var _password;
   var _email;
   var _bio;
+
+  User _user;
+
+  void getUser() async {
+    User user = await UserController.getUser(1);
+    if (!disposed) {
+      setState(() => _user = user);
+    }
+  }
+
+  bool disposed = false;
+  @override
+  void dispose() {
+    disposed = true;
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,23 +63,6 @@ class _EditProfileViewState extends State<EditProfileView> {
               image: AssetImage('assets/images/No_pic.png'),
             ),
           ),
-          /*
-          Stack(
-            children: <Widget>[
-              Container(
-                  constraints: BoxConstraints.expand(height: 120.0, width: 120.0),
-                  decoration: new BoxDecoration(color: Colors.white),
-                  child: Image(
-                    image: AssetImage('assets/images/google.png'),
-                  ),
-              ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Icon(Icons.favorite),
-              )
-            ],
-          )
-          */
           Container(
             margin: EdgeInsets.fromLTRB(0, 15, 0, 5),
             child: Text(
@@ -80,7 +85,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                     borderSide: BorderSide(color: Colors.grey),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  hintText: 'Jaume',
+                  hintText: 'Name', //_user.name,
                   hintStyle: TextStyle(
                       fontSize: 15,
                       color: Colors.grey[350],
@@ -119,7 +124,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                     borderSide: BorderSide(color: Colors.grey),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  hintText: 'Armengol Tapiolas',
+                  hintText: 'Apellidos',
                   hintStyle: TextStyle(
                       fontSize: 15,
                       color: Colors.grey[350],
@@ -158,7 +163,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                     borderSide: BorderSide(color: Colors.grey),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  hintText: 'jaumearmen',
+                  hintText: 'username', //_user.username,
                   hintStyle: TextStyle(
                       fontSize: 15,
                       color: Colors.grey[350],
@@ -188,31 +193,33 @@ class _EditProfileViewState extends State<EditProfileView> {
               constraints: BoxConstraints.expand(height: 50, width: 100),
               child: TextField(
                 controller: passwordController,
+                obscureText: isPasswordHiden,
                 style: TextStyle(
                     fontSize: 15,
                     //color: Color(0xff0962ff),
                     fontWeight: FontWeight.bold),
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  hintText: 'Password',
-                  hintStyle: TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey[350],
-                      fontWeight: FontWeight.w600),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-                  suffixIcon: IconButton(
-                      icon: Icon(Icons.clear),
-                      onPressed: () {
-                        setState(() {
-                          passwordController.clear();
-                        });
-                      }),
-                ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    hintText: 'Password',
+                    hintStyle: TextStyle(
+                        fontSize: 15,
+                        color: Colors.grey[350],
+                        fontWeight: FontWeight.w600),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black),
+                    ),
+                    suffixIcon: IconButton(
+                        icon: isPasswordHiden
+                            ? Icon(Icons.visibility_off)
+                            : Icon(Icons.visibility),
+                        onPressed: () {
+                          setState(() {
+                            isPasswordHiden = !isPasswordHiden;
+                          });
+                        })),
               )),
           Container(
             margin: EdgeInsets.fromLTRB(0, 15, 0, 5),
@@ -236,7 +243,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                     borderSide: BorderSide(color: Colors.grey),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  hintText: 'jaume29at@gmail.com',
+                  hintText: 'email', //_user.email,
                   hintStyle: TextStyle(
                       fontSize: 15,
                       color: Colors.grey[350],
@@ -253,27 +260,54 @@ class _EditProfileViewState extends State<EditProfileView> {
                       }),
                 ),
               )),
-          MyCustomInputBox(
-            label: 'Biografia',
-            inputHint: 'Hola',
-          ),
-          /*Text('Biografia'),
           Container(
-            constraints: BoxConstraints.expand(height: 40, width: 100),
-            child: TextField(
-              controller: bioController,
-              decoration: InputDecoration(
-                  hintText: 'Biografia',
-                  border: OutlineInputBorder(),
+            margin: EdgeInsets.fromLTRB(0, 15, 0, 5),
+            child: Text(
+              'Biografia',
+              style: TextStyle(
+                fontSize: 15,
+              ),
+            ),
+          ),
+          Container(
+              constraints: BoxConstraints.expand(height: 120, width: 100),
+              child: TextFormField(
+                controller: bioController,
+                onChanged: (text) {
+                  setState(() {});
+                },
+                keyboardType: TextInputType.multiline,
+                maxLines: 8,
+                inputFormatters: [
+                  new LengthLimitingTextInputFormatter(500),
+                ],
+                style: TextStyle(
+                    fontSize: 15,
+                    //color: Color(0xff0962ff),
+                    fontWeight: FontWeight.bold),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  hintText: 'bio', //_user.description,
+                  hintStyle: TextStyle(
+                      fontSize: 15,
+                      color: Colors.grey[350],
+                      fontWeight: FontWeight.w600),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                  ),
+                  counterText: '${bioController.text.length}' + '/500',
                   suffixIcon: IconButton(
                       icon: Icon(Icons.clear),
                       onPressed: () {
                         setState(() {
                           bioController.clear();
                         });
-                      })),
-            ),
-          ),*/
+                      }),
+                ),
+              )),
           Container(
             margin: EdgeInsets.fromLTRB(0, 15, 0, 5),
             child: Text(
@@ -284,35 +318,34 @@ class _EditProfileViewState extends State<EditProfileView> {
             ),
           ),
           Container(
-              constraints: BoxConstraints.expand(height: 50, width: 100),
-              child: TextField(
-                //controller: emailController,
-                style: TextStyle(
-                    fontSize: 15,
-                    //color: Color(0xff0962ff),
-                    fontWeight: FontWeight.bold),
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  hintText: 'Space & Aliens',
-                  hintStyle: TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey[350],
-                      fontWeight: FontWeight.w600),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-                  /*suffixIcon: IconButton(
-                      icon: Icon(Icons.clear),
-                      onPressed: () {
-                        setState(() {
-                          tagsController.clear();
-                        });
-                      }),*/
-                ),
-              )),
+              //color: Colors.orange,
+              constraints: BoxConstraints.expand(height: 85, width: 100),
+              child: TextFieldTags(
+                  initialTags: ['hola', 'adeu'], //_user.tags,
+                  tagsStyler: TagsStyler(
+                      tagTextStyle: TextStyle(fontWeight: FontWeight.bold),
+                      tagDecoration: BoxDecoration(
+                        color: Colors.blue[300],
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      tagCancelIcon: Icon(Icons.cancel,
+                          size: 18.0, color: Colors.blue[900]),
+                      tagPadding: const EdgeInsets.all(6.0)),
+                  textFieldStyler: TextFieldStyler(
+                      isDense: false,
+                      textFieldBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      textFieldFocusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.black,
+                        ),
+                      ),
+                      helperText: "",
+                      hintText: "put tags"),
+                  onTag: (tag) {},
+                  onDelete: (tag) {})),
           Container(
               alignment: Alignment.bottomCenter,
               height: 40,
