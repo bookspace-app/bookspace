@@ -1,3 +1,5 @@
+import 'package:bookspace/controllers/user_controller.dart';
+import 'package:bookspace/models/user.dart';
 import 'package:bookspace/app_localizations.dart';
 import 'package:bookspace/ui/login/sign_up2.dart';
 import 'package:bookspace/ui/main_view.dart';
@@ -30,12 +32,33 @@ class _SignUpState extends State<SignUp> {
   bool errorsPassR = false;
   bool errorsAll = false;
 
+  User _user;
+  List<User> _users = [];
+
+  void getALLuser() async {
+    List<User> users = await UserController.getAllusers();
+    if (!disposed){
+      setState(() => _users = users);
+    }
+    print(users);
+  }
+
+  void postUser(String username, String name, String email) async {
+    User user = await UserController.postUser(username,name,email);
+    print(user);
+    if (!disposed){
+      setState(() => _user = user);
+    }
+    print(_user);
+  }
 
   //Error Check
   String errorUserName() {
     if (userNameController.text.isEmpty) return "Rellena este campo";
     else if (userNameController.text.length < 4) return "El nombre tiene que ser al menos de 4 caracteres";
-    //else if userNameController.text = nombre de otro usuario en la BD
+    for (var i = 0; i < _users.length; i++){
+      if(userNameController.text == _users[i].username) return "El nombre ya es usado, introduzca otro";
+    }
     return null;
   } 
 
@@ -54,14 +77,16 @@ class _SignUpState extends State<SignUp> {
     else if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(emailController.text)) {
       return "El email no tiene un formato valido";
     }
-    //else if emailController.text = email de otro usuario en la BD
+    for (var i = 0; i < _users.length; i++){
+      if(emailController.text == _users[i].email) return "El email indicado ya es registrado";
+    }
     return null;
   } 
 
   String errorPass() {
     if (passController.text.isEmpty) return "Rellena este campo";
     else if (passController.text.length < 6) return "La contraseña tiene que ser al menos de 6 caracteres";
-    else if (!RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{6,}$').hasMatch(passController.text)) {
+    else if (!RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~?.,]).{6,}$').hasMatch(passController.text)) {
       return "La contraseña tiene que contener al menos \nuna mayúscula, una minúscula, un número y un simbolo";
     }
     return null;
@@ -71,12 +96,13 @@ class _SignUpState extends State<SignUp> {
     if (passRController.text.isEmpty) return "Rellena este campo";
     else if (passRController.text != passController.text) return "Las contraseñas no coinciden";
     return null;
-  } 
+  }
 
-
+  bool disposed = false;
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
+    disposed = true;
     userNameController.dispose();
     nameController.dispose();
     surNameController.dispose();
@@ -89,6 +115,7 @@ class _SignUpState extends State<SignUp> {
   @override
   void initState() {
     super.initState();
+    getALLuser();
   }
 
   @override
@@ -337,10 +364,10 @@ class _SignUpState extends State<SignUp> {
                             errorsEmail = emailController.text.isEmpty;
                             errorsPass = passController.text.isEmpty;
                             errorsPassR = passRController.text.isEmpty | (passRController.text != passController.text);
-
                             errorsAll = errorsUserName | errorsName | errorsSurName | errorsEmail | errorsPass | errorsPassR;
                         });
                         if (!errorsAll) {
+                          postUser(userNameController.text, nameController.text+surNameController.text, emailController.text);
                           Navigator.push(
                             context, // TODO: pass id to PublicationView
                             MaterialPageRoute(
@@ -349,6 +376,20 @@ class _SignUpState extends State<SignUp> {
                           );
                         }  
                       //Hacer cosas e ir a la siguiente pantalla de registro
+                        /*
+                          //
+                          FutureBuilder<User>(
+                          future: _user,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Text(snapshot.data.username);
+                            } else if (snapshot.hasError) {
+                              return Text("${snapshot.error}");
+                            }
+
+                            return CircularProgressIndicator();
+                          },
+                        ); */
                     }
                   )
                 )  
