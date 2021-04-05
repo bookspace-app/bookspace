@@ -1,3 +1,8 @@
 {
-    "id": "hello"
+    "id": "hello",
+    "home": "Home",
+    "chatList": "Chats",
+    "createPublication": "New Publication",
+    "activity": "Activity",
+    "profile": "Profile"
 }

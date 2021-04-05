@@ -112,7 +112,7 @@ class _ProfileViewState extends State<ProfileView> {
                           )
                         ),
                         Container(
-                          padding: EdgeInsets.fromLTRB(5, 10, 5, 0),         
+                          padding: EdgeInsets.fromLTRB(5, 20, 5, 0),          //TO-DO Fix the container to a position no matter description length
                           child: RichText(
                             text: new TextSpan(
                               style: new TextStyle(
