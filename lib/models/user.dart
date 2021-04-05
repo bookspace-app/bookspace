@@ -35,6 +35,7 @@ class User {
   //String myPublicationsApi;
   //String votedPublicationApi;
   //String myCommentsApi;
+  DateTime dob;
 
   User({
     this.id,
@@ -44,6 +45,7 @@ class User {
     this.age,
     this.description,
     this.rank,
+    this.dob,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
@@ -54,6 +56,7 @@ class User {
         age: json["int"],
         description: json["description"],
         rank: int.tryParse(json["rank"]),
+        dob: DateTime.parse(json["dob"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -64,5 +67,6 @@ class User {
         "age": age,
         "description": description,
         "rank": rank,
+        "dob": dob,
       };
 }

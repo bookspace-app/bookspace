@@ -1,7 +1,5 @@
-
-
 import 'dart:convert';
-
+import 'package:intl/intl.dart';
 import 'package:bookspace/config.dart';
 import 'package:bookspace/models/user.dart';
 import 'package:http/http.dart' as http;
@@ -71,6 +69,7 @@ class UserController {
   //POST user
   static Future<User> postUser(String username, String name, String email, /*String password*/) async {
     User user;
+
     try {
       Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users");
 
@@ -85,8 +84,10 @@ class UserController {
         'username': username,
         'name': name,
         'email': email,
-        //'password': password,
-        //'description': descripcion,
+        //'password': "test",
+        'description': "testDescripcion",
+        'dob': DateFormat('yyyy-mm-dd').format(DateTime.now()),
+        'rank': "WORKER",
       };
 
       // Make POST request
@@ -96,7 +97,7 @@ class UserController {
       int statusCode = response.statusCode;
       String requestBody = response.body;
 
-      //print('Response status: $statusCode\n Response body: $requestBody\n');
+      print('Response status: $statusCode\n Response body: $requestBody\n');
       if (statusCode == 201) {
         user = User.fromJson(json.decode(response.body));
       }
