@@ -1,4 +1,7 @@
 import 'package:bookspace/app_localizations.dart';
+import 'package:bookspace/ui/login/sign_in.dart';
+import 'package:bookspace/ui/login/sign_up.dart';
+import 'package:bookspace/ui/login/sign_up2.dart';
 import 'package:bookspace/ui/main_view.dart';
 import 'package:bookspace/ui/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
