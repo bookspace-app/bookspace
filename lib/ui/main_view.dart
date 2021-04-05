@@ -55,7 +55,7 @@ class _MainViewState extends State<MainView> {
         context, 
         MaterialPageRoute(
           builder: (context) => MainView(
-            renderIndex: 'profile',
+            renderIndex: '$_rendered',
             view: _views[_rendered],
           )
         ),

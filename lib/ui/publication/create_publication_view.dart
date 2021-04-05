@@ -1,6 +1,12 @@
+import 'package:bookspace/controllers/publication_controller.dart';
+import 'package:bookspace/controllers/user_controller.dart';
+import 'package:bookspace/models/publication.dart';
+import 'package:bookspace/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:textfield_tags/textfield_tags.dart';
+
+import 'package:bookspace/globals.dart' as globals;
 
 class CreatePublicationView extends StatefulWidget {
   CreatePublicationView({Key key}) : super(key: key);
@@ -11,14 +17,32 @@ class CreatePublicationView extends StatefulWidget {
 
 class _CreatePublicationViewState extends State<CreatePublicationView> {
 
+  User _user;
   var titleController = TextEditingController();
   var descController = TextEditingController();
+  var genreController = TextEditingController();
 
+  Publication myPublication;
+
+  void getUser() async {
+    User user = await UserController.getUser(1);   //TO-DO Get current user id
+    if (!disposed){
+      setState(() => _user = user);
+    }
+  }
+
+  void createPublication() async {
+    int response = await PublicationController.createPublication(myPublication);
+  }
+
+  bool disposed = false;
   @override
   void dispose() {
+    disposed = true;
     // Clean up the controller when the widget is disposed.
     titleController.dispose();
     descController.dispose();
+    genreController.dispose();
     super.dispose();
   }
 
@@ -105,13 +129,41 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                   style: TextStyle(fontSize: 14.0, color:Colors.grey),
                   ),
               ),
-              Container(
+              Container(/*                              //TO-DO Text editior toolbar (see canva reference)
                 padding: EdgeInsets.fromLTRB(15, 2, 15, 2),
                 width: 400,
-                child: Text(
-                  "PLACEHOLDER text options bar",
-                  ),
-              ),
+                child: Row(
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(
+                        CommunityMaterialIcons.format_size,
+                        color: selectedType == SmartTextType.H1
+                          ? Colors.teal
+                          : Colors.black
+                      ),
+                      onPressed: () => onSelected(SmartTextType.H1)
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        CommunityMaterialIcons.format_quote_open,
+                        color: selectedType == SmartTextType.QUOTE
+                          ? Colors.teal
+                          : Colors.black
+                      ),
+                      onPressed: () => onSelected(SmartTextType.QUOTE)
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        CommunityMaterialIcons.format_list_bulleted,
+                        color: selectedType == SmartTextType.BULLET
+                          ? Colors.teal
+                          : Colors.black
+                      ),
+                      onPressed: () => onSelected(SmartTextType.BULLET)
+                    )
+                  ]
+                )
+              */),
               Container(
                 padding: EdgeInsets.fromLTRB(15, 2, 15, 5),
                 child: Row(
@@ -130,7 +182,8 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(),
-                        counterText: '${descController.text.length}' + '/500'
+                        counterText: '${descController.text.length}' + '/500',
+                        contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10)
                       )
                     )),
                   ]
@@ -163,7 +216,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                 child: Row(
                   children: [
                     Expanded(child: TextFormField(
-                      controller: titleController,
+                      controller: genreController,
                       onChanged: (text) {
                         setState(() {
                         });
@@ -171,14 +224,13 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
-                        hintText: "PLACHOLDER genre picker",
                         border: OutlineInputBorder(),
-                        suffixIcon: titleController.text.length > 0 ?
+                        suffixIcon: genreController.text.length > 0 ?
                           IconButton(
                             icon: Icon(Icons.clear),
                             onPressed: () {
                               setState(() {
-                                titleController.clear();
+                                genreController.clear();
                               });
                             })
                           : null   
@@ -246,8 +298,12 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                         color: Color.fromRGBO(250, 198, 65, 1),
                         child: Text('Publicar', style: TextStyle(fontSize: 18.0, color: Colors.black),),
                           onPressed: () {
-
-                          //Publicar post
+                            myPublication = Publication();
+                            myPublication.title = titleController.text;
+                            myPublication.content = descController.text;
+                            myPublication.author = _user;
+                            myPublication.category = 1;       //Hardcoded
+                            createPublication();
                         }
                       )
                     )  
