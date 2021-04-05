@@ -59,6 +59,8 @@ flutter:
 
     #Images
    - assets/images/Logo.png
+   - assets/images/logo.png
+   - assets/images/google.png
    - assets/images/No_pic.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
