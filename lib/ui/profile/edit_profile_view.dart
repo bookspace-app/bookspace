@@ -51,6 +51,12 @@ class _EditProfileViewState extends State<EditProfileView> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    getUser();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
@@ -85,7 +91,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                     borderSide: BorderSide(color: Colors.grey),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  hintText: 'Name', //_user.name,
+                  hintText: _user.name,
                   hintStyle: TextStyle(
                       fontSize: 15,
                       color: Colors.grey[350],
@@ -102,7 +108,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                       }),
                 ),
               )),
-          Container(
+          /*Container(
             margin: EdgeInsets.fromLTRB(0, 15, 0, 5),
             child: Text(
               'Apellidos',
@@ -140,7 +146,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                         });
                       }),
                 ),
-              )),
+              )),*/
           Container(
             margin: EdgeInsets.fromLTRB(0, 15, 0, 5),
             child: Text(
@@ -163,7 +169,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                     borderSide: BorderSide(color: Colors.grey),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  hintText: 'username', //_user.username,
+                  hintText: _user.username,
                   hintStyle: TextStyle(
                       fontSize: 15,
                       color: Colors.grey[350],
@@ -243,7 +249,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                     borderSide: BorderSide(color: Colors.grey),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  hintText: 'email', //_user.email,
+                  hintText: _user.email,
                   hintStyle: TextStyle(
                       fontSize: 15,
                       color: Colors.grey[350],
@@ -290,7 +296,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                     borderSide: BorderSide(color: Colors.grey),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  hintText: 'bio', //_user.description,
+                  hintText: _user.description,
                   hintStyle: TextStyle(
                       fontSize: 15,
                       color: Colors.grey[350],
