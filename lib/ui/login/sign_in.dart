@@ -1,5 +1,8 @@
 import 'package:bookspace/controllers/user_controller.dart';
 import 'package:bookspace/models/user.dart';
+import 'package:bookspace/ui/login/reset_pass.dart';
+import 'package:bookspace/ui/login/sign_up.dart';
+import 'package:bookspace/ui/main_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -24,7 +27,7 @@ class _SignInState extends State<SignIn> {
   int id;
   void getALLuser() async {
     List<User> users = await UserController.getAllusers();
-    if (!disposed){
+    if (!disposed) {
       setState(() => _users = users);
     }
     print(users);
@@ -32,16 +35,16 @@ class _SignInState extends State<SignIn> {
 
   void getUser(int id) async {
     User user = await UserController.getUser(id);
-    if (!disposed){
+    if (!disposed) {
       setState(() => _user = user);
     }
   }
 
   String errorUserName() {
     if (usernameController.text.isEmpty) return "Rellena este campo";
-    for (var i = 0; i < _users.length; i++){
-      if(usernameController.text == _users[i].username){
-        id=_users[i].id;
+    for (var i = 0; i < _users.length; i++) {
+      if (usernameController.text == _users[i].username) {
+        id = _users[i].id;
         return null;
       }
     }
@@ -158,33 +161,47 @@ class _SignInState extends State<SignIn> {
             Container(
                 height: 40,
                 child: ElevatedButton(
-                  onPressed: () => print('Inici de sessió'),
-                  child: Text('Iniciar Sesión',
-                      style: TextStyle(
-                        color: Colors.black, /*fontFamily: "Schyler"*/
-                      )),
-                  style: ElevatedButton.styleFrom(
-                      primary: Colors.orangeAccent,
-                      onPrimary: Colors.black,
-                      shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(10.0))),
-                )),
+                    child: Text('Iniciar Sesión',
+                        style: TextStyle(
+                          color: Colors.black, /*fontFamily: "Schyler"*/
+                        )),
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.orangeAccent,
+                        onPrimary: Colors.black,
+                        shape: new RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(10.0))),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MainView()),
+                      );
+                    })),
             Container(
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                   TextButton(
-                      onPressed: () => print('Anar a recupesrar contrasenya'),
                       child: Text(
                         '¿Olvidaste tu contrasenya?',
                         style: TextStyle(color: Colors.black),
-                      )),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Reset()),
+                        );
+                      }),
                   TextButton(
-                      onPressed: () => print('Registrarse'),
                       child: Text(
                         'Registrarse',
                         style: TextStyle(color: Colors.black),
-                      ))
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SignUp()),
+                        );
+                      })
                 ]))
           ]),
     );
