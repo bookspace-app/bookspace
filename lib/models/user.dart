@@ -32,10 +32,17 @@ class User {
   int age;
   String description;
   int rank;
-  //String myPublicationsApi;
-  //String votedPublicationApi;
-  //String myCommentsApi;
   DateTime dob;
+  
+  String myPublicationsUri;
+  String votedPublicationsUri;
+  String favouritePublicationsUri;
+  String myCommentsUri;
+  String votedCommentsUri;
+  String blockedUsersUri;
+  String profilePicUri;
+  String myTagsUri;
+  String myPreferedTagsUri;
 
   User({
     this.id,
@@ -46,6 +53,16 @@ class User {
     this.description,
     this.rank,
     this.dob,
+    
+    this.myPublicationsUri,
+    this.votedPublicationsUri,
+    this.favouritePublicationsUri,
+    this.myCommentsUri,
+    this.votedCommentsUri,
+    this.blockedUsersUri,
+    this.profilePicUri,
+    this.myTagsUri,
+    this.myPreferedTagsUri,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
@@ -57,6 +74,16 @@ class User {
         description: json["description"],
         rank: int.tryParse(json["rank"]),
         dob: DateTime.parse(json["dob"]),
+    
+        myPublicationsUri: json["publications"],
+        votedCommentsUri: json["votedPublications"],
+        favouritePublicationsUri: json["favouritePublications"],
+        myCommentsUri: json["comments"],
+        votedPublicationsUri: json["votedComments"],
+        blockedUsersUri: json["blockedUsers"],
+        profilePicUri: json["profilePic"],
+        myTagsUri: json["createdTags"],
+        myPreferedTagsUri: json["preferedTags"],
       );
 
   Map<String, dynamic> toJson() => {
