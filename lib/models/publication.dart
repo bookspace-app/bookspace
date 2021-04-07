@@ -34,7 +34,8 @@ class Publication {
   int likes;
   int category;
   User author;
-  String votedUsers;
+  int author_id;
+  String votedUsers;  
   String favUsers;
   String comments;
   String tags;
@@ -50,6 +51,7 @@ class Publication {
     this.likes,
     this.category,
     this.author,
+    this.author_id,
     this.votedUsers,
     this.favUsers,
     this.comments,
@@ -66,6 +68,7 @@ class Publication {
         likes: json["likes"],
         category: int.tryParse(json["category"]),
         author: User.fromJson(json["author"]),
+        author_id: json["author_id"],
         votedUsers: json["votedusers"],
         favUsers: json["favusers"],
         comments: json["comments"],
@@ -82,6 +85,7 @@ class Publication {
         "likes": likes,
         "category": category,
         "author": author,
+        "author_id": author_id,
         //"nComments": nComments,
       };
 }

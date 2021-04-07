@@ -56,8 +56,8 @@ class _SignUpState extends State<SignUp> {
     print(users);
   }
 
-  void postUser(String username, String name, String email) async {
-    User user = await UserController.postUser(username, name, email);
+  void postUser(String username, String name, String email, String pass) async {
+    User user = await UserController.postUser(username, name, email, pass);
     print(user);
     if (!disposed) {
       setState(() => _user = user);
@@ -397,8 +397,10 @@ class _SignUpState extends State<SignUp> {
                                 postUser(
                                     userNameController.text,
                                     nameController.text +
-                                        surNameController.text,
-                                    emailController.text);
+                                    surNameController.text,
+                                    emailController.text,
+                                    passController.text,
+                                    );
 
                                 Navigator.push(
                                   context, // TODO: pass id to PublicationView

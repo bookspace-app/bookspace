@@ -66,12 +66,7 @@ class UserController {
   }
 
   //POST user
-  static Future<User> postUser(
-    String username,
-    String name,
-    String email,
-    /*String password*/
-  ) async {
+  static Future<User> postUser(String username, String name, String email, String password) async {
     User user;
 
     try {
@@ -88,10 +83,7 @@ class UserController {
         'username': username,
         'name': name,
         'email': email,
-        //'password': "test",
-        'description': "testDescripcion",
-        'dob': DateFormat('yyyy-mm-dd').format(DateTime.now()),
-        'rank': "WORKER",
+        'password': password,
       };
 
       // Make POST request

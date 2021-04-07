@@ -182,7 +182,7 @@ class _SignInState extends State<SignIn> {
                     children: [
                   TextButton(
                       child: Text(
-                        '¿Olvidaste tu contrasenya?',
+                        '¿Olvidaste tu contraseña?',
                         style: TextStyle(color: Colors.black),
                       ),
                       onPressed: () {
@@ -197,6 +197,8 @@ class _SignInState extends State<SignIn> {
                         style: TextStyle(color: Colors.black),
                       ),
                       onPressed: () {
+
+                        //TO-DO Ver si los campos de nombre y contraseña son correctos
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => SignUp()),
