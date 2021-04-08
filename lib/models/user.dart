@@ -32,6 +32,8 @@ class User {
   int age;
   String description;
   int rank;
+  DateTime dob;
+  
   String myPublicationsUri;
   String votedPublicationsUri;
   String favouritePublicationsUri;
@@ -50,6 +52,8 @@ class User {
     this.age,
     this.description,
     this.rank,
+    this.dob,
+    
     this.myPublicationsUri,
     this.votedPublicationsUri,
     this.favouritePublicationsUri,
@@ -69,6 +73,8 @@ class User {
         age: json["int"],
         description: json["description"],
         rank: int.tryParse(json["rank"]),
+        dob: DateTime.parse(json["dob"]),
+    
         myPublicationsUri: json["publications"],
         votedCommentsUri: json["votedPublications"],
         favouritePublicationsUri: json["favouritePublications"],
@@ -88,5 +94,6 @@ class User {
         "age": age,
         "description": description,
         "rank": rank,
+        "dob": dob,
       };
 }

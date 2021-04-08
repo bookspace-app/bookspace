@@ -1,3 +1,8 @@
 {
-    "id": "hola"
+    "id": "hola",
+    "home": "Inici",
+    "chatList": "Xats",
+    "createPublication": "Nova Publicació",
+    "activity": "Activitat",
+    "profile": "Perfil"
 }

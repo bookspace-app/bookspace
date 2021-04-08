@@ -1,5 +1,6 @@
 import 'package:bookspace/controllers/user_controller.dart';
 import 'package:bookspace/models/user.dart';
+import 'package:bookspace/ui/main_view.dart';
 import 'package:bookspace/ui/profile/profile_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,7 @@ class _EditProfileViewState extends State<EditProfileView> {
   var _password;
   var _email;
   var _bio;
+  var _id;
 
   User _user;
 
@@ -41,6 +43,17 @@ class _EditProfileViewState extends State<EditProfileView> {
     if (!disposed) {
       setState(() => _user = user);
     }
+    setState(() {
+      nameController.text = _user.name;
+      usernameController.text = _user.username;
+      emailController.text = _user.email;
+      bioController.text = _user.description;
+    });
+    _id = _user.id;
+  }
+
+  void putUser(String username, name, email, descrition, int id) async {
+    UserController.updateUser(username, name, email, descrition, id);
   }
 
   bool disposed = false;
@@ -91,7 +104,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                     borderSide: BorderSide(color: Colors.grey),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  hintText: _user.name,
+                  hintText: 'Nombre',
                   hintStyle: TextStyle(
                       fontSize: 15,
                       color: Colors.grey[350],
@@ -169,7 +182,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                     borderSide: BorderSide(color: Colors.grey),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  hintText: _user.username,
+                  hintText: 'Nombre de usuario',
                   hintStyle: TextStyle(
                       fontSize: 15,
                       color: Colors.grey[350],
@@ -209,7 +222,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                       borderSide: BorderSide(color: Colors.grey),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    hintText: 'Password',
+                    hintText: 'Contraseña',
                     hintStyle: TextStyle(
                         fontSize: 15,
                         color: Colors.grey[350],
@@ -249,7 +262,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                     borderSide: BorderSide(color: Colors.grey),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  hintText: _user.email,
+                  hintText: 'Email',
                   hintStyle: TextStyle(
                       fontSize: 15,
                       color: Colors.grey[350],
@@ -296,7 +309,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                     borderSide: BorderSide(color: Colors.grey),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  hintText: _user.description,
+                  hintText: 'Description',
                   hintStyle: TextStyle(
                       fontSize: 15,
                       color: Colors.grey[350],
@@ -360,15 +373,19 @@ class _EditProfileViewState extends State<EditProfileView> {
                 onPressed: () {
                   setState(() {
                     _name = nameController.text;
-                    _surname = surnameController.text;
                     _username = usernameController.text;
                     _email = emailController.text;
                     _password = passwordController.text;
                     _bio = bioController.text;
+                    putUser(_username, _name, _email, _bio, _id);
 
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ProfileView()),
+                      MaterialPageRoute(
+                          builder: (context) => MainView(
+                                renderIndex: 'profile',
+                                view: ProfileView(),
+                              )),
                     );
                   });
                 },
