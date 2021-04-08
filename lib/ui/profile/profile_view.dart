@@ -106,8 +106,8 @@ class _ProfileViewState extends State<ProfileView> {
                           width: 185,
                           height: 100,                            //TO-DO Reducir tamaño maximo de la descripcion
                           child: Text(
-                            //"${_user.description}",
-                            "Soy vividor, soñador, amante de las novelas policíacas y el dramatismo.",
+                            "${_user.description}",
+                            //"Soy vividor, soñador, amante de las novelas policíacas y el dramatismo.",
                             style: TextStyle(color: Colors.grey,fontSize: 14.0,)
                           )
                         ),

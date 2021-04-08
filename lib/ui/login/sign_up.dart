@@ -397,10 +397,10 @@ class _SignUpState extends State<SignUp> {
                                 postUser(
                                     userNameController.text,
                                     nameController.text +
-                                    surNameController.text,
+                                        surNameController.text,
                                     emailController.text,
                                     passController.text,
-                                    );
+                                  );
 
                                 Navigator.push(
                                   context, // TODO: pass id to PublicationView
