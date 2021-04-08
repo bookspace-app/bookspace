@@ -152,4 +152,41 @@ class UserController {
     }
     return false;
   }
+
+  //UPDATE USER DESCRIPTION
+  static Future<bool> updateDesc (String descripcion, int id ) async {
+    User user;
+    try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id");
+
+      //define headers
+      Map<String, String> headers = {
+        //"Authorization": "JWT $authToken",
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
+
+      //Define body
+      Map<String, String> body = {
+        'description': descripcion,
+      };
+
+      // Make PUT request
+      http.Response response =
+      await http.put(uri, headers: headers, body: json.encode(body));
+
+      // Request status and body
+      int statusCode = response.statusCode;
+      String requestBody = response.body;
+
+      print('Response status: $statusCode\n Response body: $requestBody\n');
+
+      if (statusCode == 201) {
+        user = User.fromJson(json.decode(response.body));
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return false;
+  }
 }
