@@ -70,7 +70,7 @@ class UserController {
     String username,
     String name,
     String email,
-    /*String password*/
+    String pass
   ) async {
     User user;
 
@@ -88,7 +88,7 @@ class UserController {
         'username': username,
         'name': name,
         'email': email,
-        //'password': "test",
+        'password': pass,
         'description': "testDescripcion",
         'dob': DateFormat('yyyy-mm-dd').format(DateTime.now()),
         'rank': "WORKER",

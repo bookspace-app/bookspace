@@ -102,7 +102,7 @@ class PublicationCard extends StatelessWidget {
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 3),
                         child: Text(
-                          '${publication.nComments}',
+                          "0",//'${publication.nComments}',
                           textAlign: TextAlign.right,
                           style: TextStyle(
                             fontSize: 20.0,
