@@ -254,7 +254,7 @@ class _SignUp2State extends State<SignUp2> {
                         child: Text('Completar registro'),
                         onPressed: () {
                           
-                          //Hacer cosas e ir a la siguiente pantalla de registro
+                          //TO-DO Puts descripcion, tags favoritas, profile pic
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => SignIn()),

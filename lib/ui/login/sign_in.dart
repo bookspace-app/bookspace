@@ -201,6 +201,8 @@ class _SignInState extends State<SignIn> {
                         style: TextStyle(color: Colors.black),
                       ),
                       onPressed: () {
+
+                        //TO-DO Ver si los campos de nombre y contraseña son correctos
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => SignUp()),

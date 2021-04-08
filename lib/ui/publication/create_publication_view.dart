@@ -298,11 +298,12 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                         color: Color.fromRGBO(250, 198, 65, 1),
                         child: Text('Publicar', style: TextStyle(fontSize: 18.0, color: Colors.black),),
                           onPressed: () {
+                            getUser();
                             myPublication = Publication();
                             myPublication.title = titleController.text;
                             myPublication.content = descController.text;
-                            myPublication.author = _user;
-                            myPublication.category = 1;       //Hardcoded
+                            myPublication.author_id = 1;              //TO-DO  = _user.id; now its hardcoded
+                            myPublication.category = 2;               //TO-DO Create genre selector and link it here, now its hardcoded
                             createPublication();
                         }
                       )

@@ -72,12 +72,12 @@ class _MainViewState extends State<MainView> {
         title: Text(_rendered),
         backgroundColor: Colors.white,
         leadingWidth: 100,
-        leading: Image.asset('./assets/images/Logo.png', fit: BoxFit.fitHeight),     //TO-DO: Hacer mas grande el logo de la AppBar  
+        leading: Image.asset('./assets/images/logo.png', fit: BoxFit.fitHeight),     //TO-DO: Hacer mas grande el logo de la AppBar  
         actions: (_rendered == "profile") ? 
           [ 
             IconButton(
                 icon: Icon(Icons.more_vert),
-                iconSize: 40,
+                iconSize: 40, 
                 color: Colors.grey,
                 onPressed: () { },
             ),
