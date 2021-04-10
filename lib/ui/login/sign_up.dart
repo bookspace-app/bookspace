@@ -396,8 +396,7 @@ class _SignUpState extends State<SignUp> {
                         
                                 postUser(
                                     userNameController.text,
-                                    nameController.text +
-                                        surNameController.text,
+                                    nameController.text + surNameController.text,
                                     emailController.text,
                                     passController.text,
                                   );

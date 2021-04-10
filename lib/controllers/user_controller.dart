@@ -66,12 +66,7 @@ class UserController {
   }
 
   //POST user
-  static Future<User> postUser(
-    String username,
-    String name,
-    String email,
-    String pass
-  ) async {
+  static Future<User> postUser(String username, String name, String email, String pass) async {
     User user;
 
     try {
@@ -89,9 +84,6 @@ class UserController {
         'name': name,
         'email': email,
         'password': pass,
-        'description': "testDescripcion",
-        'dob': DateFormat('yyyy-mm-dd').format(DateTime.now()),
-        'rank': "WORKER",
       };
 
       // Make POST request
@@ -114,7 +106,7 @@ class UserController {
 
   //UPDATE USER
   static Future<bool> updateUser(String username, String name, String email,
-      String descripcion, int id /*String password*/) async {
+      String descripcion, int id) async {
     User user;
     try {
       Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id");
@@ -131,7 +123,6 @@ class UserController {
         'username': username,
         'name': name,
         'email': email,
-        //'password': password,
         'description': descripcion,
       };
 
@@ -144,6 +135,43 @@ class UserController {
       int statusCode = response.statusCode;
 
       //return response.statusCode == 200;
+      if (statusCode == 201) {
+        user = User.fromJson(json.decode(response.body));
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return false;
+  }
+
+  //UPDATE USER DESCRIPTION
+  static Future<bool> updateDesc (String descripcion, int id ) async {
+    User user;
+    try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id");
+
+      //define headers
+      Map<String, String> headers = {
+        //"Authorization": "JWT $authToken",
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
+
+      //Define body
+      Map<String, String> body = {
+        'description': descripcion,
+      };
+
+      // Make PUT request
+      http.Response response =
+      await http.put(uri, headers: headers, body: json.encode(body));
+
+      // Request status and body
+      int statusCode = response.statusCode;
+      String requestBody = response.body;
+
+      print('Response status: $statusCode\n Response body: $requestBody\n');
+
       if (statusCode == 201) {
         user = User.fromJson(json.decode(response.body));
       }

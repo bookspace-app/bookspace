@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:bookspace/ui/login/sign_in.dart';
 import 'package:bookspace/ui/login/sign_up.dart';
+import 'package:bookspace/controllers/user_controller.dart';
+import 'package:bookspace/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:textfield_tags/textfield_tags.dart';
@@ -20,7 +22,11 @@ class _SignUp2State extends State<SignUp2> {
 
   File _image;
   final picker = ImagePicker();
+  User _user;
 
+  void updateDesc(String descp, int id) async {
+    UserController.updateDesc(descp, id);
+  }
 
   Future getImageCamera() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
@@ -253,7 +259,7 @@ class _SignUp2State extends State<SignUp2> {
                         color: Colors.blue,
                         child: Text('Completar registro'),
                         onPressed: () {
-                          
+                          updateDesc(descController.text, 1);
                           //TO-DO Puts descripcion, tags favoritas, profile pic
                           Navigator.push(
                             context,

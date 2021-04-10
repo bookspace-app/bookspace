@@ -1,3 +1,4 @@
+
 import 'package:bookspace/controllers/user_controller.dart';
 import 'package:bookspace/models/user.dart';
 import 'package:bookspace/ui/login/reset_pass.dart';
@@ -87,13 +88,12 @@ class _SignInState extends State<SignIn> {
               constraints: BoxConstraints.expand(
                 height: 200.0,
               ),
-              child: Text('') /*Image.asset(
-                              './assets/images/logo.png',         //TO-DO if userpic == null show No_pic else userpic
-                              height: 170,
-                              width: 170,
-                              fit: BoxFit.fill,  
-                            ),*/
-              
+              child: Image.asset(
+                './assets/images/logo.png',         //TO-DO if userpic == null show No_pic else userpic
+                height: 170,
+                width: 170,
+                fit: BoxFit.fill,  
+              ),  
             ),
             Container(
               constraints: BoxConstraints.expand(height: 50),
