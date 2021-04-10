@@ -73,7 +73,7 @@ class Publication {
         favUsers: json["favusers"],
         comments: json["comments"],
         tags: json["tags"],
-        nComments: json["nComments"],
+        nComments: json["n_comments"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -86,7 +86,7 @@ class Publication {
         "category": category,
         "author": author,
         "author_id": author_id,
-        //"nComments": nComments,
+        "n_comments": nComments,
       };
 }
 

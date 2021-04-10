@@ -39,6 +39,7 @@ class _PublicationViewState extends State<PublicationView> {
   void dispose() {
     disposed = true;
     super.dispose();
+
   }
   
   @override

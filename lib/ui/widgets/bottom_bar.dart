@@ -58,20 +58,7 @@ class _BookspaceBottomBarState extends State<BookspaceBottomBar> {
               icon: Icon(Icons.verified_user),
               color: globals.secondary,
               tooltip: 'Profile',
-              onPressed: () {
-                widget.callback('profile');
-                //Navigator.of(context).popUntil((route) => route.isFirst);
-                /*Navigator.pushAndRemoveUntil(
-                  context, 
-                  MaterialPageRoute(
-                    builder: (context) => MainView(
-                      renderIndex: 'profile',
-                      view: ProfileView(),
-                    )
-                  ),
-                  ModalRoute.withName('/')
-                );*/
-              },
+              onPressed: () => widget.callback('profile'),
             ),
           ],
         ),

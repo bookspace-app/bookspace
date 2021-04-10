@@ -171,7 +171,7 @@ class _ProfileViewState extends State<ProfileView> {
                     context, // TODO: pass id to PublicationView
                     MaterialPageRoute(
                       builder: (context) => MainView(
-                        renderIndex: 'home',
+                        renderIndex: 'profile',
                         view: PublicationView(id: _myPublications[index].id),
                       )
                     ),

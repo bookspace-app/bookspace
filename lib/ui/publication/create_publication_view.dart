@@ -2,6 +2,8 @@ import 'package:bookspace/controllers/publication_controller.dart';
 import 'package:bookspace/controllers/user_controller.dart';
 import 'package:bookspace/models/publication.dart';
 import 'package:bookspace/models/user.dart';
+import 'package:bookspace/ui/main_view.dart';
+import 'package:bookspace/ui/profile/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:textfield_tags/textfield_tags.dart';
@@ -33,6 +35,16 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
 
   void createPublication() async {
     int response = await PublicationController.createPublication(myPublication);
+    Navigator.pushAndRemoveUntil(
+      context, 
+      MaterialPageRoute(
+        builder: (context) => MainView(
+          renderIndex: 'profile',
+          view: ProfileView(),
+        )
+      ),
+      ModalRoute.withName('/')
+    );
   }
 
   bool disposed = false;
