@@ -78,7 +78,7 @@ class _MainViewState extends State<MainView> {
         title: Text(AppLocalizations.of(context).translate("$_rendered").toString()),
         backgroundColor: Colors.white,
         leadingWidth: 100,
-        leading: Text(''),//Image.asset('./assets/images/logo.png', fit: BoxFit.fitHeight),     //TO-DO: Hacer mas grande el logo de la AppBar  
+        leading: Image.asset('./assets/images/logo.png', fit: BoxFit.fitHeight),     //TO-DO: Hacer mas grande el logo de la AppBar  
         actions: (_rendered == "profile") ? 
           [ 
             IconButton(

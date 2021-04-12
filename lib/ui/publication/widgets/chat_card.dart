@@ -1,4 +1,7 @@
+import 'dart:html';
+
 import 'package:bookspace/models/publication.dart';
+//import 'package:bookspace/models/chat.dart';
 import 'package:bookspace/utils/humanize.dart';
 import 'package:flutter/material.dart';
 
@@ -11,14 +14,9 @@ class PublicationCard extends StatelessWidget {
     this.publication,
   }) : super(key: key);
 
-  int _totalUpvotes = 100;
-  int _totalViews = 4;
-  int _totalResponses = 2;
-
-  bool _myVote = true;
-  bool _myFavorite = true;
-  bool _myResponse = true;
-
+  String lastChat = "13/03/2021";
+  String chatName = "Alf Gomez";
+  //File pic = File('./assets/images/No_pic.png');
 
   @override
   Widget build(BuildContext context) {
