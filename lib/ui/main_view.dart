@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 
 class MainView extends StatefulWidget {
   final String renderIndex;
-  final Widget view;
+  Widget view;
 
   MainView({
     Key key,
@@ -44,24 +44,30 @@ class _MainViewState extends State<MainView> {
     }
   }
 
-  dynamic changeView(String newView) {
-
+  dynamic changeView(String newView) async {
+    String _old_rendered = _rendered;
+    var _old_route = ModalRoute.of(context);
+    var _new_route;
     setState(() {
-      print('$newView is being rendered');
-      //Navigator.of(context).popUntil((route) => route.isFirst);
-      _rendered = newView;
-      print('$_rendered is being rendered');
-      Navigator.pushAndRemoveUntil(
-        context, 
-        MaterialPageRoute(
-          builder: (context) => MainView(
-            renderIndex: '$_rendered',
-            view: _views[_rendered],
-          )
-        ),
-        ModalRoute.withName('/')
-      );
+       _rendered = newView;
+      widget.view = _views[_rendered];
+      _new_route = ModalRoute.of(context);
     });
+    print('OLD VIEW: $_old_rendered, ${_old_route.settings.name}');
+    print('NEW VIEW: $_rendered, ${_new_route.settings.name}');
+    await Future.delayed(Duration(milliseconds: 200));
+    if (_old_rendered == _rendered) {
+      Navigator.popUntil(context, ModalRoute.withName('/'));
+    } else {
+      //if (level != 1) {
+      //  Navigator.popUntil(context, ModalRoute.withName('/'));
+      //  Navigator.pushNamed(context, '/$_rendered');
+      //}
+    }
+    /*
+    if ((_old_rendered != _rendered) || (_rendered != 'home')) {
+      Navigator.pushNamed(context, '/$_rendered');
+    }*/
   }
 
   @override
@@ -69,15 +75,15 @@ class _MainViewState extends State<MainView> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(_rendered),
+        title: Text(AppLocalizations.of(context).translate("$_rendered").toString()),
         backgroundColor: Colors.white,
         leadingWidth: 100,
-        leading: Image.asset('./assets/images/Logo.png', fit: BoxFit.fitHeight),     //TO-DO: Hacer mas grande el logo de la AppBar  
+        leading: Text(''),//Image.asset('./assets/images/logo.png', fit: BoxFit.fitHeight),     //TO-DO: Hacer mas grande el logo de la AppBar  
         actions: (_rendered == "profile") ? 
           [ 
             IconButton(
                 icon: Icon(Icons.more_vert),
-                iconSize: 40,
+                iconSize: 40, 
                 color: Colors.grey,
                 onPressed: () { },
             ),
@@ -88,7 +94,7 @@ class _MainViewState extends State<MainView> {
         // padding: EdgeInsets.all(5),
         color: Colors.grey[100],
         width: double.infinity,
-        child: _views[_rendered]
+        child: widget.view == null ? _views[_rendered] : widget.view
       ),
       bottomNavigationBar: BookspaceBottomBar(callback: changeView),
     );

@@ -1,3 +1,4 @@
+import 'package:bookspace/ui/login/sign_in.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bookspace/globals.dart' as globals;
@@ -91,9 +92,11 @@ class _ResetState extends State<Reset> {
                         actions: <Widget>[
                           TextButton(
                             onPressed: () {
-                              Navigator.pop(context);
-                              _controller.clear();
-                              //TODO redirigir a sign up view
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SignIn()),
+                              );
                             },
                             child: const Text('OK'),
                           ),

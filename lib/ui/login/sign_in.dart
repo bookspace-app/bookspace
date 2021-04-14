@@ -1,3 +1,9 @@
+
+import 'package:bookspace/controllers/user_controller.dart';
+import 'package:bookspace/models/user.dart';
+import 'package:bookspace/ui/login/reset_pass.dart';
+import 'package:bookspace/ui/login/sign_up.dart';
+import 'package:bookspace/ui/main_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -17,6 +23,59 @@ class _SignInState extends State<SignIn> {
   String password = '';
   bool isPasswordHiden = true;
 
+  User _user;
+  List<User> _users = [];
+  int id;
+  void getALLuser() async {
+    List<User> users = await UserController.getAllusers();
+    if (!disposed) {
+      setState(() => _users = users);
+    }
+    print(users);
+  }
+
+  void getUser(int id) async {
+    User user = await UserController.getUser(id);
+    if (!disposed) {
+      setState(() => _user = user);
+    }
+  }
+
+  String errorUserName() {
+    if (usernameController.text.isEmpty) return "Rellena este campo";
+    for (var i = 0; i < _users.length; i++) {
+      if (usernameController.text == _users[i].username) {
+        id = _users[i].id;
+        return null;
+      }
+    }
+    return "No existe usuario, por favor regístrese primero";
+  }
+
+  String errorPass() {
+    getUser(id);
+    if (passwordController.text.isEmpty) return "Rellena este campo";
+    //user.password check
+    if (passwordController.text != _user.id) return "Contraseña incorrecta";
+    return null;
+  }
+
+  bool disposed = false;
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    disposed = true;
+    usernameController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getALLuser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,9 +88,12 @@ class _SignInState extends State<SignIn> {
               constraints: BoxConstraints.expand(
                 height: 200.0,
               ),
-              child: Image(
-                image: AssetImage('assets/images/logo.png'),
-              ),
+              child: Image.asset(
+                './assets/images/logo.png',         //TO-DO if userpic == null show No_pic else userpic
+                height: 170,
+                width: 170,
+                fit: BoxFit.fill,  
+              ),  
             ),
             Container(
               constraints: BoxConstraints.expand(height: 50),
@@ -103,33 +165,49 @@ class _SignInState extends State<SignIn> {
             Container(
                 height: 40,
                 child: ElevatedButton(
-                  onPressed: () => print('Inici de sessió'),
-                  child: Text('Iniciar Sesión',
-                      style: TextStyle(
-                        color: Colors.black, /*fontFamily: "Schyler"*/
-                      )),
-                  style: ElevatedButton.styleFrom(
-                      primary: Colors.orangeAccent,
-                      onPrimary: Colors.black,
-                      shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(10.0))),
-                )),
+                    child: Text('Iniciar Sesión',
+                        style: TextStyle(
+                          color: Colors.black, /*fontFamily: "Schyler"*/
+                        )),
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.orangeAccent,
+                        onPrimary: Colors.black,
+                        shape: new RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(10.0))),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MainView()),
+                      );
+                    })),
             Container(
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                   TextButton(
-                      onPressed: () => print('Anar a recupesrar contrasenya'),
                       child: Text(
-                        '¿Olvidaste tu contrasenya?',
+                        '¿Olvidaste tu contraseña?',
                         style: TextStyle(color: Colors.black),
-                      )),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Reset()),
+                        );
+                      }),
                   TextButton(
-                      onPressed: () => print('Registrarse'),
                       child: Text(
                         'Registrarse',
                         style: TextStyle(color: Colors.black),
-                      ))
+                      ),
+                      onPressed: () {
+
+                        //TO-DO Ver si los campos de nombre y contraseña son correctos
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SignUp()),
+                        );
+                      })
                 ]))
           ]),
     );

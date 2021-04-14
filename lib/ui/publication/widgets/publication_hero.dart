@@ -1,5 +1,9 @@
 import 'package:bookspace/models/publication.dart';
+import 'package:bookspace/ui/main_view.dart';
+import 'package:bookspace/ui/profile/profile_view.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:bookspace/globals.dart' as globals;
 
 class PublicationHero extends StatelessWidget {
 
@@ -10,17 +14,67 @@ class PublicationHero extends StatelessWidget {
     this.publication
   }) : super(key: key);
 
-  int _totalUpvotes = 100;
+  int _totalUpvotes = 1;
   int _totalViews = 4;
   int _totalResponses = 2;
 
-  bool _myVote = true;
-  bool _myFavorite = true;
-  bool _myResponse = true;
+  bool _myVote = false;
+  bool _myFavorite = false;
+  bool _myResponse = false;
 
 
   @override
   Widget build(BuildContext context) {
+
+    Widget ParsedContent(String content, bool atTitle) {
+
+      RegExp usernameExp = new RegExp(r"\@\w+");
+      Iterable<Match> usernameMatches = usernameExp.allMatches(content);
+      List<String> usernames = [];
+      usernameMatches.forEach((m)=>usernames.add(m.group(0)));
+
+      RegExp wordsExp = new RegExp(r"[@\w']+|[.,!?;]");
+      Iterable wordsMatches = wordsExp.allMatches(content);
+
+      return RichText(
+        text: TextSpan(
+          //text: content,
+          style: DefaultTextStyle.of(context).style,
+          children: [
+            for (Match m in wordsMatches)
+            usernames.contains(m.group(0))
+            ? TextSpan(
+              text: '${m.group(0)} ', 
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: atTitle? 20: 16,
+                color: globals.primary,
+              ),
+              recognizer: TapGestureRecognizer()
+                ..onTap = () {
+                  print(m.group(0));
+                  Navigator.push(
+                    context, // TODO: pass id to PublicationView
+                    MaterialPageRoute(
+                      builder: (context) => MainView(
+                        renderIndex: 'home',
+                        view: ProfileView(),
+                      )
+                    ),
+                  );
+                })
+            : TextSpan(
+              text: '${m.group(0)} ', 
+              style: TextStyle(
+                fontWeight: atTitle? FontWeight.bold: FontWeight.normal,
+                fontSize: atTitle? 20: 16,
+              )
+            )
+          ],
+        ),
+      );
+    }
+
     return Container(
       //color: Colors.pink,
       child: Column(
@@ -30,13 +84,7 @@ class PublicationHero extends StatelessWidget {
               Expanded(
                 child: Container(
                   padding: EdgeInsets.all(10),
-                  child: Text(
-                    '${publication.title}',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold
-                    ),
-                  ),
+                  child: ParsedContent(publication.title,true)
                 )
               )
               // TODO: tags
@@ -131,7 +179,7 @@ class PublicationHero extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget> [
                           Text(
-                            '$_totalUpvotes',
+                            '${publication.views}',
                             textAlign: TextAlign.right,
                             style: TextStyle(
                               fontSize: 20.0,
@@ -168,7 +216,7 @@ class PublicationHero extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget> [
                           Text(
-                            '$_totalUpvotes',
+                            '${publication.nComments}',
                             textAlign: TextAlign.right,
                             style: TextStyle(
                               fontSize: 20.0,
@@ -201,10 +249,7 @@ class PublicationHero extends StatelessWidget {
          Container(
            padding: EdgeInsets.all(10),
             //color: Colors.blue[200],
-            child: Text(
-              publication.content,
-              style: TextStyle(),
-            )
+            child: ParsedContent(publication.content, false)
           )
         ],
       )

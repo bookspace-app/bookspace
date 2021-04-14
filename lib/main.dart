@@ -1,5 +1,10 @@
 import 'package:bookspace/app_localizations.dart';
+import 'package:bookspace/ui/home/home_view.dart';
+import 'package:bookspace/ui/login/sign_in.dart';
+import 'package:bookspace/ui/login/sign_up.dart';
+import 'package:bookspace/ui/login/sign_up2.dart';
 import 'package:bookspace/ui/main_view.dart';
+import 'package:bookspace/ui/profile/profile_view.dart';
 import 'package:bookspace/ui/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -39,7 +44,7 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: globals.primary,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MainView(),
+      // home: MainView(),
 
       // All App's supportes locales
       supportedLocales: [
@@ -83,6 +88,15 @@ class _MyAppState extends State<MyApp> {
         // first one from the list (Catalan, in this case)
         _loc = supportedLocales.first;
         return supportedLocales.first;
+      },
+
+      initialRoute: '/', // TODO : SignIn
+      routes: {
+        // When navigating to the "/" route, build the Home widget.
+        '/': (context) => MainView(renderIndex: 'home', view: HomeView()),
+        '/home': (context) => MainView(renderIndex: 'home', view: HomeView()),
+        // When navigating to the "/profile" route, build the Profile widget.
+        '/profile': (context) => MainView(renderIndex: 'profile', view: ProfileView()),
       },
     );
   }

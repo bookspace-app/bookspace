@@ -42,7 +42,7 @@ class UserCard extends StatelessWidget {
               child: Row(
                 children: <Widget> [
                   Expanded(
-                    flex: 5,
+                    flex: 8,
                     child: Container(
                       padding: EdgeInsets.only(left: 10),
                       // color: Colors.blue[200],
@@ -81,7 +81,7 @@ class UserCard extends StatelessWidget {
                   Expanded(
                     flex: 5,
                     child: Container(
-                      padding: EdgeInsets.only(right: 10),
+                      padding: EdgeInsets.only(right: 1),
                       // color: Colors.red[200],
                       child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,

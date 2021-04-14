@@ -7,7 +7,32 @@ dictionary = {
         'en': 'hello',
         'ca': 'hola',
         'es': 'hola'
-    }
+    },
+    'home': {
+        'en': 'Home',
+        'ca': 'Inici',
+        'es': 'Inicio'
+    },
+    'chatList': {
+        'en': 'Chats',
+        'ca': 'Xats',
+        'es': 'Chats'
+    },
+    'createPublication': {
+        'en': 'New Publication',
+        'ca': 'Nova Publicació',
+        'es': 'Nueva Publicación'
+    },
+    'activity': {
+        'en': 'Activity',
+        'ca': 'Activitat',
+        'es': 'Actividad'
+    },
+    'profile': {
+        'en': 'Profile',
+        'ca': 'Perfil',
+        'es': 'Perfil'
+    },
 }
 
 for lang in locales:

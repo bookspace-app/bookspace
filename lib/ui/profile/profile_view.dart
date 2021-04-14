@@ -106,13 +106,13 @@ class _ProfileViewState extends State<ProfileView> {
                           width: 185,
                           height: 100,                            //TO-DO Reducir tamaño maximo de la descripcion
                           child: Text(
-                            //"${_user.description}",
-                            "Soy vividor, soñador, amante de las novelas policíacas y el dramatismo.",
+                            "${_user.description}",
+                            //"Soy vividor, soñador, amante de las novelas policíacas y el dramatismo.",
                             style: TextStyle(color: Colors.grey,fontSize: 14.0,)
                           )
                         ),
                         Container(
-                          padding: EdgeInsets.fromLTRB(5, 10, 5, 0),         
+                          padding: EdgeInsets.fromLTRB(5, 20, 5, 0),          //TO-DO Fix the container to a position no matter description length
                           child: RichText(
                             text: new TextSpan(
                               style: new TextStyle(
@@ -171,7 +171,7 @@ class _ProfileViewState extends State<ProfileView> {
                     context, // TODO: pass id to PublicationView
                     MaterialPageRoute(
                       builder: (context) => MainView(
-                        renderIndex: 'home',
+                        renderIndex: 'profile',
                         view: PublicationView(id: _myPublications[index].id),
                       )
                     ),
