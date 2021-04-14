@@ -49,13 +49,13 @@ class _BookspaceBottomBarState extends State<BookspaceBottomBar> {
               onPressed: () => widget.callback('createPublication'),
             ),
             IconButton(
-              icon: Icon(Icons.atm),
+              icon: Icon(Icons.alternate_email),
               color: globals.secondary,
               tooltip: 'Activity',
               onPressed: () => widget.callback('activity'),
             ),
             IconButton(
-              icon: Icon(Icons.verified_user),
+              icon: Icon(Icons.account_circle),
               color: globals.secondary,
               tooltip: 'Profile',
               onPressed: () => widget.callback('profile'),
