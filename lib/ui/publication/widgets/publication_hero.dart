@@ -32,9 +32,16 @@ class PublicationHero extends StatelessWidget {
       Iterable<Match> usernameMatches = usernameExp.allMatches(content);
       List<String> usernames = [];
       usernameMatches.forEach((m)=>usernames.add(m.group(0)));
-
-      RegExp wordsExp = new RegExp(r"[@\w']+|[.,!?;]");
+      RegExp wordsExp = new RegExp(r"[^\@\w+]|[-'a-zA-ZÀ-ÖØ-öø-ÿ-@]+|[!$%^&*()_+|~=`{}#@\[\]:;'’<>?,.\/"
+        '"”'
+        "]+");
       Iterable wordsMatches = wordsExp.allMatches(content);
+
+      /*
+      for (Match m in wordsMatches) {
+        print(m.group(0).trim());
+      }
+      */
 
       return RichText(
         text: TextSpan(
@@ -42,9 +49,9 @@ class PublicationHero extends StatelessWidget {
           style: DefaultTextStyle.of(context).style,
           children: [
             for (Match m in wordsMatches)
-            usernames.contains(m.group(0))
+            usernames.contains(m.group(0).trim())
             ? TextSpan(
-              text: '${m.group(0)} ', 
+              text: m.group(0), 
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: atTitle? 20: 16,
@@ -64,7 +71,7 @@ class PublicationHero extends StatelessWidget {
                   );
                 })
             : TextSpan(
-              text: '${m.group(0)} ', 
+              text: '${m.group(0)}', 
               style: TextStyle(
                 fontWeight: atTitle? FontWeight.bold: FontWeight.normal,
                 fontSize: atTitle? 20: 16,
