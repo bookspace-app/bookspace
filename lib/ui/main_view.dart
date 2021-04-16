@@ -92,7 +92,7 @@ class _MainViewState extends State<MainView> {
       ),
       body: widget.view ?? Container(
         // padding: EdgeInsets.all(5),
-        color: Colors.grey[100],
+        color: Color.fromRGBO(243, 247, 250, 1),
         width: double.infinity,
         child: widget.view == null ? _views[_rendered] : widget.view
       ),
