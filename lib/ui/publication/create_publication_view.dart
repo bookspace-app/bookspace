@@ -56,7 +56,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
 //Error Check
   String errorTitle() {
     if (titleController.text.isEmpty) return "${AppLocalizations.of(context).translate("noTitle")}";
-    else if (titleController.text.length < 50) return "${AppLocalizations.of(context).translate("shortTitle")}";
+    else if (titleController.text.length < 35) return "${AppLocalizations.of(context).translate("shortTitle")}";
     else if (titleController.text.length > 150) return "${AppLocalizations.of(context).translate("longTitle")}";
     return null;
   }
@@ -339,9 +339,12 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                         child: Text('Publicar', style: TextStyle(fontSize: 18.0, color: Colors.black),),
                           onPressed: () {
                             setState(() {
-                              errorsTitle = titleController.text.isEmpty;
-                              errorsDesc = descController.text.isEmpty;
-                              errorsGenre = genreController.text.isEmpty;                          
+                              if (errorTitle() != null ) errorsTitle = true;
+                              else errorsTitle = false;
+                              if (errorDesc() != null ) errorsDesc = true;
+                              else errorsDesc = false;
+                              if (errorGenre() != null ) errorsGenre = true;
+                              else errorsGenre = false;                        
                               errorsAll = errorsTitle | errorsDesc | errorsGenre;
                             });
                             if(!errorsAll){

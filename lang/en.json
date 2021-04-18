@@ -11,5 +11,19 @@
     "noTitle": "You have to write a title for the publication",
     "shortTitle": "The title is too short",
     "longTitle": "The title is too long",
-    "noContent": "You have to write a description for the publication"
+    "noContent": "You have to write a description for the publication",
+    "emptyField": "Fill this field",
+    "shortUName": "The username cannot be shorter than 4 characters",
+    "longUName": "The username cannot be longer than 15 characters",
+    "usedUName": "The username is already in use, enter another",
+    "shortName": "The name cannot be shorter than 2 characters",
+    "longName": "The name cannot be longer than 20 characters",
+    "shortSurname": "The surname cannot be shorter than 2 characters",
+    "longSurname": "The surname cannot be longer than 20 characters",
+    "invalidEmail": "The email has not a vaild format",
+    "usedEmail": "The email is already registered",
+    "shortPass": "The password cannot be shorter than 6 characters",
+    "longPass": "The password cannot be longer than 20 characters",
+    "invalidPass": "The password must contain at least \none majuscule, one minuscule, a number and a symbol",
+    "nomatchPass": "The passwords does not match"
 }

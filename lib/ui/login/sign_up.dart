@@ -72,59 +72,71 @@ class _SignUpState extends State<SignUp> {
   //Error Check
   String errorUserName() {
     if (userNameController.text.isEmpty)
-      return "Rellena este campo";
+      return "${AppLocalizations.of(context).translate("emptyField")}";
     else if (userNameController.text.length < 4)
-      return "El nombre tiene que ser al menos de 4 caracteres";
+      return "${AppLocalizations.of(context).translate("shortUName")}";
+    else if (userNameController.text.length > 15)
+      return "${AppLocalizations.of(context).translate("longUName")}";
     for (var i = 0; i < _users.length; i++) {
       if (userNameController.text == _users[i].username)
-        return "El nombre ya es usado, introduzca otro";
+        return "${AppLocalizations.of(context).translate("usedUName")}";
     }
     return null;
   }
 
   String errorName() {
-    if (nameController.text.isEmpty) return "Rellena este campo";
+    if (nameController.text.isEmpty) return "${AppLocalizations.of(context).translate("emptyField")}";
+    else if (nameController.text.length < 2)
+      return "${AppLocalizations.of(context).translate("shortName")}";
+    else if (nameController.text.length > 20)
+      return "${AppLocalizations.of(context).translate("longName")}";
     return null;
   }
 
   String errorSurName() {
-    if (surNameController.text.isEmpty) return "Rellena este campo";
+    if (surNameController.text.isEmpty) return "${AppLocalizations.of(context).translate("emptyField")}";
+    else if (surNameController.text.length < 2)
+      return "${AppLocalizations.of(context).translate("shortSurname")}";
+    else if (surNameController.text.length > 20)
+      return "${AppLocalizations.of(context).translate("longSurname")}";
     return null;
   }
 
   String errorEmail() {
     if (emailController.text.isEmpty)
-      return "Rellena este campo";
+      return "${AppLocalizations.of(context).translate("emptyField")}";
     else if (!RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
         .hasMatch(emailController.text)) {
-      return "El email no tiene un formato valido";
+      return "${AppLocalizations.of(context).translate("invalidEmail")}";
     }
     for (var i = 0; i < _users.length; i++) {
       if (emailController.text == _users[i].email)
-        return "El email indicado ya es registrado";
+        return "${AppLocalizations.of(context).translate("usedEmail")}";
     }
     return null;
   }
 
   String errorPass() {
     if (passController.text.isEmpty)
-      return "Rellena este campo";
+      return "${AppLocalizations.of(context).translate("emptyField")}";
     else if (passController.text.length < 6)
-      return "La contraseña tiene que ser al menos de 6 caracteres";
+      return "${AppLocalizations.of(context).translate("shortPass")}";
+    else if (passController.text.length > 20)
+      return "${AppLocalizations.of(context).translate("longPass")}";
     else if (!RegExp(
             r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~?.,]).{6,}$')
         .hasMatch(passController.text)) {
-      return "La contraseña tiene que contener al menos \nuna mayúscula, una minúscula, un número y un simbolo";
+      return "${AppLocalizations.of(context).translate("invalidPass")}";
     }
     return null;
   }
 
   String errorPassR() {
     if (passRController.text.isEmpty)
-      return "Rellena este campo";
+      return "${AppLocalizations.of(context).translate("emptyField")}";
     else if (passRController.text != passController.text)
-      return "Las contraseñas no coinciden";
+      return "${AppLocalizations.of(context).translate("nomatchPass")}";
     return null;
   }
 
@@ -191,18 +203,19 @@ class _SignUpState extends State<SignUp> {
                           prefixIcon:
                               Icon(Icons.person), //to-do Traduciones
                           errorText: errorsAll ? errorUserName() : null,
-                          suffixIcon: userNameController.text.length > 0
-                            ? IconButton(
-                                icon: Icon(Icons.clear),
-                                onPressed: () {
-                                  setState(() {
-                                    userNameController.clear();
-                                  });
-                                })
+                          suffixIcon: userNameController.text.length > 0 ?
+                            IconButton(
+                              icon: Icon(Icons.clear),
+                              onPressed: () {
+                                setState(() {
+                                  userNameController.clear();
+                                });
+                              }
+                            )
                             : null
-                          )
                         )
                       )
+                    )
                   ],
                 ),
               ),
@@ -214,25 +227,29 @@ class _SignUpState extends State<SignUp> {
                       .center, //Center Row contents vertically,
                   children: <Widget>[
                     Expanded(
-                        child: TextFormField(
-                            controller: nameController,
-                            onChanged: (text) {
-                              setState(() {});
-                            },
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: 'Nombre',
-                                prefixIcon: Icon(Icons.person),
-                                errorText: errorsAll ? errorName() : null,
-                                suffixIcon: nameController.text.length > 0
-                                    ? IconButton(
-                                        icon: Icon(Icons.clear),
-                                        onPressed: () {
-                                          setState(() {
-                                            nameController.clear();
-                                          });
-                                        })
-                                    : null)))
+                      child: TextFormField(
+                        controller: nameController,
+                        onChanged: (text) {
+                          setState(() {});
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Nombre',
+                          prefixIcon: Icon(Icons.person),
+                          errorText: errorsAll ? errorName() : null,
+                          suffixIcon: nameController.text.length > 0 ? 
+                            IconButton(
+                              icon: Icon(Icons.clear),
+                              onPressed: () {
+                                setState(() {
+                                  nameController.clear();
+                                });
+                              }
+                            )
+                            : null
+                        )
+                      )
+                    )
                   ],
                 ),
               ),
@@ -244,25 +261,29 @@ class _SignUpState extends State<SignUp> {
                       .center, //Center Row contents vertically,
                   children: <Widget>[
                     Expanded(
-                        child: TextFormField(
-                            controller: surNameController,
-                            onChanged: (text) {
-                              setState(() {});
-                            },
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: 'Apellidos',
-                                prefixIcon: Icon(Icons.person),
-                                errorText: errorsAll ? errorSurName() : null,
-                                suffixIcon: surNameController.text.length > 0
-                                    ? IconButton(
-                                        icon: Icon(Icons.clear),
-                                        onPressed: () {
-                                          setState(() {
-                                            surNameController.clear();
-                                          });
-                                        })
-                                    : null)))
+                      child: TextFormField(
+                        controller: surNameController,
+                        onChanged: (text) {
+                          setState(() {});
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Apellido',
+                          prefixIcon: Icon(Icons.person),
+                          errorText: errorsAll ? errorSurName() : null,
+                          suffixIcon: surNameController.text.length > 0 ? 
+                            IconButton(
+                              icon: Icon(Icons.clear),
+                              onPressed: () {
+                                setState(() {
+                                  surNameController.clear();
+                                });
+                              }
+                            )
+                            : null
+                        )
+                      )
+                    )
                   ],
                 ),
               ),
@@ -274,25 +295,29 @@ class _SignUpState extends State<SignUp> {
                       .center, //Center Row contents vertically,
                   children: <Widget>[
                     Expanded(
-                        child: TextFormField(
-                            controller: emailController,
-                            onChanged: (text) {
-                              setState(() {});
-                            },
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: 'Correo Electrónico',
-                                prefixIcon: Icon(Icons.mail),
-                                errorText: errorsAll ? errorEmail() : null,
-                                suffixIcon: emailController.text.length > 0
-                                    ? IconButton(
-                                        icon: Icon(Icons.clear),
-                                        onPressed: () {
-                                          setState(() {
-                                            emailController.clear();
-                                          });
-                                        })
-                                    : null)))
+                      child: TextFormField(
+                        controller: emailController,
+                        onChanged: (text) {
+                          setState(() {});
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Correo Electrónico',
+                          prefixIcon: Icon(Icons.mail),
+                          errorText: errorsAll ? errorEmail() : null,
+                          suffixIcon: emailController.text.length > 0 ?
+                            IconButton(
+                              icon: Icon(Icons.clear),
+                              onPressed: () {
+                                setState(() {
+                                  emailController.clear();
+                                });
+                              }
+                            )
+                            : null
+                        )
+                      )
+                    )
                   ],
                 ),
               ),
@@ -304,26 +329,30 @@ class _SignUpState extends State<SignUp> {
                       .center, //Center Row contents vertically,
                   children: <Widget>[
                     Expanded(
-                        child: TextFormField(
-                            controller: passController,
-                            onChanged: (text) {
-                              setState(() {});
-                            },
-                            obscureText: true,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: 'Contraseña',
-                                prefixIcon: Icon(Icons.lock),
-                                errorText: errorsAll ? errorPass() : null,
-                                suffixIcon: passController.text.length > 0
-                                    ? IconButton(
-                                        icon: Icon(Icons.clear),
-                                        onPressed: () {
-                                          setState(() {
-                                            passController.clear();
-                                          });
-                                        })
-                                    : null)))
+                      child: TextFormField(
+                        controller: passController,
+                        onChanged: (text) {
+                          setState(() {});
+                        },
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Contraseña',
+                          prefixIcon: Icon(Icons.lock),
+                          errorText: errorsAll ? errorPass() : null,
+                          suffixIcon: passController.text.length > 0 ? 
+                            IconButton(
+                              icon: Icon(Icons.clear),
+                              onPressed: () {
+                                setState(() {
+                                  passController.clear();
+                                });
+                              }
+                            )
+                            : null
+                        )
+                      )
+                    )
                   ],
                 ),
               ),
@@ -335,26 +364,30 @@ class _SignUpState extends State<SignUp> {
                       .center, //Center Row contents vertically,
                   children: <Widget>[
                     Expanded(
-                        child: TextFormField(
-                            controller: passRController,
-                            onChanged: (text) {
-                              setState(() {});
-                            },
-                            obscureText: true,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: 'Repetir Contraseña',
-                                prefixIcon: Icon(Icons.lock),
-                                errorText: errorsAll ? errorPassR() : null,
-                                suffixIcon: passRController.text.length > 0
-                                    ? IconButton(
-                                        icon: Icon(Icons.clear),
-                                        onPressed: () {
-                                          setState(() {
-                                            passRController.clear();
-                                          });
-                                        })
-                                    : null)))
+                      child: TextFormField(
+                        controller: passRController,
+                        onChanged: (text) {
+                          setState(() {});
+                        },
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Repetir Contraseña',
+                          prefixIcon: Icon(Icons.lock),
+                          errorText: errorsAll ? errorPassR() : null,
+                          suffixIcon: passRController.text.length > 0 ? 
+                            IconButton(
+                              icon: Icon(Icons.clear),
+                              onPressed: () {
+                                setState(() {
+                                  passRController.clear();
+                                });
+                              }
+                            )
+                            : null
+                        )
+                      )
+                    )
                   ],
                 ),
               ),
@@ -375,12 +408,18 @@ class _SignUpState extends State<SignUp> {
                             child: Text('Siguiente'),
                             onPressed: () {
                               setState(() {
-                                errorsUserName = userNameController.text.isEmpty; // | chechkTypeUsername();
-                                errorsName = nameController.text.isEmpty;
-                                errorsSurName = surNameController.text.isEmpty;
-                                errorsEmail = emailController.text.isEmpty;
-                                errorsPass = passController.text.isEmpty;
-                                errorsPassR = passRController.text.isEmpty | (passRController.text != passController.text);
+                                if (errorUserName() != null ) errorsUserName = true;
+                                else errorsUserName = false;
+                                if (errorName() != null ) errorsName = true;
+                                else errorsName = false;
+                                if (errorSurName() != null ) errorsSurName = true;
+                                else errorsSurName = false;
+                                if (errorEmail() != null ) errorsEmail = true;
+                                else errorsEmail = false;
+                                if (errorPass() != null ) errorsPass = true;
+                                else errorsPass = false;
+                                if (errorPassR() != null ) errorsPassR = true;
+                                else errorsPassR = false;                                                                                                                                                                
                                 errorsAll = errorsUserName | errorsName | errorsSurName | errorsEmail | errorsPass | errorsPassR;
                               });
                               if (!errorsAll) {
@@ -391,9 +430,7 @@ class _SignUpState extends State<SignUp> {
 
                                 postUser(
                                   userNameController.text,
-                                  nameController.text +
-                                      ' ' +
-                                      surNameController.text,
+                                  nameController.text + ' ' + surNameController.text,
                                   emailController.text,
                                   passController.text,
                                 );
@@ -404,7 +441,6 @@ class _SignUpState extends State<SignUp> {
                                       builder: (context) => SignUp2()),
                                 );
                               }
-                              //Hacer cosas e ir a la siguiente pantalla de registro
                               /*
                           //
                           FutureBuilder<User>(

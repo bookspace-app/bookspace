@@ -46,7 +46,7 @@ class _BookspaceBottomBarState extends State<BookspaceBottomBar> {
             ),
             IconButton(
               icon: Icon(Icons.text_fields),
-              color: globals.secondary,
+              color: globals.primary,
               iconSize: 50,
               tooltip: 'Create publication',
               onPressed: () => widget.callback('createPublication'),
