@@ -148,9 +148,9 @@ class PublicationCard extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.7,
                   // color: Colors.green,
-                  // would be publication.name
+                  // would be publication.tags
                   child: Text(
-                    "Tag",
+                    "Tags",
                     style: TextStyle(
                       fontSize: 15.0,
                     ),

@@ -28,8 +28,9 @@ class _BookspaceBottomBarState extends State<BookspaceBottomBar> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget> [
             IconButton(
-              icon: Icon(Icons.home),
+              icon: Icon(Icons.home_rounded),
               color: globals.secondary,
+              iconSize: 40,
               tooltip: 'Home',
               onPressed: () { 
                 widget.callback('home');
@@ -37,26 +38,30 @@ class _BookspaceBottomBarState extends State<BookspaceBottomBar> {
               }
             ),
             IconButton(
-              icon: Icon(Icons.chat),
+              icon: Icon(Icons.chat_rounded),
               color: globals.secondary,
+              iconSize: 40,
               tooltip: 'Chats',
               onPressed: () => widget.callback('chatList'),
             ),
             IconButton(
               icon: Icon(Icons.text_fields),
               color: globals.secondary,
+              iconSize: 50,
               tooltip: 'Create publication',
               onPressed: () => widget.callback('createPublication'),
             ),
             IconButton(
-              icon: Icon(Icons.alternate_email),
+              icon: Icon(Icons.alternate_email_rounded),
               color: globals.secondary,
+              iconSize: 40,
               tooltip: 'Activity',
               onPressed: () => widget.callback('activity'),
             ),
             IconButton(
-              icon: Icon(Icons.account_circle),
+              icon: Icon(Icons.account_circle_rounded),
               color: globals.secondary,
+              iconSize: 40,
               tooltip: 'Profile',
               onPressed: () => widget.callback('profile'),
             ),

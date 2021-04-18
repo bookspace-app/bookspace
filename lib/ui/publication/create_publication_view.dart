@@ -65,10 +65,9 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    return Container(color: Color.fromRGBO(243, 247, 250, 1), child: ListView(
       children: <Widget> [
         Container(
-          color: Color.fromRGBO(243, 247, 250, 1),
           child: Column(
             children: [
               Container(
@@ -327,6 +326,6 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
           )
         )
       ]
-    );
+    ));
   }
 }
