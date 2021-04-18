@@ -179,27 +179,30 @@ class _SignUpState extends State<SignUp> {
                       .center, //Center Row contents vertically,
                   children: <Widget>[
                     Expanded(
-                        child: TextFormField(
-                            controller: userNameController,
-                            onChanged: (text) {
-                              setState(() {});
-                            },
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText:
-                                    'Nombre de Usuario', //to-do Emoji handling
-                                prefixIcon:
-                                    Icon(Icons.person), //to-do Traduciones
-                                errorText: errorsAll ? errorUserName() : null,
-                                suffixIcon: userNameController.text.length > 0
-                                    ? IconButton(
-                                        icon: Icon(Icons.clear),
-                                        onPressed: () {
-                                          setState(() {
-                                            userNameController.clear();
-                                          });
-                                        })
-                                    : null)))
+                      child: TextFormField(
+                        controller: userNameController,
+                        onChanged: (text) {
+                          setState(() {});
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText:
+                              'Nombre de Usuario', //to-do Emoji handling
+                          prefixIcon:
+                              Icon(Icons.person), //to-do Traduciones
+                          errorText: errorsAll ? errorUserName() : null,
+                          suffixIcon: userNameController.text.length > 0
+                            ? IconButton(
+                                icon: Icon(Icons.clear),
+                                onPressed: () {
+                                  setState(() {
+                                    userNameController.clear();
+                                  });
+                                })
+                            : null
+                          )
+                        )
+                      )
                   ],
                 ),
               ),
@@ -372,21 +375,13 @@ class _SignUpState extends State<SignUp> {
                             child: Text('Siguiente'),
                             onPressed: () {
                               setState(() {
-                                errorsUserName = userNameController
-                                    .text.isEmpty; // | chechkTypeUsername();
+                                errorsUserName = userNameController.text.isEmpty; // | chechkTypeUsername();
                                 errorsName = nameController.text.isEmpty;
                                 errorsSurName = surNameController.text.isEmpty;
                                 errorsEmail = emailController.text.isEmpty;
                                 errorsPass = passController.text.isEmpty;
-                                errorsPassR = passRController.text.isEmpty |
-                                    (passRController.text !=
-                                        passController.text);
-                                errorsAll = errorsUserName |
-                                    errorsName |
-                                    errorsSurName |
-                                    errorsEmail |
-                                    errorsPass |
-                                    errorsPassR;
+                                errorsPassR = passRController.text.isEmpty | (passRController.text != passController.text);
+                                errorsAll = errorsUserName | errorsName | errorsSurName | errorsEmail | errorsPass | errorsPassR;
                               });
                               if (!errorsAll) {
                                 /*datos.add(userNameController.text);

@@ -1,7 +1,10 @@
+import 'dart:ffi';
+
 import 'package:bookspace/app_localizations.dart';
 import 'package:bookspace/ui/activity/activity_view.dart';
 import 'package:bookspace/ui/chat/chat_list_view.dart';
 import 'package:bookspace/ui/home/home_view.dart';
+import 'package:bookspace/ui/profile/edit_profile_view.dart';
 import 'package:bookspace/ui/profile/profile_view.dart';
 import 'package:bookspace/ui/publication/create_publication_view.dart';
 import 'package:bookspace/ui/publication/publication_view.dart';
@@ -81,12 +84,31 @@ class _MainViewState extends State<MainView> {
         leading: Image.asset('./assets/images/logo.png', fit: BoxFit.fitHeight),     //TO-DO: Hacer mas grande el logo de la AppBar  
         actions: (_rendered == "profile") ? 
           [ 
+            PopupMenuButton <String> (
+              onSelected: (value) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => EditProfileView()),
+                );
+              },
+              itemBuilder: (BuildContext context) {
+                return [
+                  PopupMenuItem(
+                    child: Text(AppLocalizations.of(context).translate("editProfile")),
+                    value: "Editar perfil",
+                  )
+                ];
+              }
+            )
+            /*
             IconButton(
                 icon: Icon(Icons.more_vert),
                 iconSize: 40, 
                 color: Colors.grey,
                 onPressed: () { },
             ),
+            */
           ]
         : null,
       ),

@@ -4,5 +4,12 @@
     "chatList": "Xats",
     "createPublication": "Nova Publicació",
     "activity": "Activitat",
-    "profile": "Perfil"
+    "profile": "Perfil",
+    "editProfile": "Edita Perfil",
+    "longContent": "La descripció és massa llarga",
+    "noGenre": "Ha de seleccionar al menys un gènere",
+    "noTitle": "Ha d'escriure un títol per la publcació",
+    "shortTitle": "El títol és massa curt",
+    "longTitle": "El títol és massa llarg",
+    "noContent": "Ha d'escriure una descripció per la publcació"
 }

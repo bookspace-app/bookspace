@@ -4,5 +4,12 @@
     "chatList": "Chats",
     "createPublication": "Nueva Publicación",
     "activity": "Actividad",
-    "profile": "Perfil"
+    "profile": "Perfil",
+    "editProfile": "Edita Perfil",
+    "longContent": "La descripción es demasiado larga",
+    "noGenre": "Tienes que seleccioanar al menos un género",
+    "noTitle": "Tienes que escribir un título para la publicación",
+    "shortTitle": "El título es demasiado corto",
+    "longTitle": "El título es demasiado largo",
+    "noContent": "Tienes que escribir una descripción para la publicación"
 }

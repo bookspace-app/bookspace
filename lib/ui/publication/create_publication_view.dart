@@ -1,3 +1,4 @@
+import 'package:bookspace/app_localizations.dart';
 import 'package:bookspace/controllers/publication_controller.dart';
 import 'package:bookspace/controllers/user_controller.dart';
 import 'package:bookspace/models/publication.dart';
@@ -24,6 +25,11 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
   var descController = TextEditingController();
   var genreController = TextEditingController();
 
+  bool errorsTitle = false;
+  bool errorsDesc = false;
+  bool errorsGenre = false;
+  bool errorsAll = false;
+
   Publication myPublication;
 
   void getUser() async {
@@ -46,6 +52,26 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
       ModalRoute.withName('/')
     );
   }
+
+//Error Check
+  String errorTitle() {
+    if (titleController.text.isEmpty) return "${AppLocalizations.of(context).translate("noTitle")}";
+    else if (titleController.text.length < 50) return "${AppLocalizations.of(context).translate("shortTitle")}";
+    else if (titleController.text.length > 150) return "${AppLocalizations.of(context).translate("longTitle")}";
+    return null;
+  }
+
+  String errorDesc() {
+    if (descController.text.isEmpty) return "${AppLocalizations.of(context).translate("noContent")}";
+    else if (descController.text.length > 2000) return "${AppLocalizations.of(context).translate("longContent")}";
+    return null;
+  }
+
+  String errorGenre() {
+    if (genreController.text.isEmpty) return "${AppLocalizations.of(context).translate("noGenre")}";
+    return null;
+  }
+
 
   bool disposed = false;
   @override
@@ -107,6 +133,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                         fillColor: Colors.white,
                         hintText: "Escribe tu pregunta aquí...",
                         border: OutlineInputBorder(),
+                        errorText: errorsAll ? errorTitle() : null,
                         suffixIcon: titleController.text.length > 0 ?
                           IconButton(
                             icon: Icon(Icons.clear),
@@ -187,14 +214,15 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                       keyboardType: TextInputType.multiline,
                       maxLines: 4,
                       inputFormatters: [
-                        new LengthLimitingTextInputFormatter(500),
+                        new LengthLimitingTextInputFormatter(2000),
                       ],                                                          //TO-DO Define length of publication's description
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(),
-                        counterText: '${descController.text.length}' + '/500',
-                        contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10)
+                        counterText: '${descController.text.length}' + '/2000',
+                        contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        errorText: errorsAll ? errorDesc() : null,
                       )
                     )),
                   ]
@@ -236,6 +264,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(),
+                        errorText: errorsAll ? errorGenre() : null,
                         suffixIcon: genreController.text.length > 0 ?
                           IconButton(
                             icon: Icon(Icons.clear),
@@ -309,14 +338,22 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                         color: Color.fromRGBO(250, 198, 65, 1),
                         child: Text('Publicar', style: TextStyle(fontSize: 18.0, color: Colors.black),),
                           onPressed: () {
-                            getUser();
-                            myPublication = Publication();
-                            myPublication.title = titleController.text;
-                            myPublication.content = descController.text;
-                            myPublication.author_id = 1;              //TO-DO  = _user.id; now its hardcoded
-                            myPublication.category = 2;               //TO-DO Create genre selector and link it here, now its hardcoded
-                            createPublication();
-                        }
+                            setState(() {
+                              errorsTitle = titleController.text.isEmpty;
+                              errorsDesc = descController.text.isEmpty;
+                              errorsGenre = genreController.text.isEmpty;                          
+                              errorsAll = errorsTitle | errorsDesc | errorsGenre;
+                            });
+                            if(!errorsAll){
+                              getUser();
+                              myPublication = Publication();
+                              myPublication.title = titleController.text;
+                              myPublication.content = descController.text;
+                              myPublication.author_id = 1;              //TO-DO  = _user.id; now its hardcoded
+                              myPublication.category = 2;               //TO-DO Create genre selector and link it here, now its hardcoded
+                              createPublication();
+                            }
+                          }
                       )
                     )  
                   ],
