@@ -15,9 +15,9 @@ class PublicationCard extends StatelessWidget {
   int _totalViews = 4;
   int _totalResponses = 2;
 
-  bool _myVote = true;
-  bool _myFavorite = true;
-  bool _myResponse = true;
+  bool _myVote = false;
+  bool _myFavorite = false;
+  bool _myResponse = false;
 
 
   @override
