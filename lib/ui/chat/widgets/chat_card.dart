@@ -44,7 +44,7 @@ class ChatCard extends StatelessWidget {
           Container(
             //color: Colors.yellow,
             padding: EdgeInsets.fromLTRB(0, 5, 15, 5),
-            height: 85,
+            height: MediaQuery.of(context).size.width * 0.22, //85,
             child: Column(
               children: <Widget> [
                  Container(
