@@ -14,15 +14,6 @@ class PublicationHero extends StatelessWidget {
     this.publication
   }) : super(key: key);
 
-  int _totalUpvotes = 1;
-  int _totalViews = 4;
-  int _totalResponses = 2;
-
-  bool _myVote = false;
-  bool _myFavorite = false;
-  bool _myResponse = false;
-
-
   @override
   Widget build(BuildContext context) {
 
@@ -112,12 +103,12 @@ class PublicationHero extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget> [
                           Text(
-                            '$_totalUpvotes',
+                            '${publication.likes}',
                             textAlign: TextAlign.right,
                             style: TextStyle(
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold,
-                              color: _myVote ? Colors.green[400] : Colors.black,
+                              //color: _myVote ? Colors.green[400] : Colors.black,
                             ),
                           ),
                           Container(
@@ -126,7 +117,7 @@ class PublicationHero extends StatelessWidget {
                               onTap: () { print('Tap');},
                               child: Icon(
                                 Icons.thumb_up,
-                                color: _myVote ? Colors.green[400] : Colors.black
+                                //color: _myVote ? Colors.green[400] : Colors.black
                               ),
                             ),
                           )
@@ -149,12 +140,12 @@ class PublicationHero extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget> [
                           Text(
-                            '$_totalUpvotes',
+                            '${publication.dislikes}',
                             textAlign: TextAlign.right,
                             style: TextStyle(
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold,
-                              color: _myVote ? Colors.red[400] : Colors.black,
+                              //color: _myVote ? Colors.red[400] : Colors.black,
                             ),
                           ),
                           Container(
