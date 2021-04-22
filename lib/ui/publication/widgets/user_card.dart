@@ -7,21 +7,20 @@ class UserCard extends StatelessWidget {
   final User author;
   final DateTime dop;
   final bool principal;
+
+  final int likes;
+  final int dislikes;
+  final int replies;
   
   UserCard({
     Key key,
     this.author,
     this.dop,
-    this.principal
+    this.principal,
+    this.likes,
+    this.dislikes,
+    this.replies,
   }) : super(key: key);
-
-  int _totalUpvotes = 100;
-  int _totalViews = 4;
-  int _totalResponses = 2;
-
-  bool _myVote = true;
-  bool _myFavorite = true;
-  bool _myResponse = true;
 
   Widget build(BuildContext context) {
     return Container(
@@ -140,12 +139,12 @@ class UserCard extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget> [
                               Text(
-                                '$_totalUpvotes',
+                                '$likes',
                                 textAlign: TextAlign.right,
                                 style: TextStyle(
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.bold,
-                                  color: _myVote ? Colors.green[400] : Colors.black,
+                                  //color: _myVote ? Colors.green[400] : Colors.black,
                                 ),
                               ),
                               Container(
@@ -154,7 +153,7 @@ class UserCard extends StatelessWidget {
                                   onTap: () { print('Tap');},
                                   child: Icon(
                                     Icons.thumb_up,
-                                    color: _myVote ? Colors.green[400] : Colors.black
+                                    //color: _myVote ? Colors.green[400] : Colors.black
                                   ),
                                 ),
                               )
@@ -177,12 +176,12 @@ class UserCard extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget> [
                               Text(
-                                '$_totalUpvotes',
+                                '$dislikes',
                                 textAlign: TextAlign.right,
                                 style: TextStyle(
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.bold,
-                                  color: _myVote ? Colors.red[400] : Colors.black,
+                                  //color: _myVote ? Colors.red[400] : Colors.black,
                                 ),
                               ),
                               Container(
@@ -191,7 +190,7 @@ class UserCard extends StatelessWidget {
                                   onTap: () { print('Tap');},
                                   child: Icon(
                                     Icons.thumb_down,
-                                    color: _myVote ? Colors.red[400] : Colors.black
+                                    //color: _myVote ? Colors.red[400] : Colors.black
                                   ),
                                 ),
                               )
@@ -214,12 +213,12 @@ class UserCard extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget> [
                               Text(
-                                '$_totalUpvotes',
+                                '$replies',
                                 textAlign: TextAlign.right,
                                 style: TextStyle(
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.bold,
-                                  color: _myVote ? Colors.green[400] : Colors.black,
+                                  //color: _myVote ? Colors.green[400] : Colors.black,
                                 ),
                               ),
                               Container(
@@ -228,7 +227,7 @@ class UserCard extends StatelessWidget {
                                   onTap: () { print('Tap');},
                                   child: Icon(
                                     Icons.reply,
-                                    color: _myVote ? Colors.green[400] : Colors.black
+                                    //color: _myVote ? Colors.green[400] : Colors.black
                                   ),
                                 ),
                               )
