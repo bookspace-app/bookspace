@@ -26,6 +26,12 @@ class UserController {
 
       print('Response status: $statusCode\n Response body: $requestBody\n');
       if (statusCode == 200) {
+        final data = jsonDecode(response.body) as Map;
+        for (String name in data.keys){
+          final value = data[name];
+          print('[$name:$value]'); 
+        }
+        print("\n");
         user = User.fromJson(json.decode(response.body));
       }
     } catch (e) {

@@ -1,4 +1,5 @@
 import 'package:bookspace/app_localizations.dart';
+import 'package:bookspace/ui/activity/activity_view.dart';
 import 'package:bookspace/ui/home/home_view.dart';
 import 'package:bookspace/ui/login/sign_in.dart';
 import 'package:bookspace/ui/login/sign_up.dart';
@@ -93,10 +94,11 @@ class _MyAppState extends State<MyApp> {
       initialRoute: '/', // TODO : SignIn
       routes: {
         // When navigating to the "/" route, build the Home widget.
-        '/': (context) => MainView(renderIndex: 'home', view: HomeView()),
+        '/': (context) => MainView(renderIndex: 'home', view: ActivityView()),
         '/home': (context) => MainView(renderIndex: 'home', view: HomeView()),
         // When navigating to the "/profile" route, build the Profile widget.
         '/profile': (context) => MainView(renderIndex: 'profile', view: ProfileView()),
+        '/activity': (context) => MainView(renderIndex: 'activity', view: ActivityView()),
       },
     );
   }

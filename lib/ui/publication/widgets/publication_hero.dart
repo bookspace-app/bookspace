@@ -223,7 +223,7 @@ class PublicationHero extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget> [
                           Text(
-                            '${publication.nComments}',
+                            '${publication.comments}',
                             textAlign: TextAlign.right,
                             style: TextStyle(
                               fontSize: 20.0,
