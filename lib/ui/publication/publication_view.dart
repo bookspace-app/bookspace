@@ -71,7 +71,7 @@ class _PublicationViewState extends State<PublicationView> {
              ),
            ),
          ),
-         for (var i = 0; i < _publication.comments; i++) Container(
+         for (var i = 0; i < _publication.comments; i++)Container(
            child: Column(
             children: <Widget> [
               ResponseCard(

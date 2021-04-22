@@ -29,9 +29,6 @@ class Comment {
   String repliesUri;
   String mentionsUri;
 
-  //String votedUsersUri;  
-  //String favUsersUri;
-
   Comment({
     this.id,
     this.content,
@@ -54,16 +51,17 @@ class Comment {
   factory Comment.fromJson(Map<String, dynamic> json) => Comment(
         id: json["id"],
         content: json["content"],
+        parentId: json["parentId"],
         dop: DateTime.parse(json["dop"]),
         likes: json["likes"],
         dislikes: json["dislikes"],
         totalLikes: json["totalLikes"],
-        replies: json["nReplies"], 
+        replies: json["nreplies"], 
         author: User.fromJson(json["author"]),
         likedByUri: json["likedByUri"],
         dislikedByUri: json["dislikedByUri"],
-        repliesUri: json["answersUri"],
-        mentionsUri: "",//json["mentionsUri"] <= Cambiar cuando este en el back TODO
+        repliesUri: json["repliesUri"],
+        mentionsUri: json["mentionsUri"],
       );
 
   Map<String, dynamic> toJson() => {
