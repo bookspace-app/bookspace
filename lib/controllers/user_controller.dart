@@ -90,6 +90,7 @@ class UserController {
         'name': name,
         'email': email,
         'password': pass,
+        'dob':  "1996-04-26",
       };
 
       // Make POST request

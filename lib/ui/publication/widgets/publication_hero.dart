@@ -154,7 +154,7 @@ class PublicationHero extends StatelessWidget {
                               onTap: () { print('Tap');},
                               child: Icon(
                                 Icons.thumb_down,
-                                color: _myVote ? Colors.red[400] : Colors.black
+                                // color: _myVote ? Colors.red[400] : Colors.black
                               ),
                             ),
                           )
@@ -182,7 +182,7 @@ class PublicationHero extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold,
-                              color: _myVote ? Colors.yellow[800] : Colors.black,
+                              // color: _myVote ? Colors.yellow[800] : Colors.black,
                             ),
                           ),
                           Container(
@@ -191,7 +191,7 @@ class PublicationHero extends StatelessWidget {
                               onTap: () { print('Tap');},
                               child: Icon(
                                 Icons.remove_red_eye,
-                                color: _myVote ? Colors.yellow[800] : Colors.black
+                                // color: _myVote ? Colors.yellow[800] : Colors.black
                               ),
                             ),
                           )
@@ -219,7 +219,7 @@ class PublicationHero extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold,
-                              color: _myVote ? Colors.green[400] : Colors.black,
+                              // color: _myVote ? Colors.green[400] : Colors.black,
                             ),
                           ),
                           Container(
@@ -231,7 +231,7 @@ class PublicationHero extends StatelessWidget {
                               },
                               child: Icon(
                                 Icons.reply,
-                                color: _myVote ? Colors.green[400] : Colors.black
+                                // color: _myVote ? Colors.green[400] : Colors.black
                               ),
                             ),
                           )
