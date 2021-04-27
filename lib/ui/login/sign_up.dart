@@ -44,7 +44,7 @@ class _SignUpState extends State<SignUp> {
 
   User _user;
   List<User> _users = [];
-  final int id;
+  int id;
   //List<String> datos = [];
 
   static get username => null;
