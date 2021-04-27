@@ -28,6 +28,7 @@ class _SignInState extends State<SignIn> {
   User _user;
   List<User> _users = [];
   String id;
+  int idUser;
   void getALLuser() async {
     List<User> users = await UserController.getAllusers();
     if (!disposed) {
@@ -48,6 +49,7 @@ class _SignInState extends State<SignIn> {
     for (var i = 0; i < _users.length; i++) {
       if (usernameController.text == _users[i].username) {
         id = _users[i].password;
+        idUser = _users[i].id;
         return null;
       }
     }
@@ -57,8 +59,8 @@ class _SignInState extends State<SignIn> {
   String errorPass() {
     if (passwordController.text.isEmpty) return "Rellena este campo";
     //user.password check
-    if (passwordController.text != id) return "Contraseña incorrecta";
-    return null;
+    if (passwordController.text != id)  return "Contraseña incorrecta";
+      return null;
   }
 
   bool disposed = false;
@@ -90,7 +92,7 @@ class _SignInState extends State<SignIn> {
                 height: 200.0,
               ),
               child: Image.asset(
-                './assets/images/logo.png', //TO-DO if userpic == null show No_pic else userpic
+                './assets/images/No_pic.png', //TO-DO if userpic == null show No_pic else userpic
                 height: 170,
                 width: 170,
                 fit: BoxFit.fill,
@@ -198,7 +200,7 @@ class _SignInState extends State<SignIn> {
                       if (!error) {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => MainView()),
+                          MaterialPageRoute(builder: (context) => MainView(id: idUser)),
                         );
                       }
                     })),

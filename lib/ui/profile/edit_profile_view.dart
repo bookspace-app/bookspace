@@ -46,7 +46,7 @@ class _EditProfileViewState extends State<EditProfileView> {
   User _user;
 
   void getUser() async {
-    User user = await UserController.getUser(1);
+    User user = await UserController.getUser(22);
     if (!disposed) {
       setState(() => _user = user);
     }

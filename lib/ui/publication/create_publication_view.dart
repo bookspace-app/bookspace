@@ -352,8 +352,8 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                               myPublication = Publication();
                               myPublication.title = titleController.text;
                               myPublication.content = descController.text;
-                              myPublication.authorId = 1;              //TO-DO  = _user.id; now its hardcoded
-                              myPublication.category = 'Horror';               //TO-DO Create genre selector and link it here, now its hardcoded
+                              myPublication.authorId = 22;              //TO-DO  = _user.id; now its hardcoded
+                              myPublication.category = genreController.text;               //TO-DO Create genre selector and link it here, now its hardcoded
                               createPublication();
                             }
                           }

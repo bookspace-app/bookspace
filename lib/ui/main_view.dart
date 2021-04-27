@@ -14,11 +14,13 @@ import 'package:flutter/material.dart';
 class MainView extends StatefulWidget {
   final String renderIndex;
   Widget view;
+  final int id;
 
   MainView({
     Key key,
     this.renderIndex,
     this.view, 
+    this.id
   }) : super(key: key);
 
   @override
@@ -33,7 +35,7 @@ class _MainViewState extends State<MainView> {
     "chatList": ChatListView(),
     "createPublication": CreatePublicationView(),
     "activity": ActivityView(),
-    "profile": ProfileView(),
+    "profile": ProfileView(id: 22),
   };
 
   @override
@@ -81,7 +83,7 @@ class _MainViewState extends State<MainView> {
         title: Text(AppLocalizations.of(context).translate("$_rendered").toString()),
         backgroundColor: Colors.white,
         leadingWidth: 100,
-        leading: Image.asset('./assets/images/logo.png', fit: BoxFit.fitHeight),     //TO-DO: Hacer mas grande el logo de la AppBar  
+        leading: Image.asset('./assets/images/No_pic.png', fit: BoxFit.fitHeight),     //TO-DO: Hacer mas grande el logo de la AppBar  
         actions: (_rendered == "profile") ? 
           [ 
             PopupMenuButton <String> (

@@ -11,7 +11,11 @@ import 'package:textfield_tags/textfield_tags.dart';
 import 'package:bookspace/globals.dart' as globals;
 
 class ProfileView extends StatefulWidget {
-  ProfileView({Key key}) : super(key: key);
+  final int id;
+  ProfileView({
+    Key key,
+    this.id
+  }) : super(key: key);
 
   @override
   _ProfileViewState createState() => _ProfileViewState();
@@ -23,7 +27,7 @@ class _ProfileViewState extends State<ProfileView> {
   List<Publication> _myPublications = [];
 
   void getUser() async {
-    User user = await UserController.getUser(1);
+    User user = await UserController.getUser(22);
     if (!disposed){
       setState(() => _user = user);
       getPublications(_user);

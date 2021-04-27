@@ -91,10 +91,11 @@ class _MyAppState extends State<MyApp> {
         return supportedLocales.first;
       },
 
-      initialRoute: '/', // TODO : SignIn
+      initialRoute: '/login', // TODO : SignIn
       routes: {
         // When navigating to the "/" route, build the Home widget.
-        '/': (context) => SignIn(),
+        '/login': (context) => SignIn(),
+        '/': (context) => MainView(renderIndex: 'home', view: HomeView()),
         '/home': (context) => MainView(renderIndex: 'home', view: HomeView()),
         // When navigating to the "/profile" route, build the Profile widget.
         '/profile': (context) => MainView(renderIndex: 'profile', view: ProfileView()),
