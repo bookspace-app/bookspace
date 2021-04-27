@@ -25,16 +25,14 @@ extension RankExtension on Rank {
 }
 
 class User {
-
   // INPUT
   String email;
   String name;
   String username;
-  // ignore password
+  String password;
   DateTime dob;
   String description;
   List<String> favCategories;
-  
 
   // OUTPUT
   int id;
@@ -57,38 +55,38 @@ class User {
   String favCategoriesUri;
   String myMentionsUri;
 
-  User({
-    this.id,
-    this.email,
-    this.name,
-    this.username,
-    this.dob,
-    this.description,
-    this.favCategories,
-    this.age, 
-    this.dor,
-    this.rank,
-    this.myPublicationsUri,
-    this.likedCommentsUri,
-    this.dislikedCommentsUri,
-    this.favPublicationsUri,
-    this.myCommentsUri,
-    this.likedPublicationsUri,
-    this.dislikedPublicationsUri,
-    this.blockedUsersUri,
-    this.profilePicUri,
-    this.myTagsUri,
-    this.favTagsUri,
-    this.favCategoriesUri,
-    this.myMentionsUri
-  });
+  User(
+      {this.id,
+      this.email,
+      this.name,
+      this.username,
+      this.password,
+      this.dob,
+      this.description,
+      this.favCategories,
+      this.age,
+      this.dor,
+      this.rank,
+      this.myPublicationsUri,
+      this.likedCommentsUri,
+      this.dislikedCommentsUri,
+      this.favPublicationsUri,
+      this.myCommentsUri,
+      this.likedPublicationsUri,
+      this.dislikedPublicationsUri,
+      this.blockedUsersUri,
+      this.profilePicUri,
+      this.myTagsUri,
+      this.favTagsUri,
+      this.favCategoriesUri,
+      this.myMentionsUri});
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
         email: json["email"],
         name: json["name"],
         username: json["username"],
-        // password ignore
+        password: json["password"],
         description: json["description"],
         age: json["age"],
         dor: DateTime.parse(json["dor"]),
