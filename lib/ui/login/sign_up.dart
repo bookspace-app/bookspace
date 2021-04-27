@@ -44,6 +44,7 @@ class _SignUpState extends State<SignUp> {
 
   User _user;
   List<User> _users = [];
+  final int id;
   //List<String> datos = [];
 
   static get username => null;
@@ -56,14 +57,25 @@ class _SignUpState extends State<SignUp> {
     print(users);
   }
 
-  void postUser(String username, String name, String email, String pass) async {
+  Future<void> postUser(
+      String username, String name, String email, String pass) async {
     User user = await UserController.postUser(username, name, email, pass);
-    print(user);
+    if (!disposed) {
+      setState(() {
+        _user = user;
+        id = user.id;
+      });
+    }
+    print(_user);
+  }
+  /*Future<void> postUser(
+      String username, String name, String email, String pass) async {
+    User user = await UserController.postUser(username, name, email, pass);
     if (!disposed) {
       setState(() => _user = user);
     }
     print(_user);
-  }
+  }*/
   /*
   List<String> datosUsr() {
     return datos;
@@ -85,7 +97,8 @@ class _SignUpState extends State<SignUp> {
   }
 
   String errorName() {
-    if (nameController.text.isEmpty) return "${AppLocalizations.of(context).translate("emptyField")}";
+    if (nameController.text.isEmpty)
+      return "${AppLocalizations.of(context).translate("emptyField")}";
     else if (nameController.text.length < 2)
       return "${AppLocalizations.of(context).translate("shortName")}";
     else if (nameController.text.length > 20)
@@ -94,7 +107,8 @@ class _SignUpState extends State<SignUp> {
   }
 
   String errorSurName() {
-    if (surNameController.text.isEmpty) return "${AppLocalizations.of(context).translate("emptyField")}";
+    if (surNameController.text.isEmpty)
+      return "${AppLocalizations.of(context).translate("emptyField")}";
     else if (surNameController.text.length < 2)
       return "${AppLocalizations.of(context).translate("shortSurname")}";
     else if (surNameController.text.length > 20)
@@ -191,31 +205,27 @@ class _SignUpState extends State<SignUp> {
                       .center, //Center Row contents vertically,
                   children: <Widget>[
                     Expanded(
-                      child: TextFormField(
-                        controller: userNameController,
-                        onChanged: (text) {
-                          setState(() {});
-                        },
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText:
-                              'Nombre de Usuario', //to-do Emoji handling
-                          prefixIcon:
-                              Icon(Icons.person), //to-do Traduciones
-                          errorText: errorsAll ? errorUserName() : null,
-                          suffixIcon: userNameController.text.length > 0 ?
-                            IconButton(
-                              icon: Icon(Icons.clear),
-                              onPressed: () {
-                                setState(() {
-                                  userNameController.clear();
-                                });
-                              }
-                            )
-                            : null
-                        )
-                      )
-                    )
+                        child: TextFormField(
+                            controller: userNameController,
+                            onChanged: (text) {
+                              setState(() {});
+                            },
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText:
+                                    'Nombre de Usuario', //to-do Emoji handling
+                                prefixIcon:
+                                    Icon(Icons.person), //to-do Traduciones
+                                errorText: errorsAll ? errorUserName() : null,
+                                suffixIcon: userNameController.text.length > 0
+                                    ? IconButton(
+                                        icon: Icon(Icons.clear),
+                                        onPressed: () {
+                                          setState(() {
+                                            userNameController.clear();
+                                          });
+                                        })
+                                    : null)))
                   ],
                 ),
               ),
@@ -227,29 +237,25 @@ class _SignUpState extends State<SignUp> {
                       .center, //Center Row contents vertically,
                   children: <Widget>[
                     Expanded(
-                      child: TextFormField(
-                        controller: nameController,
-                        onChanged: (text) {
-                          setState(() {});
-                        },
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Nombre',
-                          prefixIcon: Icon(Icons.person),
-                          errorText: errorsAll ? errorName() : null,
-                          suffixIcon: nameController.text.length > 0 ? 
-                            IconButton(
-                              icon: Icon(Icons.clear),
-                              onPressed: () {
-                                setState(() {
-                                  nameController.clear();
-                                });
-                              }
-                            )
-                            : null
-                        )
-                      )
-                    )
+                        child: TextFormField(
+                            controller: nameController,
+                            onChanged: (text) {
+                              setState(() {});
+                            },
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Nombre',
+                                prefixIcon: Icon(Icons.person),
+                                errorText: errorsAll ? errorName() : null,
+                                suffixIcon: nameController.text.length > 0
+                                    ? IconButton(
+                                        icon: Icon(Icons.clear),
+                                        onPressed: () {
+                                          setState(() {
+                                            nameController.clear();
+                                          });
+                                        })
+                                    : null)))
                   ],
                 ),
               ),
@@ -261,29 +267,25 @@ class _SignUpState extends State<SignUp> {
                       .center, //Center Row contents vertically,
                   children: <Widget>[
                     Expanded(
-                      child: TextFormField(
-                        controller: surNameController,
-                        onChanged: (text) {
-                          setState(() {});
-                        },
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Apellido',
-                          prefixIcon: Icon(Icons.person),
-                          errorText: errorsAll ? errorSurName() : null,
-                          suffixIcon: surNameController.text.length > 0 ? 
-                            IconButton(
-                              icon: Icon(Icons.clear),
-                              onPressed: () {
-                                setState(() {
-                                  surNameController.clear();
-                                });
-                              }
-                            )
-                            : null
-                        )
-                      )
-                    )
+                        child: TextFormField(
+                            controller: surNameController,
+                            onChanged: (text) {
+                              setState(() {});
+                            },
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Apellido',
+                                prefixIcon: Icon(Icons.person),
+                                errorText: errorsAll ? errorSurName() : null,
+                                suffixIcon: surNameController.text.length > 0
+                                    ? IconButton(
+                                        icon: Icon(Icons.clear),
+                                        onPressed: () {
+                                          setState(() {
+                                            surNameController.clear();
+                                          });
+                                        })
+                                    : null)))
                   ],
                 ),
               ),
@@ -295,29 +297,25 @@ class _SignUpState extends State<SignUp> {
                       .center, //Center Row contents vertically,
                   children: <Widget>[
                     Expanded(
-                      child: TextFormField(
-                        controller: emailController,
-                        onChanged: (text) {
-                          setState(() {});
-                        },
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Correo Electrónico',
-                          prefixIcon: Icon(Icons.mail),
-                          errorText: errorsAll ? errorEmail() : null,
-                          suffixIcon: emailController.text.length > 0 ?
-                            IconButton(
-                              icon: Icon(Icons.clear),
-                              onPressed: () {
-                                setState(() {
-                                  emailController.clear();
-                                });
-                              }
-                            )
-                            : null
-                        )
-                      )
-                    )
+                        child: TextFormField(
+                            controller: emailController,
+                            onChanged: (text) {
+                              setState(() {});
+                            },
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Correo Electrónico',
+                                prefixIcon: Icon(Icons.mail),
+                                errorText: errorsAll ? errorEmail() : null,
+                                suffixIcon: emailController.text.length > 0
+                                    ? IconButton(
+                                        icon: Icon(Icons.clear),
+                                        onPressed: () {
+                                          setState(() {
+                                            emailController.clear();
+                                          });
+                                        })
+                                    : null)))
                   ],
                 ),
               ),
@@ -329,30 +327,26 @@ class _SignUpState extends State<SignUp> {
                       .center, //Center Row contents vertically,
                   children: <Widget>[
                     Expanded(
-                      child: TextFormField(
-                        controller: passController,
-                        onChanged: (text) {
-                          setState(() {});
-                        },
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Contraseña',
-                          prefixIcon: Icon(Icons.lock),
-                          errorText: errorsAll ? errorPass() : null,
-                          suffixIcon: passController.text.length > 0 ? 
-                            IconButton(
-                              icon: Icon(Icons.clear),
-                              onPressed: () {
-                                setState(() {
-                                  passController.clear();
-                                });
-                              }
-                            )
-                            : null
-                        )
-                      )
-                    )
+                        child: TextFormField(
+                            controller: passController,
+                            onChanged: (text) {
+                              setState(() {});
+                            },
+                            obscureText: true,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Contraseña',
+                                prefixIcon: Icon(Icons.lock),
+                                errorText: errorsAll ? errorPass() : null,
+                                suffixIcon: passController.text.length > 0
+                                    ? IconButton(
+                                        icon: Icon(Icons.clear),
+                                        onPressed: () {
+                                          setState(() {
+                                            passController.clear();
+                                          });
+                                        })
+                                    : null)))
                   ],
                 ),
               ),
@@ -364,30 +358,26 @@ class _SignUpState extends State<SignUp> {
                       .center, //Center Row contents vertically,
                   children: <Widget>[
                     Expanded(
-                      child: TextFormField(
-                        controller: passRController,
-                        onChanged: (text) {
-                          setState(() {});
-                        },
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Repetir Contraseña',
-                          prefixIcon: Icon(Icons.lock),
-                          errorText: errorsAll ? errorPassR() : null,
-                          suffixIcon: passRController.text.length > 0 ? 
-                            IconButton(
-                              icon: Icon(Icons.clear),
-                              onPressed: () {
-                                setState(() {
-                                  passRController.clear();
-                                });
-                              }
-                            )
-                            : null
-                        )
-                      )
-                    )
+                        child: TextFormField(
+                            controller: passRController,
+                            onChanged: (text) {
+                              setState(() {});
+                            },
+                            obscureText: true,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Repetir Contraseña',
+                                prefixIcon: Icon(Icons.lock),
+                                errorText: errorsAll ? errorPassR() : null,
+                                suffixIcon: passRController.text.length > 0
+                                    ? IconButton(
+                                        icon: Icon(Icons.clear),
+                                        onPressed: () {
+                                          setState(() {
+                                            passRController.clear();
+                                          });
+                                        })
+                                    : null)))
                   ],
                 ),
               ),
@@ -408,19 +398,36 @@ class _SignUpState extends State<SignUp> {
                             child: Text('Siguiente'),
                             onPressed: () {
                               setState(() {
-                                if (errorUserName() != null ) errorsUserName = true;
-                                else errorsUserName = false;
-                                if (errorName() != null ) errorsName = true;
-                                else errorsName = false;
-                                if (errorSurName() != null ) errorsSurName = true;
-                                else errorsSurName = false;
-                                if (errorEmail() != null ) errorsEmail = true;
-                                else errorsEmail = false;
-                                if (errorPass() != null ) errorsPass = true;
-                                else errorsPass = false;
-                                if (errorPassR() != null ) errorsPassR = true;
-                                else errorsPassR = false;                                                                                                                                                                
-                                errorsAll = errorsUserName | errorsName | errorsSurName | errorsEmail | errorsPass | errorsPassR;
+                                if (errorUserName() != null)
+                                  errorsUserName = true;
+                                else
+                                  errorsUserName = false;
+                                if (errorName() != null)
+                                  errorsName = true;
+                                else
+                                  errorsName = false;
+                                if (errorSurName() != null)
+                                  errorsSurName = true;
+                                else
+                                  errorsSurName = false;
+                                if (errorEmail() != null)
+                                  errorsEmail = true;
+                                else
+                                  errorsEmail = false;
+                                if (errorPass() != null)
+                                  errorsPass = true;
+                                else
+                                  errorsPass = false;
+                                if (errorPassR() != null)
+                                  errorsPassR = true;
+                                else
+                                  errorsPassR = false;
+                                errorsAll = errorsUserName |
+                                    errorsName |
+                                    errorsSurName |
+                                    errorsEmail |
+                                    errorsPass |
+                                    errorsPassR;
                               });
                               if (!errorsAll) {
                                 /*datos.add(userNameController.text);
@@ -430,15 +437,19 @@ class _SignUpState extends State<SignUp> {
 
                                 postUser(
                                   userNameController.text,
-                                  nameController.text + ' ' + surNameController.text,
+                                  nameController.text +
+                                      ' ' +
+                                      surNameController.text,
                                   emailController.text,
                                   passController.text,
                                 );
-
+                                print(1919 + id);
                                 Navigator.push(
-                                  context, // TODO: pass id to PublicationView
+                                  context,
                                   MaterialPageRoute(
-                                      builder: (context) => SignUp2()),
+                                      builder: (context) => SignUp2(
+                                            id: id,
+                                          )),
                                 );
                               }
                               /*
