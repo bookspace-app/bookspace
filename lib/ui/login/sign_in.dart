@@ -27,7 +27,7 @@ class _SignInState extends State<SignIn> {
 
   User _user;
   List<User> _users = [];
-  int id;
+  String id;
   void getALLuser() async {
     List<User> users = await UserController.getAllusers();
     if (!disposed) {
@@ -47,7 +47,7 @@ class _SignInState extends State<SignIn> {
     if (usernameController.text.isEmpty) return "Rellena este campo";
     for (var i = 0; i < _users.length; i++) {
       if (usernameController.text == _users[i].username) {
-        id = _users[i].id;
+        id = _users[i].password;
         return null;
       }
     }
@@ -55,10 +55,9 @@ class _SignInState extends State<SignIn> {
   }
 
   String errorPass() {
-    getUser(id);
     if (passwordController.text.isEmpty) return "Rellena este campo";
     //user.password check
-    //if (passwordController.text != _user.id) return "Contraseña incorrecta";
+    if (passwordController.text != id) return "Contraseña incorrecta";
     return null;
   }
 
@@ -186,8 +185,14 @@ class _SignInState extends State<SignIn> {
                             borderRadius: new BorderRadius.circular(10.0))),
                     onPressed: () {
                       setState(() {
-                        errorsUserName = usernameController.text.isEmpty;
-                        errorsPass = passwordController.text.isEmpty;
+                        if (errorUserName() != null)
+                          errorsUserName = true;
+                        else
+                          errorsUserName = false;
+                        if (errorPass() != null)
+                          errorsPass = true;
+                        else
+                          errorsPass = false;
                         error = errorsUserName | errorsPass;
                       });
                       if (!error) {
