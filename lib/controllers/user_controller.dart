@@ -103,7 +103,7 @@ class UserController {
       String requestBody = response.body;
 
       print('Response status: $statusCode\n Response body: $requestBody\n');
-      if (statusCode == 201) {
+      if (statusCode == 200) {
         user = User.fromJson(json.decode(response.body));
       }
     } catch (e) {
