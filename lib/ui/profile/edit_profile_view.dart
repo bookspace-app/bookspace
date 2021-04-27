@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:bookspace/controllers/user_controller.dart';
 import 'package:bookspace/models/user.dart';
 import 'package:bookspace/ui/main_view.dart';
@@ -9,6 +12,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:bookspace/globals.dart' as globals;
 import 'package:bookspace/ui/widgets/custom_input_box.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 
 class EditProfileView extends StatefulWidget {
@@ -27,6 +31,9 @@ class _EditProfileViewState extends State<EditProfileView> {
   final bioController = TextEditingController();
 
   bool isPasswordHiden = true;
+
+  PickedFile _imageFile;
+  final ImagePicker _picker = ImagePicker();
 
   var _name;
   var _surname;
@@ -75,15 +82,9 @@ class _EditProfileViewState extends State<EditProfileView> {
       body: ListView(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 40),
         children: [
+          imageProfile(),
           Container(
-            margin: EdgeInsets.fromLTRB(0, 10, 0, 20),
-            constraints: BoxConstraints.expand(height: 150.0, width: 200.0),
-            child: Image(
-              image: AssetImage('assets/images/No_pic.png'),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 15, 0, 5),
+            margin: EdgeInsets.fromLTRB(0, 25, 0, 5),
             child: Text(
               'Nombre',
               style: TextStyle(
@@ -121,45 +122,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                       }),
                 ),
               )),
-          /*Container(
-            margin: EdgeInsets.fromLTRB(0, 15, 0, 5),
-            child: Text(
-              'Apellidos',
-              style: TextStyle(
-                fontSize: 15,
-              ),
-            ),
-          ),
-          Container(
-              constraints: BoxConstraints.expand(height: 50, width: 100),
-              child: TextField(
-                controller: surnameController,
-                style: TextStyle(
-                    fontSize: 15,
-                    //color: Color(0xff0962ff),
-                    fontWeight: FontWeight.bold),
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  hintText: 'Apellidos',
-                  hintStyle: TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey[350],
-                      fontWeight: FontWeight.w600),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-                  suffixIcon: IconButton(
-                      icon: Icon(Icons.clear),
-                      onPressed: () {
-                        setState(() {
-                          surnameController.clear();
-                        });
-                      }),
-                ),
-              )),*/
           Container(
             margin: EdgeInsets.fromLTRB(0, 15, 0, 5),
             child: Text(
@@ -198,47 +160,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                         });
                       }),
                 ),
-              )),
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 15, 0, 5),
-            child: Text(
-              'Contraseña',
-              style: TextStyle(
-                fontSize: 15,
-              ),
-            ),
-          ),
-          Container(
-              constraints: BoxConstraints.expand(height: 50, width: 100),
-              child: TextField(
-                controller: passwordController,
-                obscureText: isPasswordHiden,
-                style: TextStyle(
-                    fontSize: 15,
-                    //color: Color(0xff0962ff),
-                    fontWeight: FontWeight.bold),
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    hintText: 'Contraseña',
-                    hintStyle: TextStyle(
-                        fontSize: 15,
-                        color: Colors.grey[350],
-                        fontWeight: FontWeight.w600),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
-                    ),
-                    suffixIcon: IconButton(
-                        icon: isPasswordHiden
-                            ? Icon(Icons.visibility_off)
-                            : Icon(Icons.visibility),
-                        onPressed: () {
-                          setState(() {
-                            isPasswordHiden = !isPasswordHiden;
-                          });
-                        })),
               )),
           Container(
             margin: EdgeInsets.fromLTRB(0, 15, 0, 5),
@@ -365,29 +286,30 @@ class _EditProfileViewState extends State<EditProfileView> {
                       hintText: "put tags"),
                   onTag: (tag) {},
                   onDelete: (tag) {})),
+          //BUTTON SUBMIT
           Container(
               alignment: Alignment.bottomCenter,
               height: 40,
               margin: EdgeInsets.only(top: 20),
               child: ElevatedButton(
                 onPressed: () {
-                  setState(() {
-                    _name = nameController.text;
-                    _username = usernameController.text;
-                    _email = emailController.text;
-                    _password = passwordController.text;
-                    _bio = bioController.text;
-                    putUser(_username, _name, _email, _bio, _id);
+                  //setState(() {
+                  _name = nameController.text;
+                  _username = usernameController.text;
+                  _email = emailController.text;
+                  _password = passwordController.text;
+                  _bio = bioController.text;
+                  putUser(_username, _name, _email, _bio, _id);
 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MainView(
-                                renderIndex: 'profile',
-                                view: ProfileView(),
-                              )),
-                    );
-                  });
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MainView(
+                              renderIndex: 'profile',
+                              view: ProfileView(),
+                            )),
+                  );
+                  //});
                 },
                 child: Text('Submit',
                     style: TextStyle(
@@ -404,4 +326,87 @@ class _EditProfileViewState extends State<EditProfileView> {
       ),
     );
   }
+
+  Widget imageProfile() {
+    return Center(
+      child: Stack(
+        children: [
+          CircleAvatar(
+            radius: 80,
+            backgroundImage: _imageFile == null
+                ? AssetImage('assets/images/No_pic.png')
+                : FileImage(File(_imageFile.path)),
+            //AssetImage(_user.profilePicUri),
+          ),
+          Positioned(
+              bottom: 20,
+              right: 20,
+              child: InkWell(
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: ((builder) => bottomSheet()),
+                  );
+                },
+                child: Icon(
+                  Icons.edit,
+                  size: 30,
+                ),
+              )),
+        ],
+      ),
+    );
+  }
+
+  Widget bottomSheet() {
+    return Container(
+        height: 100,
+        width: MediaQuery.of(context).size.width,
+        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: Column(
+          children: [
+            Text("Escoge una foto de perfil",
+                style: TextStyle(
+                  fontSize: 20,
+                )),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton.icon(
+                    onPressed: () {
+                      takePhoto(ImageSource.camera);
+                      //savePhoto();
+                    },
+                    icon: Icon(Icons.camera_alt),
+                    label: Text('Cámera')),
+                SizedBox(
+                  width: 20,
+                ),
+                TextButton.icon(
+                    onPressed: () {
+                      takePhoto(ImageSource.gallery);
+                      //savePhoto();
+                    },
+                    icon: Icon(Icons.image),
+                    label: Text('Galeria'))
+              ],
+            )
+          ],
+        ));
+  }
+
+  void takePhoto(ImageSource source) async {
+    final pickedFile = await _picker.getImage(source: source);
+    setState(() {
+      _imageFile = pickedFile;
+    });
+  }
+
+  /*void savePhoto() async {
+    SharedPreferences saveImage = await SharedPreferences.getInstance();
+    print('Saved image path: ' + saveImage.toString());
+  }*/
 }
