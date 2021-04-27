@@ -27,9 +27,9 @@ class UserController {
       print('Response status: $statusCode\n Response body: $requestBody\n');
       if (statusCode == 200) {
         final data = jsonDecode(response.body) as Map;
-        for (String name in data.keys){
+        for (String name in data.keys) {
           final value = data[name];
-          print('[$name:$value]'); 
+          print('[$name:$value]');
         }
         print("\n");
         user = User.fromJson(json.decode(response.body));
@@ -72,7 +72,8 @@ class UserController {
   }
 
   //POST user
-  static Future<User> postUser(String username, String name, String email, String pass) async {
+  static Future<User> postUser(
+      String username, String name, String email, String pass) async {
     User user;
 
     try {
@@ -90,7 +91,7 @@ class UserController {
         'name': name,
         'email': email,
         'password': pass,
-        'dob':  "1996-04-26",
+        'dob': "1996-04-26",
       };
 
       // Make POST request
@@ -108,7 +109,7 @@ class UserController {
     } catch (e) {
       print('error caught: $e');
     }
-    return null;
+    return user;
   }
 
   //UPDATE USER
@@ -152,7 +153,7 @@ class UserController {
   }
 
   //UPDATE USER DESCRIPTION
-  static Future<bool> updateDesc (String descripcion, int id ) async {
+  static Future<bool> updateDesc(String descripcion, int id) async {
     User user;
     try {
       Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id");
@@ -171,7 +172,7 @@ class UserController {
 
       // Make PUT request
       http.Response response =
-      await http.put(uri, headers: headers, body: json.encode(body));
+          await http.put(uri, headers: headers, body: json.encode(body));
 
       // Request status and body
       int statusCode = response.statusCode;
