@@ -59,8 +59,8 @@ class _SignInState extends State<SignIn> {
   String errorPass() {
     if (passwordController.text.isEmpty) return "Rellena este campo";
     //user.password check
-    if (passwordController.text != id)  return "Contraseña incorrecta";
-      return null;
+    if (passwordController.text != id) return "Contraseña incorrecta";
+    return null;
   }
 
   bool disposed = false;
@@ -198,9 +198,11 @@ class _SignInState extends State<SignIn> {
                         error = errorsUserName | errorsPass;
                       });
                       if (!error) {
+                        globals.id = idUser;
+                        print(globals.id);
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => MainView(id: idUser)),
+                          MaterialPageRoute(builder: (context) => MainView()),
                         );
                       }
                     })),
