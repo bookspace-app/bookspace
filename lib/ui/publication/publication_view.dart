@@ -22,6 +22,8 @@ class PublicationView extends StatefulWidget {
 class _PublicationViewState extends State<PublicationView> {
   Publication _publication;
   List<Comment> _comments;
+  int rate = 2;
+  int loadedComments = 2;
 
   void getPublication(int id) async {
     Publication publication = await PublicationController.getPublication(id);
@@ -58,6 +60,38 @@ class _PublicationViewState extends State<PublicationView> {
   
   @override
   Widget build(BuildContext context) {
+
+    Widget loadMoreComments() {
+      return Container(
+            padding: EdgeInsets.fromLTRB(15, 0, 15, 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center, 
+              crossAxisAlignment: CrossAxisAlignment.center, 
+              children: <Widget>[
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.40,
+                  height: 35,
+                  child: RaisedButton(
+                    textColor: Colors.white,
+                    color: Color.fromRGBO(250, 198, 65, 1),
+                    child: Text(
+                      'Load more',
+                      style: TextStyle(
+                        fontSize: 18.0, color: Colors.black),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          loadedComments = (loadedComments + rate > _publication.comments)
+                          ? _publication.comments
+                          : loadedComments + rate;
+                        });
+                      }
+                    )
+                )
+              ],
+            ), 
+          );
+    }
     return (_publication != null && _comments != null)? ListView(
        children: <Widget>[
          PublicationHero(
@@ -78,7 +112,7 @@ class _PublicationViewState extends State<PublicationView> {
              ),
            ),
          ),
-         for (var i = 0; i < _publication.comments; i++)Container(
+         for (var i = 0; i < loadedComments; i++)Container(
            child: Column(
             children: <Widget> [
               ResponseCard(
@@ -95,6 +129,9 @@ class _PublicationViewState extends State<PublicationView> {
             ]
           )
          ),
+         (loadedComments < _publication.comments)
+         ? loadMoreComments()
+         : Container(),
           CreateComment(
             id: _publication.id,
             notifyOnNewComment: refresh
