@@ -9,7 +9,7 @@ class CommentController {
   static Future<Comment> getComment(int id) async {
     Comment comment;
     try {
-      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications/$id");
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/comments/$id");
       
       // Define headers
       Map<String, String> headers = {
@@ -25,11 +25,11 @@ class CommentController {
 
       if (statusCode == 200) {
         final data = jsonDecode(response.body) as Map;
-        for (String name in data.keys){
+        /*for (String name in data.keys){
           final value = data[name];
           print('[$name:$value]'); 
         }
-        print("\n");
+        print("\n");*/
         comment = Comment.fromJson(json.decode(utf8.decode(response.bodyBytes)));
       }
     } catch(e) {
@@ -64,11 +64,11 @@ class CommentController {
       if (statusCode == 200) {
         json.decode(utf8.decode(response.bodyBytes)).forEach((result) {
 
-          for (String name in result.keys){
+          /*for (String name in result.keys){
             final value = result[name];
             print('[$name:$value]'); 
           }
-          print("\n");
+          print("\n");*/
 
           comments.add(Comment.fromJson(result));
         });
