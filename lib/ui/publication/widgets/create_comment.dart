@@ -73,31 +73,34 @@ class _CreateCommentState extends State<CreateComment> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.amber,
       padding: EdgeInsets.fromLTRB(15, 2, 15, 5),
-      child: Row(
+      child: Column(
         children: <Widget>[
-          Expanded(
-            child: TextFormField(
-              controller: contentController,
-              onChanged: (text) {
-                setState(() {});
-              },
-              keyboardType: TextInputType.multiline,
-              maxLines: 4,
-              inputFormatters: [
-                new LengthLimitingTextInputFormatter(2000),
-              ], //TO-DO Define length of publication's description
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                border: OutlineInputBorder(),
-                counterText:
-                  '${contentController.text.length}' + '/2000',
-                contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                errorText: errorsContent ? errorContent() : null,
-              )
-            )  
+          Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  controller: contentController,
+                  onChanged: (text) {
+                    setState(() {});
+                  },
+                  keyboardType: TextInputType.multiline,
+                  maxLines: 4,
+                  inputFormatters: [
+                    new LengthLimitingTextInputFormatter(2000),
+                  ], //TO-DO Define length of publication's description
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(),
+                    counterText:
+                      '${contentController.text.length}' + '/2000',
+                    contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    errorText: errorsContent ? errorContent() : null,
+                  )
+                )  
+              ),
+            ],
           ),
           Container(
             padding: EdgeInsets.fromLTRB(15, 0, 15, 5),
