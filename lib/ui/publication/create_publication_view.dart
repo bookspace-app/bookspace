@@ -342,20 +342,10 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                             ),
                             onPressed: () {
                               setState(() {
-                                if (errorTitle() != null)
-                                  errorsTitle = true;
-                                else
-                                  errorsTitle = false;
-                                if (errorDesc() != null)
-                                  errorsDesc = true;
-                                else
-                                  errorsDesc = false;
-                                if (errorGenre() != null)
-                                  errorsGenre = true;
-                                else
-                                  errorsGenre = false;
-                                errorsAll =
-                                    errorsTitle | errorsDesc | errorsGenre;
+                                errorsTitle = (errorTitle() != null) ? true : false;
+                                errorsDesc = (errorDesc() != null) ? true : false;
+                                errorsGenre = (errorGenre() != null) ? true : false;
+                                errorsAll = errorsTitle | errorsDesc | errorsGenre;
                               });
                               if (!errorsAll) {
                                 getUser();
