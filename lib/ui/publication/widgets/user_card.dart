@@ -1,12 +1,16 @@
 import 'package:bookspace/models/user.dart';
+import 'package:bookspace/ui/main_view.dart';
+import 'package:bookspace/ui/publication/publication_view.dart';
 import 'package:bookspace/utils/humanize.dart';
 import 'package:flutter/material.dart';
 
 class UserCard extends StatelessWidget {
   
+  final int commentId;
   final User author;
   final DateTime dop;
   final bool principal;
+  final bool isPublication;
 
   final int likes;
   final int dislikes;
@@ -14,9 +18,11 @@ class UserCard extends StatelessWidget {
   
   UserCard({
     Key key,
+    this.commentId,
     this.author,
     this.dop,
     this.principal,
+    this.isPublication,
     this.likes,
     this.dislikes,
     this.replies,
@@ -88,7 +94,9 @@ class UserCard extends StatelessWidget {
                             children: <Widget> [
                               Container(
                                 child: Text(
-                                  'Pregunta',
+                                  (isPublication)
+                                  ? 'Pregunta'
+                                  : 'Comentario',
                                   style: TextStyle(
                                     fontWeight: FontWeight.normal
                                   ),
@@ -224,7 +232,21 @@ class UserCard extends StatelessWidget {
                               Container(
                                 padding: EdgeInsets.only(left:10),
                                 child: GestureDetector(
-                                  onTap: () { print('Tap');},
+                                  onTap: () {
+                                    print('Goto comment $commentId');
+                                    Navigator.push(
+                                      context, // TODO: pass id to PublicationView
+                                      MaterialPageRoute(
+                                        builder: (context) => MainView(
+                                          renderIndex: 'home',
+                                          view: PublicationView(
+                                            id: commentId,
+                                            isPublication: false,
+                                          ),
+                                        )
+                                      ),
+                                    );
+                                  },
                                   child: Icon(
                                     Icons.reply,
                                     //color: _myVote ? Colors.green[400] : Colors.black

@@ -7,11 +7,13 @@ import 'package:bookspace/globals.dart' as globals;
 
 class PublicationHero extends StatelessWidget {
 
-  final Publication publication;
+  final publication;
+  final bool isPublication;
 
   PublicationHero({
     Key key,
-    this.publication
+    this.publication,
+    this.isPublication
   }) : super(key: key);
 
   @override
@@ -77,7 +79,8 @@ class PublicationHero extends StatelessWidget {
       //color: Colors.pink,
       child: Column(
         children: <Widget>[
-          Row(
+          (isPublication)
+          ? Row(
             children: <Widget>[
               Expanded(
                 child: Container(
@@ -87,7 +90,7 @@ class PublicationHero extends StatelessWidget {
               )
               // TODO: tags
             ],
-          ),
+          ) : Container(),
           // Upvotes module
           Row(
             children: <Widget>[
@@ -165,7 +168,8 @@ class PublicationHero extends StatelessWidget {
                 ),
               ),
               // Views and favorite module
-              Expanded(
+              (isPublication)
+              ? Expanded(
                 child: Container(
                   //color: Colors.orange[300],
                   padding: EdgeInsets.symmetric(vertical: 3),
@@ -200,12 +204,14 @@ class PublicationHero extends StatelessWidget {
                     )
                   )
                 ),
-              ),
+              ) : Container(),
               // reply module
               Expanded(
                 child: Container(
                   //color: Colors.red[300],
-                  padding: EdgeInsets.symmetric(vertical: 3),
+                  padding: (isPublication)
+                  ? EdgeInsets.symmetric(vertical: 3)
+                  : EdgeInsets.fromLTRB(0, 20, 0, 3),
                   child: Center(
                     child: Container(
                       width: 100,
@@ -214,7 +220,9 @@ class PublicationHero extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget> [
                           Text(
-                            '${publication.comments}',
+                            (isPublication) 
+                            ? '${publication.comments}'
+                            : '${publication.replies}',
                             textAlign: TextAlign.right,
                             style: TextStyle(
                               fontSize: 20.0,
@@ -245,6 +253,7 @@ class PublicationHero extends StatelessWidget {
           ),
           // Content publication hero
          Container(
+           width: double.infinity,
            padding: EdgeInsets.all(10),
             //color: Colors.blue[200],
             child: ParsedContent(publication.content, false)

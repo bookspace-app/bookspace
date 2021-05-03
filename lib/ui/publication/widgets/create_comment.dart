@@ -11,11 +11,13 @@ import 'package:flutter/services.dart';
 class CreateComment extends StatefulWidget {
 
   final int id;
+  final commentId;
   final Function() notifyOnNewComment;
 
   CreateComment({
     Key key,
     this.id,
+    this.commentId,
     @required this.notifyOnNewComment
   }) : super(key: key);
 
@@ -38,6 +40,13 @@ class _CreateCommentState extends State<CreateComment> {
     }
   }
 
+  @override
+  void initState() { 
+    super.initState();
+    print("Publi id: ${widget.id}");
+    print("Comment id: ${widget.commentId}");
+  }
+
   bool disposed = false;
   @override
   void dispose() {
@@ -50,16 +59,6 @@ class _CreateCommentState extends State<CreateComment> {
   void createComment() async {
     int response = await CommentController.createComment(myComment);
     print(globals.id);
-    /*
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-            builder: (context) => MainView(
-                  renderIndex: 'profile',
-                  view: ProfileView(),
-                )),
-        ModalRoute.withName('/'));
-    */
   }
 
   String errorContent() {
@@ -132,7 +131,7 @@ class _CreateCommentState extends State<CreateComment> {
                           myComment.authorId = (globals.id).toInt();
                           myComment.content = contentController.text;
                           myComment.mentions = mentionIds;
-                          myComment.parentId = null;
+                          myComment.parentId = widget.commentId;
                           myComment.publicationId = (widget.id).toInt();
                           createComment();
                           widget.notifyOnNewComment();
