@@ -65,7 +65,10 @@ class _PublicationsListState extends State<PublicationsList> {
                     MaterialPageRoute(
                       builder: (context) => MainView(
                         renderIndex: 'home',
-                        view: PublicationView(id: _publications[index].id),
+                        view: PublicationView(
+                          id: _publications[index].id,
+                          isPublication: true,
+                        ),
                       )
                     ),
                   );

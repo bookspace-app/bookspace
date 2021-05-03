@@ -1,27 +1,32 @@
 import 'package:bookspace/models/user.dart';
+import 'package:bookspace/ui/main_view.dart';
+import 'package:bookspace/ui/publication/publication_view.dart';
 import 'package:bookspace/utils/humanize.dart';
 import 'package:flutter/material.dart';
 
 class UserCard extends StatelessWidget {
   
+  final int commentId;
   final User author;
   final DateTime dop;
   final bool principal;
+  final bool isPublication;
+
+  final int likes;
+  final int dislikes;
+  final int replies;
   
   UserCard({
     Key key,
+    this.commentId,
     this.author,
     this.dop,
-    this.principal
+    this.principal,
+    this.isPublication,
+    this.likes,
+    this.dislikes,
+    this.replies,
   }) : super(key: key);
-
-  int _totalUpvotes = 100;
-  int _totalViews = 4;
-  int _totalResponses = 2;
-
-  bool _myVote = true;
-  bool _myFavorite = true;
-  bool _myResponse = true;
 
   Widget build(BuildContext context) {
     return Container(
@@ -89,7 +94,9 @@ class UserCard extends StatelessWidget {
                             children: <Widget> [
                               Container(
                                 child: Text(
-                                  'Pregunta',
+                                  (isPublication)
+                                  ? 'Pregunta'
+                                  : 'Comentario',
                                   style: TextStyle(
                                     fontWeight: FontWeight.normal
                                   ),
@@ -140,12 +147,12 @@ class UserCard extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget> [
                               Text(
-                                '$_totalUpvotes',
+                                '$likes',
                                 textAlign: TextAlign.right,
                                 style: TextStyle(
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.bold,
-                                  color: _myVote ? Colors.green[400] : Colors.black,
+                                  //color: _myVote ? Colors.green[400] : Colors.black,
                                 ),
                               ),
                               Container(
@@ -154,7 +161,7 @@ class UserCard extends StatelessWidget {
                                   onTap: () { print('Tap');},
                                   child: Icon(
                                     Icons.thumb_up,
-                                    color: _myVote ? Colors.green[400] : Colors.black
+                                    //color: _myVote ? Colors.green[400] : Colors.black
                                   ),
                                 ),
                               )
@@ -177,12 +184,12 @@ class UserCard extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget> [
                               Text(
-                                '$_totalUpvotes',
+                                '$dislikes',
                                 textAlign: TextAlign.right,
                                 style: TextStyle(
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.bold,
-                                  color: _myVote ? Colors.red[400] : Colors.black,
+                                  //color: _myVote ? Colors.red[400] : Colors.black,
                                 ),
                               ),
                               Container(
@@ -191,7 +198,7 @@ class UserCard extends StatelessWidget {
                                   onTap: () { print('Tap');},
                                   child: Icon(
                                     Icons.thumb_down,
-                                    color: _myVote ? Colors.red[400] : Colors.black
+                                    //color: _myVote ? Colors.red[400] : Colors.black
                                   ),
                                 ),
                               )
@@ -214,21 +221,35 @@ class UserCard extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget> [
                               Text(
-                                '$_totalUpvotes',
+                                '$replies',
                                 textAlign: TextAlign.right,
                                 style: TextStyle(
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.bold,
-                                  color: _myVote ? Colors.green[400] : Colors.black,
+                                  //color: _myVote ? Colors.green[400] : Colors.black,
                                 ),
                               ),
                               Container(
                                 padding: EdgeInsets.only(left:10),
                                 child: GestureDetector(
-                                  onTap: () { print('Tap');},
+                                  onTap: () {
+                                    print('Goto comment $commentId');
+                                    Navigator.push(
+                                      context, // TODO: pass id to PublicationView
+                                      MaterialPageRoute(
+                                        builder: (context) => MainView(
+                                          renderIndex: 'home',
+                                          view: PublicationView(
+                                            id: commentId,
+                                            isPublication: false,
+                                          ),
+                                        )
+                                      ),
+                                    );
+                                  },
                                   child: Icon(
                                     Icons.reply,
-                                    color: _myVote ? Colors.green[400] : Colors.black
+                                    //color: _myVote ? Colors.green[400] : Colors.black
                                   ),
                                 ),
                               )

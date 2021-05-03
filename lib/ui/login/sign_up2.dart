@@ -11,7 +11,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:bookspace/globals.dart' as globals;
 
 class SignUp2 extends StatefulWidget {
-  SignUp2({Key key}) : super(key: key);
+  final int id;
+
+  SignUp2({Key key, this.id}) : super(key: key);
 
   @override
   _SignUp2State createState() => _SignUp2State();
@@ -259,7 +261,8 @@ class _SignUp2State extends State<SignUp2> {
                         color: Colors.blue,
                         child: Text('Completar registro'),
                         onPressed: () {
-                          updateDesc(descController.text, 1);
+                          print(widget.id);
+                          updateDesc(descController.text, widget.id);
                           //TO-DO Puts descripcion, tags favoritas, profile pic
                           Navigator.push(
                             context,

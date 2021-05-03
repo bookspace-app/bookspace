@@ -7,7 +7,7 @@ Publication publicationFromJson(String str) => Publication.fromJson(json.decode(
 String publicationToJson(Publication data) => json.encode(data.toJson());
 
 enum Category { ACTION, LOVE, WAR, POTENTIAL }
-
+/*
 extension CategoryExtension on Category {
   int get category {
     switch (this) {
@@ -24,39 +24,60 @@ extension CategoryExtension on Category {
     }
   }
 }
+*/
 
 class Publication {
-  int id;
+
+  // INPUT
   String title;
   String content;
-  DateTime dop; // date of publication
-  int views;
-  int likes;
-  int category;
-  User author;
-  int author_id;
-  String votedUsers;  
-  String favUsers;
-  String comments;
-  String tags;
-  int nComments;
+  DateTime dop; 
+  int authorId;
+  String category;
+  List<int> tags;
+  List<int> mentions;
 
+  // OUTPUT
+  int id;
+  int likes;
+  int dislikes;
+  int views;
+  int totalLikes;
+  int comments;
+  User author;
+
+  // URIs
+  String likedByUri;
+  String dislikedByUri;
+  String favByUri;
+  String commentsUri;
+  String tagsUri;
+  String mentionsUri;
+
+  //String votedUsersUri;  
+  //String favUsersUri;
 
   Publication({
     this.id,
     this.title,
     this.content,
     this.dop,
-    this.views,
-    this.likes,
+    this.authorId,
     this.category,
-    this.author,
-    this.author_id,
-    this.votedUsers,
-    this.favUsers,
-    this.comments,
     this.tags,
-    this.nComments,
+    this.mentions,
+    this.likes,
+    this.dislikes,
+    this.views,
+    this.totalLikes,
+    this.comments,
+    this.author,
+    this.likedByUri,
+    this.dislikedByUri,
+    this.favByUri,
+    this.commentsUri,
+    this.tagsUri,
+    this.mentionsUri
   });
 
   factory Publication.fromJson(Map<String, dynamic> json) => Publication(
@@ -64,29 +85,28 @@ class Publication {
         title: json["title"],
         content: json["content"],
         dop: DateTime.parse(json["dop"]),
-        views: json["views"],
+        category: json["category"],
         likes: json["likes"],
-        category: int.tryParse(json["category"]),
+        dislikes: json["dislikes"],
+        views: json["nviews"], // ESTO ESTA MAL EN EL BACK
+        totalLikes: json["totalLikes"],
+        comments: json["ncomments"],  // ESTO ESTA MAL EN EL BACK
         author: User.fromJson(json["author"]),
-        author_id: json["author_id"],
-        votedUsers: json["votedusers"],
-        favUsers: json["favusers"],
-        comments: json["comments"],
-        tags: json["tags"],
-        nComments: json["n_comments"],
+        likedByUri: json["likedByUri"],
+        dislikedByUri: json["dislikedByUri"],
+        favByUri: json["favByUri"],
+        commentsUri: json["commentsUri"],
+        tagsUri: json["tagsUri"],
+        mentionsUri: json["mentionsUri"]
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
         "title": title,
         "content": content,
-        "dop": dop,
-        "views": views,
-        "likes": likes,
+        "authorId": authorId,
         "category": category,
-        "author": author,
-        "author_id": author_id,
-        "n_comments": nComments,
+        "tags": tags,
+        "mentions": mentions,
       };
 }
 

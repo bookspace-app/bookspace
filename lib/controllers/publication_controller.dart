@@ -27,7 +27,13 @@ class PublicationController {
 
       //print('Response status: $statusCode\n Response body: $requestBody\n');
       if (statusCode == 200) {
-        publication = Publication.fromJson(json.decode(response.body));
+        final data = jsonDecode(response.body) as Map;
+        /*for (String name in data.keys){
+          final value = data[name];
+          print('[$name:$value]'); 
+        }
+        print("\n");*/
+        publication = Publication.fromJson(json.decode(utf8.decode(response.bodyBytes)));
       }
     } catch(e) {
       print('error caught: $e');
@@ -46,7 +52,7 @@ class PublicationController {
       
       // Define headers
       Map<String, String> headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
       };
 
@@ -59,7 +65,14 @@ class PublicationController {
 
       print('Response status: $statusCode\n Response body: $requestBody\n');
       if (statusCode == 200) {
-        json.decode(response.body).forEach((result) {
+        json.decode(utf8.decode(response.bodyBytes)).forEach((result) {
+
+          /*for (String name in result.keys){
+            final value = result[name];
+            print('[$name:$value]'); 
+          }
+          print("\n");*/
+
           publications.add(Publication.fromJson(result));
         });
       }
@@ -86,7 +99,7 @@ class PublicationController {
       // Make POST request
       http.Response response = await http.post(uri, headers: headers, body: body);
       
-      print('Create publication response code: ${response.statusCode}: ${response.body}\n');
+      //print('Create publication response code: ${response.statusCode}: ${response.body}\n');
 
       if (response.statusCode == 200) {
         return int.parse(response.body);

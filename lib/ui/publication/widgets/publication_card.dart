@@ -44,7 +44,7 @@ class PublicationCard extends StatelessWidget {
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 3),
                         child: Text(
-                          '${publication.likes}',
+                          '${publication.totalLikes}',
                           textAlign: TextAlign.right,
                           style: TextStyle(
                             fontSize: 20.0,
@@ -102,7 +102,7 @@ class PublicationCard extends StatelessWidget {
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 3),
                         child: Text(
-                          '${publication.nComments}',
+                          '${publication.comments}',
                           textAlign: TextAlign.right,
                           style: TextStyle(
                             fontSize: 20.0,
@@ -148,9 +148,9 @@ class PublicationCard extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.7,
                   // color: Colors.green,
-                  // would be publication.name
+                  // would be publication.tags
                   child: Text(
-                    "Tag",
+                    "Tags",
                     style: TextStyle(
                       fontSize: 15.0,
                     ),

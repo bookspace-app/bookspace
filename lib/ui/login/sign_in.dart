@@ -1,4 +1,3 @@
-
 import 'package:bookspace/controllers/user_controller.dart';
 import 'package:bookspace/models/user.dart';
 import 'package:bookspace/ui/login/reset_pass.dart';
@@ -22,10 +21,14 @@ class _SignInState extends State<SignIn> {
   final passwordController = TextEditingController();
   String password = '';
   bool isPasswordHiden = true;
+  bool errorsUserName = false;
+  bool errorsPass = false;
+  bool error = false;
 
   User _user;
   List<User> _users = [];
-  int id;
+  String id;
+  int idUser;
   void getALLuser() async {
     List<User> users = await UserController.getAllusers();
     if (!disposed) {
@@ -45,7 +48,8 @@ class _SignInState extends State<SignIn> {
     if (usernameController.text.isEmpty) return "Rellena este campo";
     for (var i = 0; i < _users.length; i++) {
       if (usernameController.text == _users[i].username) {
-        id = _users[i].id;
+        id = _users[i].password;
+        idUser = _users[i].id;
         return null;
       }
     }
@@ -53,10 +57,9 @@ class _SignInState extends State<SignIn> {
   }
 
   String errorPass() {
-    getUser(id);
     if (passwordController.text.isEmpty) return "Rellena este campo";
     //user.password check
-    if (passwordController.text != _user.id) return "Contraseña incorrecta";
+    if (passwordController.text != id) return "Contraseña incorrecta";
     return null;
   }
 
@@ -89,22 +92,26 @@ class _SignInState extends State<SignIn> {
                 height: 200.0,
               ),
               child: Image.asset(
-                './assets/images/logo.png',         //TO-DO if userpic == null show No_pic else userpic
+                './assets/images/No_pic.png', //TO-DO if userpic == null show No_pic else userpic
                 height: 170,
                 width: 170,
-                fit: BoxFit.fill,  
-              ),  
+                fit: BoxFit.fill,
+              ),
             ),
             Container(
               constraints: BoxConstraints.expand(height: 50),
               child: TextField(
                 controller: usernameController,
+                onChanged: (text) {
+                  setState(() {});
+                },
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
                     labelText: 'Nombre de Usuario',
                     fillColor: Colors.white,
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.person),
+                    errorText: error ? errorUserName() : null,
                     suffixIcon: IconButton(
                         icon: Icon(Icons.clear),
                         onPressed: () {
@@ -119,11 +126,15 @@ class _SignInState extends State<SignIn> {
                 constraints: BoxConstraints.expand(height: 50),
                 child: TextFormField(
                   controller: passwordController,
+                  onChanged: (text) {
+                    setState(() {});
+                  },
                   obscureText: isPasswordHiden,
                   decoration: InputDecoration(
                       labelText: 'Contraseña',
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.lock),
+                      errorText: error ? errorPass() : null,
                       suffixIcon: IconButton(
                           icon: isPasswordHiden
                               ? Icon(Icons.visibility_off)
@@ -175,10 +186,25 @@ class _SignInState extends State<SignIn> {
                         shape: new RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(10.0))),
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => MainView()),
-                      );
+                      setState(() {
+                        if (errorUserName() != null)
+                          errorsUserName = true;
+                        else
+                          errorsUserName = false;
+                        if (errorPass() != null)
+                          errorsPass = true;
+                        else
+                          errorsPass = false;
+                        error = errorsUserName | errorsPass;
+                      });
+                      if (!error) {
+                        globals.id = idUser;
+                        print(globals.id);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => MainView()),
+                        );
+                      }
                     })),
             Container(
                 child: Row(
@@ -201,7 +227,6 @@ class _SignInState extends State<SignIn> {
                         style: TextStyle(color: Colors.black),
                       ),
                       onPressed: () {
-
                         //TO-DO Ver si los campos de nombre y contraseña son correctos
                         Navigator.push(
                           context,

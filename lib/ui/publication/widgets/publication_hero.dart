@@ -7,21 +7,14 @@ import 'package:bookspace/globals.dart' as globals;
 
 class PublicationHero extends StatelessWidget {
 
-  final Publication publication;
+  final publication;
+  final bool isPublication;
 
   PublicationHero({
     Key key,
-    this.publication
+    this.publication,
+    this.isPublication
   }) : super(key: key);
-
-  int _totalUpvotes = 1;
-  int _totalViews = 4;
-  int _totalResponses = 2;
-
-  bool _myVote = false;
-  bool _myFavorite = false;
-  bool _myResponse = false;
-
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +25,16 @@ class PublicationHero extends StatelessWidget {
       Iterable<Match> usernameMatches = usernameExp.allMatches(content);
       List<String> usernames = [];
       usernameMatches.forEach((m)=>usernames.add(m.group(0)));
-
-      RegExp wordsExp = new RegExp(r"[@\w']+|[.,!?;]");
+      RegExp wordsExp = new RegExp(r"[^\@\w+]|[-'a-zA-ZÀ-ÖØ-öø-ÿ-@]+|[!$%^&*()_+|~=`{}#@\[\]:;'’<>?,.\/"
+        '"”'
+        "]+");
       Iterable wordsMatches = wordsExp.allMatches(content);
+
+      /*
+      for (Match m in wordsMatches) {
+        print(m.group(0).trim());
+      }
+      */
 
       return RichText(
         text: TextSpan(
@@ -42,9 +42,9 @@ class PublicationHero extends StatelessWidget {
           style: DefaultTextStyle.of(context).style,
           children: [
             for (Match m in wordsMatches)
-            usernames.contains(m.group(0))
+            usernames.contains(m.group(0).trim())
             ? TextSpan(
-              text: '${m.group(0)} ', 
+              text: m.group(0), 
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: atTitle? 20: 16,
@@ -64,7 +64,7 @@ class PublicationHero extends StatelessWidget {
                   );
                 })
             : TextSpan(
-              text: '${m.group(0)} ', 
+              text: '${m.group(0)}', 
               style: TextStyle(
                 fontWeight: atTitle? FontWeight.bold: FontWeight.normal,
                 fontSize: atTitle? 20: 16,
@@ -79,7 +79,8 @@ class PublicationHero extends StatelessWidget {
       //color: Colors.pink,
       child: Column(
         children: <Widget>[
-          Row(
+          (isPublication)
+          ? Row(
             children: <Widget>[
               Expanded(
                 child: Container(
@@ -89,7 +90,7 @@ class PublicationHero extends StatelessWidget {
               )
               // TODO: tags
             ],
-          ),
+          ) : Container(),
           // Upvotes module
           Row(
             children: <Widget>[
@@ -105,12 +106,12 @@ class PublicationHero extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget> [
                           Text(
-                            '$_totalUpvotes',
+                            '${publication.likes}',
                             textAlign: TextAlign.right,
                             style: TextStyle(
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold,
-                              color: _myVote ? Colors.green[400] : Colors.black,
+                              //color: _myVote ? Colors.green[400] : Colors.black,
                             ),
                           ),
                           Container(
@@ -119,7 +120,7 @@ class PublicationHero extends StatelessWidget {
                               onTap: () { print('Tap');},
                               child: Icon(
                                 Icons.thumb_up,
-                                color: _myVote ? Colors.green[400] : Colors.black
+                                //color: _myVote ? Colors.green[400] : Colors.black
                               ),
                             ),
                           )
@@ -142,12 +143,12 @@ class PublicationHero extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget> [
                           Text(
-                            '$_totalUpvotes',
+                            '${publication.dislikes}',
                             textAlign: TextAlign.right,
                             style: TextStyle(
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold,
-                              color: _myVote ? Colors.red[400] : Colors.black,
+                              //color: _myVote ? Colors.red[400] : Colors.black,
                             ),
                           ),
                           Container(
@@ -156,7 +157,7 @@ class PublicationHero extends StatelessWidget {
                               onTap: () { print('Tap');},
                               child: Icon(
                                 Icons.thumb_down,
-                                color: _myVote ? Colors.red[400] : Colors.black
+                                // color: _myVote ? Colors.red[400] : Colors.black
                               ),
                             ),
                           )
@@ -167,7 +168,8 @@ class PublicationHero extends StatelessWidget {
                 ),
               ),
               // Views and favorite module
-              Expanded(
+              (isPublication)
+              ? Expanded(
                 child: Container(
                   //color: Colors.orange[300],
                   padding: EdgeInsets.symmetric(vertical: 3),
@@ -184,7 +186,7 @@ class PublicationHero extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold,
-                              color: _myVote ? Colors.yellow[800] : Colors.black,
+                              // color: _myVote ? Colors.yellow[800] : Colors.black,
                             ),
                           ),
                           Container(
@@ -193,7 +195,7 @@ class PublicationHero extends StatelessWidget {
                               onTap: () { print('Tap');},
                               child: Icon(
                                 Icons.remove_red_eye,
-                                color: _myVote ? Colors.yellow[800] : Colors.black
+                                // color: _myVote ? Colors.yellow[800] : Colors.black
                               ),
                             ),
                           )
@@ -202,12 +204,14 @@ class PublicationHero extends StatelessWidget {
                     )
                   )
                 ),
-              ),
+              ) : Container(),
               // reply module
               Expanded(
                 child: Container(
                   //color: Colors.red[300],
-                  padding: EdgeInsets.symmetric(vertical: 3),
+                  padding: (isPublication)
+                  ? EdgeInsets.symmetric(vertical: 3)
+                  : EdgeInsets.fromLTRB(0, 20, 0, 3),
                   child: Center(
                     child: Container(
                       width: 100,
@@ -216,12 +220,14 @@ class PublicationHero extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget> [
                           Text(
-                            '${publication.nComments}',
+                            (isPublication) 
+                            ? '${publication.comments}'
+                            : '${publication.replies}',
                             textAlign: TextAlign.right,
                             style: TextStyle(
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold,
-                              color: _myVote ? Colors.green[400] : Colors.black,
+                              // color: _myVote ? Colors.green[400] : Colors.black,
                             ),
                           ),
                           Container(
@@ -233,7 +239,7 @@ class PublicationHero extends StatelessWidget {
                               },
                               child: Icon(
                                 Icons.reply,
-                                color: _myVote ? Colors.green[400] : Colors.black
+                                // color: _myVote ? Colors.green[400] : Colors.black
                               ),
                             ),
                           )
@@ -247,6 +253,7 @@ class PublicationHero extends StatelessWidget {
           ),
           // Content publication hero
          Container(
+           width: double.infinity,
            padding: EdgeInsets.all(10),
             //color: Colors.blue[200],
             child: ParsedContent(publication.content, false)

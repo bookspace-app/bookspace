@@ -25,75 +25,93 @@ extension RankExtension on Rank {
 }
 
 class User {
-  int id;
+  // INPUT
   String email;
   String name;
   String username;
-  int age;
-  String description;
-  int rank;
+  String password;
   DateTime dob;
-  
+  String description;
+  List<String> favCategories;
+
+  // OUTPUT
+  int id;
+  int age;
+  DateTime dor; // date of register
+  int rank;
+
+  // URIs
   String myPublicationsUri;
-  String votedPublicationsUri;
-  String favouritePublicationsUri;
+  String likedPublicationsUri;
+  String dislikedPublicationsUri;
+  String favPublicationsUri;
   String myCommentsUri;
-  String votedCommentsUri;
+  String likedCommentsUri;
+  String dislikedCommentsUri;
   String blockedUsersUri;
   String profilePicUri;
   String myTagsUri;
-  String myPreferedTagsUri;
+  String favTagsUri;
+  String favCategoriesUri;
+  String myMentionsUri;
 
-  User({
-    this.id,
-    this.email,
-    this.name,
-    this.username,
-    this.age,
-    this.description,
-    this.rank,
-    this.dob,
-    
-    this.myPublicationsUri,
-    this.votedPublicationsUri,
-    this.favouritePublicationsUri,
-    this.myCommentsUri,
-    this.votedCommentsUri,
-    this.blockedUsersUri,
-    this.profilePicUri,
-    this.myTagsUri,
-    this.myPreferedTagsUri,
-  });
+  User(
+      {this.id,
+      this.email,
+      this.name,
+      this.username,
+      this.password,
+      this.dob,
+      this.description,
+      this.favCategories,
+      this.age,
+      this.dor,
+      this.rank,
+      this.myPublicationsUri,
+      this.likedCommentsUri,
+      this.dislikedCommentsUri,
+      this.favPublicationsUri,
+      this.myCommentsUri,
+      this.likedPublicationsUri,
+      this.dislikedPublicationsUri,
+      this.blockedUsersUri,
+      this.profilePicUri,
+      this.myTagsUri,
+      this.favTagsUri,
+      this.favCategoriesUri,
+      this.myMentionsUri});
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
         email: json["email"],
         name: json["name"],
         username: json["username"],
-        age: json["int"],
+        password: json["password"],
         description: json["description"],
+        age: json["age"],
+        dor: DateTime.parse(json["dor"]),
         rank: int.tryParse(json["rank"]),
-        dob: DateTime.parse(json["dob"]),
-    
-        myPublicationsUri: json["publications"],
-        votedCommentsUri: json["votedPublications"],
-        favouritePublicationsUri: json["favouritePublications"],
-        myCommentsUri: json["comments"],
-        votedPublicationsUri: json["votedComments"],
-        blockedUsersUri: json["blockedUsers"],
-        profilePicUri: json["profilePic"],
-        myTagsUri: json["createdTags"],
-        myPreferedTagsUri: json["preferedTags"],
+        myPublicationsUri: json["publicationsUri"],
+        likedCommentsUri: json["likedCommentsUri"],
+        dislikedCommentsUri: json["dislikedCommentsUri"],
+        favPublicationsUri: json["favouritePublicationsUri"],
+        myCommentsUri: json["commentsUri"],
+        likedPublicationsUri: json["likedPublicationsUri"],
+        dislikedPublicationsUri: json["dislikedPublicationsUri"],
+        blockedUsersUri: json["blockedUsersUri"],
+        profilePicUri: json["profilePicUri"],
+        myTagsUri: json["createdTagsUri"],
+        favTagsUri: json["favTagsUri"],
+        favCategoriesUri: json["favCategoriesUri"],
+        myMentionsUri: json["mentionsUri"],
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
         "email": email,
         "name": name,
         "username": username,
-        "age": age,
         "description": description,
-        "rank": rank,
+        "favCategories": favCategories,
         "dob": dob,
       };
 }
