@@ -8,9 +8,13 @@ import 'package:bookspace/ui/main_view.dart';
 import 'package:bookspace/ui/profile/profile_view.dart';
 import 'package:bookspace/ui/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'dart:ui' as ui;
 import 'package:bookspace/globals.dart' as globals;
 Future<void> main() async {
+  RenderErrorBox.backgroundColor = Colors.transparent; /* Un apaño */
+  RenderErrorBox.textStyle = ui.TextStyle(color: Colors.transparent);
   runApp(MyApp());
 }
 
