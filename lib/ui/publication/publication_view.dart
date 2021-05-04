@@ -27,10 +27,12 @@ class _PublicationViewState extends State<PublicationView> {
   List<Comment> _comments;
   // Rate is the number of comments that are added
   // when you ask for more
-  int rate = 2;
+  int rate = 3;
   // Loaded comments is the initial number of loaded comments
   // in the view
-  int loadedComments = 2;
+  int loadedComments = 0;
+
+  bool refreshed = false;
 
   // API call to get the publication of the view by id
   void getPublication(int id) async {
@@ -42,10 +44,15 @@ class _PublicationViewState extends State<PublicationView> {
       // If there are no comments, do not overload
       // by API call
       if (_publication.comments ==  0) {
-        setState(() => loadedComments = 0);
+        setState(() => _comments = comments);
       } else {
         comments = await CommentController.getComments(_publication.commentsUri);
         setState(() => _comments = comments);
+        setState(() => loadedComments = (
+          _publication.comments >= rate
+          ? rate
+          : _publication.comments
+        ));
         print(_comments);
       }
     }
@@ -61,11 +68,15 @@ class _PublicationViewState extends State<PublicationView> {
       // If there are no replies, do not overload
       // by API call
       if (_comment.replies ==  0) {
-        setState(() => loadedComments = 0);
         setState(() => _comments = comments);
       } else  {
         comments = await CommentController.getComments(_comment.repliesUri);
         setState(() => _comments = comments);
+        setState(() => loadedComments = (
+          _comment.replies >= rate
+          ? rate
+          : _comment.replies
+        ));
         print(_comments);
       }
     }
@@ -94,11 +105,19 @@ class _PublicationViewState extends State<PublicationView> {
   // Refresh the view on update
   // When new comments are added
   void refresh() {
+    print('CURRENT RATE: $rate');
+    print('CURRENT LOADED:$loadedComments');
     if (widget.isPublication) {
       getPublication(widget.id);
+      print('CURRENT LIMIT: ${_publication.comments}');
     } else {
       getComment(widget.id);
+      print('CURRENT LIMIT: ${_comment.replies}');
     }
+
+    setState(() {
+      refreshed = false;
+    });
   }
   
   @override
@@ -129,9 +148,14 @@ class _PublicationViewState extends State<PublicationView> {
                       int comments = (widget.isPublication)
                       ? _publication.comments
                       : _comment.replies;
+                      print('TOTAL NUM: $comments');
                       loadedComments = (loadedComments + rate > comments)
                       ? comments
                       : loadedComments + rate; 
+                      print('AFTER UPDATE LOADED: $loadedComments');
+                      setState(() {
+                        refreshed = false;
+                      });
                     }
                   );
                 }
@@ -141,6 +165,10 @@ class _PublicationViewState extends State<PublicationView> {
         ), 
       );
     }
+    print('NUMBER OF LOADED COMMENTS:$loadedComments');
+    print('PUBLICATION:$_publication');
+    print('COMMENT:$_comment');
+    print('COMMENTS: $_comments');
     // Return the view if the objects are loaded (are not null)
     return ((_publication != null || _comment != null) && _comments != null)? ListView(
        children: <Widget>[

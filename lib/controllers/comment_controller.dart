@@ -60,7 +60,7 @@ class CommentController {
       int statusCode = response.statusCode;
       String responseBody = response.body;
 
-      print('Response status: $statusCode\n Response body: $responseBody\n');
+      //print('Response status: $statusCode\n Response body: $responseBody\n');
       if (statusCode == 200) {
         json.decode(utf8.decode(response.bodyBytes)).forEach((result) {
 
@@ -96,7 +96,7 @@ class CommentController {
       // Make POST request
       http.Response response = await http.post(uri, headers: headers, body: body);
       
-      print('Create comment response code: ${response.statusCode}: ${response.body}\n');
+      //print('Create comment response code: ${response.statusCode}: ${response.body}\n');
 
       if (response.statusCode == 200) {
         return int.parse(response.body);
