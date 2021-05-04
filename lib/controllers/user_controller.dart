@@ -188,4 +188,35 @@ class UserController {
     }
     return false;
   }
+
+  //GET USER TAGS
+  static Future<List<String>> getUserTags(int id) async {
+    List<String> tags = [];
+    try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/$id/tags");
+
+      // Define headers
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
+
+      // Make GET request
+      http.Response response = await http.get(uri, headers: headers);
+
+      // Request status and body
+      int statusCode = response.statusCode;
+      String requestBody = response.body;
+
+      print('Response status: $statusCode\n Response body: $requestBody\n');
+      if (statusCode == 200) {
+        json.decode(response.body).forEach((result) {
+          tags.add(result);
+        });
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return tags;
+  }
 }

@@ -44,11 +44,14 @@ class _EditProfileViewState extends State<EditProfileView> {
   var _id;
 
   User _user;
+  List<String> _tags;
 
   void getUser() async {
     User user = await UserController.getUser(1);
+    List<String> tags = await UserController.getUserTags(1);
     if (!disposed) {
       setState(() => _user = user);
+      setState(() => _tags = tags);
     }
     setState(() {
       nameController.text = _user.name;
@@ -261,7 +264,7 @@ class _EditProfileViewState extends State<EditProfileView> {
               //color: Colors.orange,
               constraints: BoxConstraints.expand(height: 85, width: 100),
               child: TextFieldTags(
-                  initialTags: ['hola', 'adeu'], //_user.tags,
+                  initialTags: _tags, //_user.tags,
                   tagsStyler: TagsStyler(
                       tagTextStyle: TextStyle(fontWeight: FontWeight.bold),
                       tagDecoration: BoxDecoration(
