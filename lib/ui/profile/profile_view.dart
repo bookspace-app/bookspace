@@ -128,8 +128,7 @@ class _ProfileViewState extends State<ProfileView> {
                                 new TextSpan(
                                     text: "${_user.rank}",
                                     style: new TextStyle(
-                                        fontWeight: FontWeight
-                                            .bold)), //TO-DO Añadir fecha registro
+                                        fontWeight: FontWeight.bold)),
                                 new TextSpan(
                                     text: " · " +
                                         "Se unió al día\n" +

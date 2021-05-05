@@ -38,7 +38,7 @@ class User {
   int id;
   int age;
   DateTime dor; // date of register
-  //int rank;
+  //int rank;;
   String rank;
 
   // URIs
