@@ -7,8 +7,8 @@ import 'package:bookspace/ui/publication/publication_view.dart';
 import 'package:bookspace/ui/publication/widgets/publication_card.dart';
 import 'package:flutter/material.dart';
 import 'package:textfield_tags/textfield_tags.dart';
-
 import 'package:bookspace/globals.dart' as globals;
+import 'package:intl/intl.dart';
 
 class ProfileView extends StatefulWidget {
   final int id;
@@ -20,7 +20,6 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView> {
   User _user;
-
   List<Publication> _myPublications = [];
 
   void getUser() async {
@@ -133,8 +132,8 @@ class _ProfileViewState extends State<ProfileView> {
                                             .bold)), //TO-DO Añadir fecha registro
                                 new TextSpan(
                                     text: " · " +
-                                        "Se unió \n" +
-                                        "FECHA REGISTRO"),
+                                        "Se unió al día\n" +
+                                        "${DateFormat.yMd().format(_user.dor)}"),
                               ],
                             ),
                           ))
