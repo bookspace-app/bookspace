@@ -1,4 +1,6 @@
+import 'package:bookspace/controllers/user_controller.dart';
 import 'package:bookspace/models/publication.dart';
+import 'package:bookspace/models/user.dart';
 import 'package:bookspace/ui/main_view.dart';
 import 'package:bookspace/ui/profile/profile_view.dart';
 import 'package:flutter/gestures.dart';
@@ -18,6 +20,8 @@ class PublicationHero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
 
     Widget ParsedContent(String content, bool atTitle) {
 
@@ -58,7 +62,9 @@ class PublicationHero extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => MainView(
                         renderIndex: 'home',
-                        view: ProfileView(),
+                        view: ProfileView(
+                          username: m.group(0).substring(1),
+                        ),
                       )
                     ),
                   );
