@@ -49,7 +49,7 @@ class _EditProfileViewState extends State<EditProfileView> {
     User user = await UserController.getUser(globals.id);
     if (!disposed) {
       setState(() => _user = user);
-      setState(() => _tags = tags);
+      //setState(() => _tags = tags);
     }
     setState(() {
       nameController.text = _user.name;
