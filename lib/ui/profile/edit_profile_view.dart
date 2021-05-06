@@ -148,16 +148,16 @@ class _EditProfileViewState extends State<EditProfileView> {
                             )),
                   );
                 },
+                style: ElevatedButton.styleFrom(
+                    primary: Colors.grey,
+                    onPrimary: Colors.black,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0))),
                 child: Text('Submit',
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.black,
                     )),
-                style: ElevatedButton.styleFrom(
-                    primary: Colors.grey,
-                    onPrimary: Colors.black,
-                    shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(5.0))),
               )),
         ],
       ),
@@ -202,7 +202,7 @@ class _EditProfileViewState extends State<EditProfileView> {
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
           children: [
-            Text("Escoge una foto de perfil",
+            Text('Escoge una foto de perfil',
                 style: TextStyle(
                   fontSize: 20,
                 )),
