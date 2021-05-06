@@ -13,8 +13,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'dart:ui' as ui;
 import 'package:bookspace/globals.dart' as globals;
 Future<void> main() async {
-  RenderErrorBox.backgroundColor = Colors.transparent; /* Un apaño */
-  RenderErrorBox.textStyle = ui.TextStyle(color: Colors.transparent);
+  //RenderErrorBox.backgroundColor = Colors.transparent; /* Un apaño */
+  //RenderErrorBox.textStyle = ui.TextStyle(color: Colors.transparent);
   runApp(MyApp());
 }
 

@@ -57,8 +57,11 @@ class _CreateCommentState extends State<CreateComment> {
   }
 
   void createComment() async {
-    int response = await CommentController.createComment(myComment);
+    bool response = await CommentController.createComment(myComment);
     print(globals.id);
+    if (response) {
+      print('THIS HAS WORKED');
+    }
   }
 
   String errorContent() {
@@ -134,6 +137,7 @@ class _CreateCommentState extends State<CreateComment> {
                           myComment.parentId = widget.commentId;
                           myComment.publicationId = (widget.id).toInt();
                           createComment();
+                          myComment.content = "";
                           widget.notifyOnNewComment();
                         }
                       }

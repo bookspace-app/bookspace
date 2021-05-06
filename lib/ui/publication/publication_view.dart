@@ -165,10 +165,11 @@ class _PublicationViewState extends State<PublicationView> {
         ), 
       );
     }
-    print('NUMBER OF LOADED COMMENTS:$loadedComments');
-    print('PUBLICATION:$_publication');
-    print('COMMENT:$_comment');
-    print('COMMENTS: $_comments');
+    for (var i = 0; i < loadedComments; i++) {
+      print('${widget.isPublication}  ${_comments[i].parentId}');
+      print((_comments[i].parentId == null && widget.isPublication) );
+      print((_comments[i].parentId>0 && !(widget.isPublication)) );
+    }
     // Return the view if the objects are loaded (are not null)
     return ((_publication != null || _comment != null) && _comments != null)? ListView(
        children: <Widget>[
@@ -207,13 +208,17 @@ class _PublicationViewState extends State<PublicationView> {
          ),
          // This iterator renders the comments
          // to the principal contribution of the view
-         for (var i = 0; i < loadedComments; i++)Container(
+         for (var i = 0; i < loadedComments; i++) Container(
            child: Column(
             children: <Widget> [
+              ((_comments[i].parentId == 0 && widget.isPublication) 
+              || (_comments[i].parentId > 0 && !(widget.isPublication))) ? 
               ResponseCard(
                 response: _comments[i]
-              ),
+              ) : Container(),
               // The corresponding author of the comment
+              ((_comments[i].parentId == 0 && widget.isPublication) 
+              || (_comments[i].parentId > 0 && !(widget.isPublication))) ? 
               UserCard(
                 commentId: _comments[i].id,
                 author: _comments[i].author,
@@ -223,7 +228,7 @@ class _PublicationViewState extends State<PublicationView> {
                 likes: _comments[i].likes,
                 dislikes: _comments[i].dislikes,
                 replies: _comments[i].replies,
-              ),
+              ) : Container(),
             ]
           )
          ),
@@ -244,7 +249,7 @@ class _PublicationViewState extends State<PublicationView> {
             ? _publication.id
             : _comment.publicationId,
             commentId: (widget.isPublication)
-            ? null
+            ? 0
             : _comment.id,
             notifyOnNewComment: refresh
           )
