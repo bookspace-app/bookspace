@@ -249,7 +249,7 @@ class _PublicationViewState extends State<PublicationView> {
             ? _publication.id
             : _comment.publicationId,
             commentId: (widget.isPublication)
-            ? 0
+            ? null
             : _comment.id,
             notifyOnNewComment: refresh
           )
