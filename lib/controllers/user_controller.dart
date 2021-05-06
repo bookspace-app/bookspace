@@ -41,6 +41,41 @@ class UserController {
     return user;
   }
 
+  // GET user by Username
+  static Future<User> getUserByUsername(String username) async {
+    User user;
+    try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/username/$username");
+
+      // Define headers
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
+
+      // Make GET request
+      http.Response response = await http.get(uri, headers: headers);
+
+      // Request status and body
+      int statusCode = response.statusCode;
+      String requestBody = response.body;
+
+      print('Response status: $statusCode\n Response body: $requestBody\n');
+      if (statusCode == 200) {
+        final data = jsonDecode(response.body) as Map;
+        /*for (String name in data.keys) {
+          final value = data[name];
+          print('[$name:$value]');
+        }
+        print("\n");*/
+        user = User.fromJson(json.decode(response.body));
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return user;
+  }
+
   // GET ALL users
   static Future<List<User>> getAllusers() async {
     List<User> users = [];

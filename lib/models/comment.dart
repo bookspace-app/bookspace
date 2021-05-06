@@ -12,7 +12,7 @@ class Comment {
   int authorId;
   int publicationId;
   int parentId;
-  List<int> mentions;
+  List<String> mentions;
 
   // OUTPUT
   int id;

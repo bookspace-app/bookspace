@@ -35,7 +35,7 @@ class Publication {
   int authorId;
   String category;
   List<int> tags;
-  List<int> mentions;
+  List<String> mentions;
 
   // OUTPUT
   int id;
