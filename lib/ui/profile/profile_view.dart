@@ -188,7 +188,8 @@ class _ProfileViewState extends State<ProfileView> {
                           builder: (context) => MainView(
                                 renderIndex: 'profile',
                                 view: PublicationView(
-                                    id: _myPublications[index].id),
+                                    id: _myPublications[index].id,
+                                    isPublication: true),
                               )),
                     );
                   }, // on tap llevar a la view de la publicacion
