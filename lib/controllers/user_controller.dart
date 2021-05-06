@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:bookspace/models/tag.dart';
 import 'package:intl/intl.dart';
 import 'package:bookspace/config.dart';
 import 'package:bookspace/models/user.dart';
@@ -189,9 +190,10 @@ class UserController {
     return false;
   }
 
-  //GET USER TAGS
+  //GET USER TAGS NAMES
   static Future<List<String>> getUserTags(int id) async {
-    List<String> tags = [];
+    List<Tag> tags = [];
+    List<String> tags_string = [];
     try {
       Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/$id/tags");
 
@@ -211,12 +213,15 @@ class UserController {
       print('Response status: $statusCode\n Response body: $requestBody\n');
       if (statusCode == 200) {
         json.decode(response.body).forEach((result) {
-          tags.add(result);
+          tags.add(Tag.fromJson(result));
+          for (int i = 0; i < tags.length; i++) {
+            tags_string[i] = tags[i].name;
+          }
         });
       }
     } catch (e) {
       print('error caught: $e');
     }
-    return tags;
+    return tags_string;
   }
 }
