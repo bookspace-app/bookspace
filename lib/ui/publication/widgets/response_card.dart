@@ -12,6 +12,7 @@ class ResponseCard extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
        child: Container(
            padding: EdgeInsets.all(10),
             //color: Colors.blue[200],

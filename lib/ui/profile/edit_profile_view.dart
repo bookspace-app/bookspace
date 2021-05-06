@@ -46,8 +46,7 @@ class _EditProfileViewState extends State<EditProfileView> {
   List<String> _tags;
 
   void getUser() async {
-    User user = await UserController.getUser(1);
-    List<String> tags = await UserController.getUserTags(1);
+    User user = await UserController.getUser(globals.id);
     if (!disposed) {
       setState(() => _user = user);
       setState(() => _tags = tags);

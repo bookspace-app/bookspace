@@ -44,7 +44,7 @@ class _SignUpState extends State<SignUp> {
 
   User _user;
   List<User> _users = [];
-  final int id;
+  int id;
   //List<String> datos = [];
 
   static get username => null;
@@ -63,10 +63,11 @@ class _SignUpState extends State<SignUp> {
     if (!disposed) {
       setState(() {
         _user = user;
-        id = user.id;
       });
     }
-    print(_user);
+    setState(() {
+      id = user.id;
+    });
   }
   /*Future<void> postUser(
       String username, String name, String email, String pass) async {
@@ -442,15 +443,15 @@ class _SignUpState extends State<SignUp> {
                                       surNameController.text,
                                   emailController.text,
                                   passController.text,
-                                );
-                                print(1919 + id);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
+                                ).then((value) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
                                       builder: (context) => SignUp2(
-                                            id: id,
-                                          )),
-                                );
+                                        id: id,
+                                      )),
+                                  );
+                                });
                               }
                               /*
                           //

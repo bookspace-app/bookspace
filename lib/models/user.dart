@@ -38,7 +38,8 @@ class User {
   int id;
   int age;
   DateTime dor; // date of register
-  int rank;
+  //int rank;;
+  String rank;
 
   // URIs
   String myPublicationsUri;
@@ -90,7 +91,8 @@ class User {
         description: json["description"],
         age: json["age"],
         dor: DateTime.parse(json["dor"]),
-        rank: int.tryParse(json["rank"]),
+        rank: (json["rank"]),
+        //rank: int.tryParse(json["rank"]),
         myPublicationsUri: json["publicationsUri"],
         likedCommentsUri: json["likedCommentsUri"],
         dislikedCommentsUri: json["dislikedCommentsUri"],
