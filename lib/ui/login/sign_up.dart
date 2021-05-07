@@ -9,6 +9,7 @@ import 'package:bookspace/ui/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:bookspace/globals.dart' as globals;
+import 'package:flutter_string_encryption/flutter_string_encryption.dart';
 
 /*class Datos {
   String username;
@@ -33,6 +34,10 @@ class _SignUpState extends State<SignUp> {
   var emailController = TextEditingController();
   var passController = TextEditingController();
   var passRController = TextEditingController();
+
+  String key, password;
+  String encrypt, decrypt;
+  PlatformStringCryptor cryptor;
 
   bool errorsUserName = false;
   bool errorsName = false;
@@ -399,6 +404,8 @@ class _SignUpState extends State<SignUp> {
                             child: Text('Siguiente'),
                             onPressed: () {
                               setState(() {
+                                encryption();
+                                decryption();
                                 if (errorUserName() != null)
                                   errorsUserName = true;
                                 else
@@ -447,9 +454,9 @@ class _SignUpState extends State<SignUp> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => SignUp2(
-                                        id: id,
-                                      )),
+                                        builder: (context) => SignUp2(
+                                              id: id,
+                                            )),
                                   );
                                 });
                               }
@@ -471,5 +478,22 @@ class _SignUpState extends State<SignUp> {
                 ),
               ),
             ]));
+  }
+
+  void encryption() async {
+    cryptor = new PlatformStringCryptor();
+    final String salt = await cryptor.generateSalt();
+    password = passController.text;
+    key = await cryptor.generateKeyFromPassword(password, salt);
+    encrypt = await cryptor.encrypt(password, key);
+    print(encrypt);
+    print(key);
+  }
+
+  void decryption() async {
+    try {
+      decrypt = await cryptor.decrypt(encrypt, key);
+      print(decrypt);
+    } catch (error) {}
   }
 }

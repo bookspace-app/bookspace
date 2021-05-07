@@ -188,4 +188,41 @@ class UserController {
     }
     return false;
   }
+
+  // GET favorite categories by ID
+  static Future<List<String>> getCategories(int id) async {
+    String cat;
+    List<String> categories;
+    try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id/categories");
+
+      // Define headers
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
+
+      // Make GET request
+      http.Response response = await http.get(uri, headers: headers);
+
+      // Request status and body
+      int statusCode = response.statusCode;
+      String requestBody = response.body;
+
+      print('Response status: $statusCode\n Response body: $requestBody\n');
+      if (statusCode == 200) {
+        final data = jsonDecode(response.body) as Map;
+        for (String name in data.keys) {
+          final value = data[name];
+          print('[$name:$value]');
+        }
+        print("\n");
+        cat = json.decode(response.body);
+        categories = cat.split(" ");
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return categories;
+  }
 }
