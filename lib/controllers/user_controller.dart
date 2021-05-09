@@ -25,14 +25,14 @@ class UserController {
       int statusCode = response.statusCode;
       String requestBody = response.body;
 
-      print('Response status: $statusCode\n Response body: $requestBody\n');
+      /*print('Response status: $statusCode\n Response body: $requestBody\n');*/
       if (statusCode == 200) {
         final data = jsonDecode(response.body) as Map;
-        for (String name in data.keys) {
+        /*for (String name in data.keys) {
           final value = data[name];
           print('[$name:$value]');
         }
-        print("\n");
+        print("\n");*/
         user = User.fromJson(json.decode(response.body));
       }
     } catch (e) {
@@ -95,7 +95,7 @@ class UserController {
       int statusCode = response.statusCode;
       String requestBody = response.body;
 
-      print('Response status: $statusCode\n Response body: $requestBody\n');
+      /*print('Response status: $statusCode\n Response body: $requestBody\n');*/
       if (statusCode == 200) {
         json.decode(response.body).forEach((result) {
           users.add(User.fromJson(result));
@@ -138,7 +138,7 @@ class UserController {
       int statusCode = response.statusCode;
       String requestBody = response.body;
 
-      print('Response status: $statusCode\n Response body: $requestBody\n');
+      /*print('Response status: $statusCode\n Response body: $requestBody\n');*/
       if (statusCode == 200) {
         user = User.fromJson(json.decode(response.body));
       }
