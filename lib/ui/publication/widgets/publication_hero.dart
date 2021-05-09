@@ -11,17 +11,17 @@ class PublicationHero extends StatelessWidget {
 
   final publication;
   final bool isPublication;
+  final Function() scrollOnReply;
 
   PublicationHero({
     Key key,
     this.publication,
-    this.isPublication
+    this.isPublication,
+    @required this.scrollOnReply,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
-
 
     Widget ParsedContent(String content, bool atTitle) {
 
@@ -241,7 +241,7 @@ class PublicationHero extends StatelessWidget {
                             child: GestureDetector(
                               onTap: () { 
                                 print('Tap');
-                                Navigator.pop(context);
+                                scrollOnReply();
                               },
                               child: Icon(
                                 Icons.reply,

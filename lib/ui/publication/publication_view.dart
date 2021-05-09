@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bookspace/controllers/comment_controller.dart';
 import 'package:bookspace/controllers/publication_controller.dart';
 import 'package:bookspace/models/comment.dart';
@@ -136,6 +138,14 @@ class _PublicationViewState extends State<PublicationView> {
       return null;
     }
   }
+
+  final _controller = ScrollController();
+
+  void scrollDown() => _controller.animateTo(
+    _controller.position.maxScrollExtent,
+    duration: Duration(milliseconds: 500),
+    curve: Curves.fastOutSlowIn,
+  );
   
   @override
   Widget build(BuildContext context) {
@@ -189,6 +199,7 @@ class _PublicationViewState extends State<PublicationView> {
     }
     // Return the view if the objects are loaded (are not null)
     return ((_publication != null || _comment != null) && _comments != null)? ListView(
+       controller: _controller,
        children: <Widget>[
          // Publication hero is the top widget that
          // shows the content of the contribution
@@ -197,6 +208,7 @@ class _PublicationViewState extends State<PublicationView> {
             ? _publication
             : _comment,
             isPublication: widget.isPublication,
+            scrollOnReply: scrollDown
           ),
          // User card is the widget of the author
          UserCard(
