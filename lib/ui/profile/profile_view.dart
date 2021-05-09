@@ -7,12 +7,17 @@ import 'package:bookspace/ui/publication/publication_view.dart';
 import 'package:bookspace/ui/publication/widgets/publication_card.dart';
 import 'package:flutter/material.dart';
 import 'package:textfield_tags/textfield_tags.dart';
-
 import 'package:bookspace/globals.dart' as globals;
+import 'package:intl/intl.dart';
 
 class ProfileView extends StatefulWidget {
   final int id;
-  ProfileView({Key key, this.id}) : super(key: key);
+  final String username;
+  ProfileView({
+    Key key, 
+    this.id,
+    this.username
+  }) : super(key: key);
 
   @override
   _ProfileViewState createState() => _ProfileViewState();
@@ -20,15 +25,36 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView> {
   User _user;
-
   List<Publication> _myPublications = [];
+  Widget noUser = CircularProgressIndicator();
 
-  void getUser() async {
-    User user = await UserController.getUser(globals.id);
+  void getUser(int id) async {
+    User user = await UserController.getUser(id);
     if (!disposed) {
       setState(() => _user = user);
-      getPublications(_user);
-      print(globals.id);
+      if (_user != null) getPublications(_user);
+      else {
+        Future.delayed(Duration(milliseconds:500)).then((_) {
+          setState(() {
+            noUser = Text("This user does not exist");
+          });
+        });
+      }
+    }
+  }
+
+  void getUserByUsername(String username) async {
+    User user = await UserController.getUserByUsername(username);
+    if (!disposed) {
+      setState(() => _user = user);
+      if (_user != null) getPublications(_user);
+      else {
+        Future.delayed(Duration(milliseconds:500)).then((_) {
+          setState(() {
+            noUser = Text("This user does not exist");
+          });
+        });
+      }
     }
   }
 
@@ -47,7 +73,13 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   void initState() {
     super.initState();
-    getUser();
+    if (widget.id == null && widget.username == null) {
+      getUser(globals.id);
+    } else if (widget.id == null && widget.username != null) {
+      getUserByUsername(widget.username);
+    } else if (widget.id != null && widget.username == null) {
+      getUser(widget.id);
+    }
   }
 
   bool disposed = false;
@@ -129,12 +161,11 @@ class _ProfileViewState extends State<ProfileView> {
                                 new TextSpan(
                                     text: "${_user.rank}",
                                     style: new TextStyle(
-                                        fontWeight: FontWeight
-                                            .bold)), //TO-DO Añadir fecha registro
+                                        fontWeight: FontWeight.bold)),
                                 new TextSpan(
                                     text: " · " +
-                                        "Se unió \n" +
-                                        "FECHA REGISTRO"),
+                                        "Se unió al día\n" +
+                                        "${DateFormat.yMd().format(_user.dor)}"),
                               ],
                             ),
                           ))
@@ -190,7 +221,8 @@ class _ProfileViewState extends State<ProfileView> {
                           builder: (context) => MainView(
                                 renderIndex: 'profile',
                                 view: PublicationView(
-                                    id: _myPublications[index].id),
+                                    id: _myPublications[index].id,
+                                    isPublication: true),
                               )),
                     );
                   }, // on tap llevar a la view de la publicacion
@@ -202,7 +234,7 @@ class _ProfileViewState extends State<ProfileView> {
        child: Text('hello ${_user.username}'),
       );*/
     } else {
-      return Container(child: Center(child: CircularProgressIndicator()));
+      return Container(child: Center(child: noUser));
     }
   }
 }

@@ -12,7 +12,7 @@ class Comment {
   int authorId;
   int publicationId;
   int parentId;
-  List<int> mentions;
+  List<String> mentions;
 
   // OUTPUT
   int id;
@@ -51,6 +51,7 @@ class Comment {
   factory Comment.fromJson(Map<String, dynamic> json) => Comment(
         id: json["id"],
         content: json["content"],
+        publicationId: json["publicationId"],
         parentId: json["parentId"],
         dop: DateTime.parse(json["dop"]),
         likes: json["likes"],

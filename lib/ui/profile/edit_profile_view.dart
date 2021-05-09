@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:bookspace/controllers/user_controller.dart';
@@ -44,11 +43,13 @@ class _EditProfileViewState extends State<EditProfileView> {
   var _id;
 
   User _user;
+  List<String> _tags;
 
   void getUser() async {
     User user = await UserController.getUser(globals.id);
     if (!disposed) {
       setState(() => _user = user);
+      //setState(() => _tags = tags);
     }
     setState(() {
       nameController.text = _user.name;
@@ -83,185 +84,21 @@ class _EditProfileViewState extends State<EditProfileView> {
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 40),
         children: [
           imageProfile(),
+          titlePreEditText('Nombre'),
+          editTextProfile(nameController, 'Nombre'),
+          titlePreEditText('Nombre de Usuario'),
+          editTextProfile(usernameController, 'Nombre de Usuario'),
+          titlePreEditText('Email'),
+          editTextProfile(emailController, 'Email'),
+          titlePreEditText('Biografia'),
+          editTextProfile(bioController, 'Description'),
+          titlePreEditText('Tags'),
+
+          //EDIT TEXT TAGS. No lo hago con el metodo "editTextProfile" porque es distinto a los demás
           Container(
-            margin: EdgeInsets.fromLTRB(0, 25, 0, 5),
-            child: Text(
-              'Nombre',
-              style: TextStyle(
-                fontSize: 15,
-              ),
-            ),
-          ),
-          Container(
-              constraints: BoxConstraints.expand(height: 50, width: 100),
-              child: TextField(
-                controller: nameController,
-                style: TextStyle(
-                    fontSize: 15,
-                    //color: Color(0xff0962ff),
-                    fontWeight: FontWeight.bold),
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  hintText: 'Nombre',
-                  hintStyle: TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey[350],
-                      fontWeight: FontWeight.w600),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-                  suffixIcon: IconButton(
-                      icon: Icon(Icons.clear),
-                      onPressed: () {
-                        setState(() {
-                          nameController.clear();
-                        });
-                      }),
-                ),
-              )),
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 15, 0, 5),
-            child: Text(
-              'Nombre de usuario',
-              style: TextStyle(
-                fontSize: 15,
-              ),
-            ),
-          ),
-          Container(
-              constraints: BoxConstraints.expand(height: 50, width: 100),
-              child: TextField(
-                controller: usernameController,
-                style: TextStyle(
-                    fontSize: 15,
-                    //color: Color(0xff0962ff),
-                    fontWeight: FontWeight.bold),
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  hintText: 'Nombre de usuario',
-                  hintStyle: TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey[350],
-                      fontWeight: FontWeight.w600),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-                  suffixIcon: IconButton(
-                      icon: Icon(Icons.clear),
-                      onPressed: () {
-                        setState(() {
-                          usernameController.clear();
-                        });
-                      }),
-                ),
-              )),
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 15, 0, 5),
-            child: Text(
-              'Email',
-              style: TextStyle(
-                fontSize: 15,
-              ),
-            ),
-          ),
-          Container(
-              constraints: BoxConstraints.expand(height: 50, width: 100),
-              child: TextField(
-                controller: emailController,
-                style: TextStyle(
-                    fontSize: 15,
-                    //color: Color(0xff0962ff),
-                    fontWeight: FontWeight.bold),
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  hintText: 'Email',
-                  hintStyle: TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey[350],
-                      fontWeight: FontWeight.w600),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-                  suffixIcon: IconButton(
-                      icon: Icon(Icons.clear),
-                      onPressed: () {
-                        setState(() {
-                          emailController.clear();
-                        });
-                      }),
-                ),
-              )),
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 15, 0, 5),
-            child: Text(
-              'Biografia',
-              style: TextStyle(
-                fontSize: 15,
-              ),
-            ),
-          ),
-          Container(
-              constraints: BoxConstraints.expand(height: 120, width: 100),
-              child: TextFormField(
-                controller: bioController,
-                onChanged: (text) {
-                  setState(() {});
-                },
-                keyboardType: TextInputType.multiline,
-                maxLines: 8,
-                inputFormatters: [
-                  new LengthLimitingTextInputFormatter(500),
-                ],
-                style: TextStyle(
-                    fontSize: 15,
-                    //color: Color(0xff0962ff),
-                    fontWeight: FontWeight.bold),
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  hintText: 'Description',
-                  hintStyle: TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey[350],
-                      fontWeight: FontWeight.w600),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-                  counterText: '${bioController.text.length}' + '/500',
-                  suffixIcon: IconButton(
-                      icon: Icon(Icons.clear),
-                      onPressed: () {
-                        setState(() {
-                          bioController.clear();
-                        });
-                      }),
-                ),
-              )),
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 15, 0, 5),
-            child: Text(
-              'Tags',
-              style: TextStyle(
-                fontSize: 15,
-              ),
-            ),
-          ),
-          Container(
-              //color: Colors.orange,
               constraints: BoxConstraints.expand(height: 85, width: 100),
               child: TextFieldTags(
-                  initialTags: ['hola', 'adeu'], //_user.tags,
+                  initialTags: _tags,
                   tagsStyler: TagsStyler(
                       tagTextStyle: TextStyle(fontWeight: FontWeight.bold),
                       tagDecoration: BoxDecoration(
@@ -286,6 +123,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                       hintText: "put tags"),
                   onTag: (tag) {},
                   onDelete: (tag) {})),
+
           //BUTTON SUBMIT
           Container(
               alignment: Alignment.bottomCenter,
@@ -293,7 +131,6 @@ class _EditProfileViewState extends State<EditProfileView> {
               margin: EdgeInsets.only(top: 20),
               child: ElevatedButton(
                 onPressed: () {
-                  //setState(() {
                   _name = nameController.text;
                   _username = usernameController.text;
                   _email = emailController.text;
@@ -309,18 +146,17 @@ class _EditProfileViewState extends State<EditProfileView> {
                               view: ProfileView(),
                             )),
                   );
-                  //});
                 },
-                child: Text('Submit',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.black, /*fontFamily: "Schyler"*/
-                    )),
                 style: ElevatedButton.styleFrom(
                     primary: Colors.grey,
                     onPrimary: Colors.black,
-                    shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(5.0))),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0))),
+                child: Text('Submit',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                    )),
               )),
         ],
       ),
@@ -365,7 +201,7 @@ class _EditProfileViewState extends State<EditProfileView> {
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
           children: [
-            Text("Escoge una foto de perfil",
+            Text('Escoge una foto de perfil',
                 style: TextStyle(
                   fontSize: 20,
                 )),
@@ -396,6 +232,51 @@ class _EditProfileViewState extends State<EditProfileView> {
             )
           ],
         ));
+  }
+
+  Widget editTextProfile(TextEditingController controller, String hintText) {
+    return Container(
+        constraints: BoxConstraints.expand(height: 50, width: 100),
+        child: TextField(
+          controller: controller,
+          style: TextStyle(
+              fontSize: 15,
+              //color: Color(0xff0962ff),
+              fontWeight: FontWeight.bold),
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            hintText: hintText,
+            hintStyle: TextStyle(
+                fontSize: 15,
+                color: Colors.grey[350],
+                fontWeight: FontWeight.w600),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.black),
+            ),
+            suffixIcon: IconButton(
+                icon: Icon(Icons.clear),
+                onPressed: () {
+                  setState(() {
+                    emailController.clear();
+                  });
+                }),
+          ),
+        ));
+  }
+
+  Widget titlePreEditText(String title) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(0, 15, 0, 5),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: 15,
+        ),
+      ),
+    );
   }
 
   void takePhoto(ImageSource source) async {

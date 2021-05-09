@@ -5,6 +5,7 @@ import 'package:bookspace/models/publication.dart';
 import 'package:bookspace/models/user.dart';
 import 'package:bookspace/ui/main_view.dart';
 import 'package:bookspace/ui/profile/profile_view.dart';
+import 'package:bookspace/utils/extract_usernames.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:textfield_tags/textfield_tags.dart';
@@ -352,10 +353,9 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                                 myPublication = Publication();
                                 myPublication.title = titleController.text;
                                 myPublication.content = descController.text;
-                                myPublication.authorId = globals
-                                    .id; //TO-DO  = _user.id; now its hardcoded
-                                myPublication.category = genreController
-                                    .text; //TO-DO Create genre selector and link it here, now its hardcoded
+                                myPublication.authorId = globals.id; //TO-DO  = _user.id; now its hardcoded
+                                myPublication.category = genreController.text; //TO-DO Create genre selector and link it here, now its hardcoded
+                                myPublication.mentions = ExtractUsernames(descController.text);
                                 createPublication();
                               }
                             }))

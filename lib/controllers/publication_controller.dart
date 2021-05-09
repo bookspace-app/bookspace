@@ -63,7 +63,7 @@ class PublicationController {
       int statusCode = response.statusCode;
       String requestBody = response.body;
 
-      print('Response status: $statusCode\n Response body: $requestBody\n');
+      //print('Response status: $statusCode\n Response body: $requestBody\n');
       if (statusCode == 200) {
         json.decode(utf8.decode(response.bodyBytes)).forEach((result) {
 

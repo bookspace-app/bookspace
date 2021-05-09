@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:bookspace/models/tag.dart';
 import 'package:intl/intl.dart';
 import 'package:bookspace/config.dart';
 import 'package:bookspace/models/user.dart';
@@ -24,14 +25,49 @@ class UserController {
       int statusCode = response.statusCode;
       String requestBody = response.body;
 
-      print('Response status: $statusCode\n Response body: $requestBody\n');
+      /*print('Response status: $statusCode\n Response body: $requestBody\n');*/
       if (statusCode == 200) {
         final data = jsonDecode(response.body) as Map;
-        for (String name in data.keys) {
+        /*for (String name in data.keys) {
           final value = data[name];
           print('[$name:$value]');
         }
-        print("\n");
+        print("\n");*/
+        user = User.fromJson(json.decode(response.body));
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return user;
+  }
+
+  // GET user by Username
+  static Future<User> getUserByUsername(String username) async {
+    User user;
+    try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/username/$username");
+
+      // Define headers
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
+
+      // Make GET request
+      http.Response response = await http.get(uri, headers: headers);
+
+      // Request status and body
+      int statusCode = response.statusCode;
+      String requestBody = response.body;
+
+      print('Response status: $statusCode\n Response body: $requestBody\n');
+      if (statusCode == 200) {
+        final data = jsonDecode(response.body) as Map;
+        /*for (String name in data.keys) {
+          final value = data[name];
+          print('[$name:$value]');
+        }
+        print("\n");*/
         user = User.fromJson(json.decode(response.body));
       }
     } catch (e) {
@@ -59,7 +95,7 @@ class UserController {
       int statusCode = response.statusCode;
       String requestBody = response.body;
 
-      print('Response status: $statusCode\n Response body: $requestBody\n');
+      /*print('Response status: $statusCode\n Response body: $requestBody\n');*/
       if (statusCode == 200) {
         json.decode(response.body).forEach((result) {
           users.add(User.fromJson(result));
@@ -102,7 +138,7 @@ class UserController {
       int statusCode = response.statusCode;
       String requestBody = response.body;
 
-      print('Response status: $statusCode\n Response body: $requestBody\n');
+      /*print('Response status: $statusCode\n Response body: $requestBody\n');*/
       if (statusCode == 200) {
         user = User.fromJson(json.decode(response.body));
       }
@@ -187,5 +223,40 @@ class UserController {
       print('error caught: $e');
     }
     return false;
+  }
+
+  //GET USER TAGS NAMES
+  static Future<List<String>> getUserTags(int id) async {
+    List<Tag> tags = [];
+    List<String> tags_string = [];
+    try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/$id/tags");
+
+      // Define headers
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
+
+      // Make GET request
+      http.Response response = await http.get(uri, headers: headers);
+
+      // Request status and body
+      int statusCode = response.statusCode;
+      String requestBody = response.body;
+
+      print('Response status: $statusCode\n Response body: $requestBody\n');
+      if (statusCode == 200) {
+        json.decode(response.body).forEach((result) {
+          tags.add(Tag.fromJson(result));
+          for (int i = 0; i < tags.length; i++) {
+            tags_string[i] = tags[i].name;
+          }
+        });
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return tags_string;
   }
 }
