@@ -102,22 +102,39 @@ class _PublicationViewState extends State<PublicationView> {
 
   }
 
+  void refreshWrapper() {
+    setState(() => refreshed = true);
+    refresh();
+  }
+
   // Refresh the view on update
   // When new comments are added
   void refresh() {
+    print('Refreshed state: $refreshed');
+    print('==================================');
+    print('REFRESHING');
+    print('==================================');
     print('CURRENT RATE: $rate');
     print('CURRENT LOADED:$loadedComments');
     if (widget.isPublication) {
       getPublication(widget.id);
-      print('CURRENT LIMIT: ${_publication.comments}');
     } else {
       getComment(widget.id);
-      print('CURRENT LIMIT: ${_comment.replies}');
     }
-
-    setState(() {
-      refreshed = false;
-    });
+    print('==================================');
+    print('REFRESHED');
+    print('==================================');
+    if (refreshed) {
+      Future.delayed(Duration(milliseconds:500)).then((_) {
+        refresh();
+        setState(() {
+          refreshed = false;
+          return null;
+        });
+      });
+    } else {
+      return null;
+    }
   }
   
   @override
@@ -251,7 +268,7 @@ class _PublicationViewState extends State<PublicationView> {
             commentId: (widget.isPublication)
             ? null
             : _comment.id,
-            notifyOnNewComment: refresh
+            notifyOnNewComment: refreshWrapper
           )
        ],
     ): Center(child:CircularProgressIndicator());
