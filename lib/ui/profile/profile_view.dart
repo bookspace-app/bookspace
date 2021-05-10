@@ -109,8 +109,8 @@ class _ProfileViewState extends State<ProfileView> {
                               borderRadius: BorderRadius.circular(20),
                               child: Image.asset(
                                 './assets/images/No_pic.png', //TO-DO if userpic == null show No_pic else userpic
-                                height: 170,
-                                width: 170,
+                                height: 160,
+                                width: 160,
                                 fit: BoxFit.fill,
                               ),
                             )),
@@ -140,7 +140,7 @@ class _ProfileViewState extends State<ProfileView> {
                       Container(
                           padding: EdgeInsets.fromLTRB(5, 10, 5, 0),
                           //color: Colors.orange,
-                          width: 185,
+                          //width: 185,
                           height:
                               100, //TO-DO Reducir tamaño maximo de la descripcion
                           child: Text("${_user.description}",
