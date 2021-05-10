@@ -138,8 +138,6 @@ class UserController {
       http.Response response =
           await http.put(uri, headers: headers, body: json.encode(body));
 
-      print("HOLIIIII" + response.body.toString());
-
       int statusCode = response.statusCode;
 
       //return response.statusCode == 200;
@@ -224,5 +222,42 @@ class UserController {
       print('error caught: $e');
     }
     return categories;
+  }
+
+  //UPDATE USER CATEGORIES
+  static Future<bool> updateCategories(List<String> cat, int id) async {
+    List<String> cat;
+    try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id/categories");
+
+      //define headers
+      Map<String, String> headers = {
+        //"Authorization": "JWT $authToken",
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
+
+      //Define body
+      Map<String, List<String>> body = {
+        'categories': cat,
+      };
+
+      // Make PUT request
+      http.Response response =
+          await http.put(uri, headers: headers, body: json.encode(body));
+
+      // Request status and body
+      int statusCode = response.statusCode;
+      String requestBody = response.body;
+
+      print('Response status: $statusCode\n Response body: $requestBody\n');
+
+      if (statusCode == 201) {
+        cat = json.decode(response.body);
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return true;
   }
 }

@@ -44,6 +44,7 @@ class _EditProfileViewState extends State<EditProfileView> {
   var _id;
 
   User _user;
+  List<String> categories;
 
   void getUser() async {
     User user = await UserController.getUser(globals.id);
@@ -59,8 +60,17 @@ class _EditProfileViewState extends State<EditProfileView> {
     _id = _user.id;
   }
 
+  void getCategories() async {
+    List<String> cat = await UserController.getCategories(globals.id);
+    categories = cat;
+  }
+
   void putUser(String username, name, email, descrition, int id) async {
     UserController.updateUser(username, name, email, descrition, id);
+  }
+
+  void updateCategories(List<String> categories, int id) {
+    UserController.updateCategories(categories, id);
   }
 
   bool disposed = false;
@@ -74,6 +84,7 @@ class _EditProfileViewState extends State<EditProfileView> {
   void initState() {
     super.initState();
     getUser();
+    getCategories();
   }
 
   @override
@@ -251,7 +262,7 @@ class _EditProfileViewState extends State<EditProfileView> {
           Container(
             margin: EdgeInsets.fromLTRB(0, 15, 0, 5),
             child: Text(
-              'Tags',
+              'Categories',
               style: TextStyle(
                 fontSize: 15,
               ),
@@ -261,7 +272,7 @@ class _EditProfileViewState extends State<EditProfileView> {
               //color: Colors.orange,
               constraints: BoxConstraints.expand(height: 85, width: 100),
               child: TextFieldTags(
-                  initialTags: ['hola', 'adeu'], //_user.tags,
+                  initialTags: ['hola', 'adeu'], //categories,
                   tagsStyler: TagsStyler(
                       tagTextStyle: TextStyle(fontWeight: FontWeight.bold),
                       tagDecoration: BoxDecoration(
@@ -284,8 +295,18 @@ class _EditProfileViewState extends State<EditProfileView> {
                       ),
                       helperText: "",
                       hintText: "put tags"),
-                  onTag: (tag) {},
-                  onDelete: (tag) {})),
+                  onTag: (tag) {
+                    categories.add(tag);
+                  },
+                  onDelete: (tag) {
+                    bool trobat = false;
+                    for (int i = 0; i < categories.length && !trobat; i++) {
+                      if (categories[i] == tag) {
+                        categories.removeAt(i);
+                        trobat = true;
+                      }
+                    }
+                  })),
           //BUTTON SUBMIT
           Container(
               alignment: Alignment.bottomCenter,
@@ -300,6 +321,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   _password = passwordController.text;
                   _bio = bioController.text;
                   putUser(_username, _name, _email, _bio, _id);
+                  //updateCategories(categories, _id);
 
                   Navigator.push(
                     context,

@@ -25,6 +25,11 @@ class _SignUp2State extends State<SignUp2> {
   File _image;
   final picker = ImagePicker();
   User _user;
+  List<String> categories;
+
+  void updateCategories(List<String> categories, int id) {
+    UserController.updateCategories(categories, id);
+  }
 
   void updateDesc(String descp, int id) async {
     UserController.updateDesc(descp, id);
@@ -217,7 +222,7 @@ class _SignUp2State extends State<SignUp2> {
                   CrossAxisAlignment.center, //Center Row contents vertically,
               children: <Widget>[
                 Text(
-                  "Tags favoritos:", //to-do TRADUCIONES
+                  "Categorias favoritas:", //to-do TRADUCIONES
                   style: TextStyle(
                       color: Colors.black, //to-do Cambiar color letras
                       fontSize: 14),
@@ -242,8 +247,18 @@ class _SignUp2State extends State<SignUp2> {
                       isDense: false,
                       helperText: "",
                       hintText: 'Escribe los temas que más te interesan'),
-                  onTag: (tag) {},
-                  onDelete: (tag) {})),
+                  onTag: (tag) {
+                    categories.add(tag);
+                  },
+                  onDelete: (tag) {
+                    bool trobat = false;
+                    for (int i = 0; i < categories.length && !trobat; i++) {
+                      if (categories[i] == tag) {
+                        categories.removeAt(i);
+                        trobat = true;
+                      }
+                    }
+                  })),
           Container(
             //color: Colors.pink,
             padding: EdgeInsets.symmetric(vertical: 30),
@@ -263,6 +278,7 @@ class _SignUp2State extends State<SignUp2> {
                         onPressed: () {
                           print(widget.id);
                           updateDesc(descController.text, widget.id);
+                          //updateCategories(categories, widget.id);
                           //TO-DO Puts descripcion, tags favoritas, profile pic
                           Navigator.push(
                             context,
