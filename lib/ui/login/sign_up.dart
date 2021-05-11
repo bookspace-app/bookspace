@@ -34,6 +34,9 @@ class _SignUpState extends State<SignUp> {
   var emailController = TextEditingController();
   var passController = TextEditingController();
   var passRController = TextEditingController();
+  var yearController = TextEditingController();
+  var monthController = TextEditingController();
+  var dayController = TextEditingController();
 
   String key, password;
   String encrypt, decrypt;
@@ -386,6 +389,45 @@ class _SignUpState extends State<SignUp> {
                                     : null)))
                   ],
                 ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(left: 10),
+                    constraints: BoxConstraints.expand(height: 50, width: 60),
+                    child: TextField(
+                      controller: dayController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: "D",
+                      ),
+                    ),
+                  ),
+                  Text("-"),
+                  Container(
+                    constraints: BoxConstraints.expand(height: 50, width: 60),
+                    child: TextField(
+                      controller: monthController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: "M",
+                      ),
+                    ),
+                  ),
+                  Text("-"),
+                  Container(
+                    margin: EdgeInsets.only(right: 10),
+                    constraints: BoxConstraints.expand(height: 50, width: 100),
+                    child: TextField(
+                      controller: yearController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: "Y",
+                      ),
+                    ),
+                  )
+                ],
               ),
               Padding(
                 padding: EdgeInsets.fromLTRB(10, 30, 30, 30),

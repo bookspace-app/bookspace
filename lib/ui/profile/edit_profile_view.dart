@@ -44,7 +44,22 @@ class _EditProfileViewState extends State<EditProfileView> {
   var _id;
 
   User _user;
-  List<String> categories;
+  List<String> categories = [""];
+
+  /*void addCategories(String cat) {
+    print(cat);
+    categories.add(cat);
+  }
+
+  void deleteCategories(String cat) {
+    bool trobat = false;
+    for (int i = 0; i < categories.length && !trobat; i++) {
+      if (categories[i] == cat) {
+        categories.removeAt(i);
+        trobat = true;
+      }
+    }
+  }*/
 
   void getUser() async {
     User user = await UserController.getUser(globals.id);
@@ -58,10 +73,6 @@ class _EditProfileViewState extends State<EditProfileView> {
       bioController.text = _user.description;
     });
     _id = _user.id;
-  }
-
-  void printList(List<String> cat) {
-    for (int i = 0; i < cat.length; ++i) print(cat[i]);
   }
 
   void getCategories() async {
@@ -300,16 +311,10 @@ class _EditProfileViewState extends State<EditProfileView> {
                       helperText: "",
                       hintText: "put categories"),
                   onTag: (tag) {
-                    //categories.add(tag);
+                    //addCategories(tag);
                   },
                   onDelete: (tag) {
-                    /*bool trobat = false;
-                    for (int i = 0; i < categories.length && !trobat; i++) {
-                      if (categories[i] == tag) {
-                        categories.removeAt(i);
-                        trobat = true;
-                      }
-                    }*/
+                    //deleteCategories(tag);
                   })),
           //BUTTON SUBMIT
           Container(
@@ -319,7 +324,6 @@ class _EditProfileViewState extends State<EditProfileView> {
               child: ElevatedButton(
                 onPressed: () {
                   //setState(() {
-                  printList(categories);
                   _name = nameController.text;
                   _username = usernameController.text;
                   _email = emailController.text;
