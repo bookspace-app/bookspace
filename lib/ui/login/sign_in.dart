@@ -87,13 +87,13 @@ class _SignInState extends State<SignIn> {
           padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
           children: [
             Container(
-              margin: EdgeInsets.fromLTRB(0, 40.0, 0, 0),
+              margin: EdgeInsets.fromLTRB(0, 30.0, 0, 0),
               constraints: BoxConstraints.expand(
-                height: 200.0,
+                height: 250.0,
               ),
               child: Image.asset(
-                './assets/images/No_pic.png', //TO-DO if userpic == null show No_pic else userpic
-                height: 170,
+                './assets/images/logo.png', //TO-DO if userpic == null show No_pic else userpic
+                height: 250,
                 width: 170,
                 fit: BoxFit.fill,
               ),
