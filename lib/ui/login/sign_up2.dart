@@ -248,16 +248,16 @@ class _SignUp2State extends State<SignUp2> {
                       helperText: "",
                       hintText: 'Escribe los temas que más te interesan'),
                   onTag: (tag) {
-                    categories.add(tag);
+                    //categories.add(tag);
                   },
                   onDelete: (tag) {
-                    bool trobat = false;
+                    /*bool trobat = false;
                     for (int i = 0; i < categories.length && !trobat; i++) {
                       if (categories[i] == tag) {
                         categories.removeAt(i);
                         trobat = true;
                       }
-                    }
+                    }*/
                   })),
           Container(
             //color: Colors.pink,

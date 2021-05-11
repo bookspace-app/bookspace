@@ -404,8 +404,8 @@ class _SignUpState extends State<SignUp> {
                             child: Text('Siguiente'),
                             onPressed: () {
                               setState(() {
-                                encryption();
-                                decryption();
+                                //encryption();
+                                //decryption();
                                 if (errorUserName() != null)
                                   errorsUserName = true;
                                 else

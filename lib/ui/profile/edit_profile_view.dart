@@ -294,7 +294,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                         ),
                       ),
                       helperText: "",
-                      hintText: "put tags"),
+                      hintText: "put categories"),
                   onTag: (tag) {
                     categories.add(tag);
                   },
