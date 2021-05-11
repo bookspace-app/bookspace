@@ -3,6 +3,7 @@ import 'package:bookspace/controllers/comment_controller.dart';
 import 'package:bookspace/controllers/user_controller.dart';
 import 'package:bookspace/models/comment.dart';
 import 'package:bookspace/models/user.dart';
+import 'package:bookspace/utils/extract_usernames.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bookspace/globals.dart' as globals;
@@ -57,8 +58,11 @@ class _CreateCommentState extends State<CreateComment> {
   }
 
   void createComment() async {
-    int response = await CommentController.createComment(myComment);
+    bool response = await CommentController.createComment(myComment);
     print(globals.id);
+    if (response) {
+      print('THIS HAS WORKED');
+    }
   }
 
   String errorContent() {
@@ -124,16 +128,14 @@ class _CreateCommentState extends State<CreateComment> {
                         });
                         print(errorsContent);
                         if (!errorsContent) {
-                          List<int> mentionIds = [];
-                          print(contentController.text);
-                          print(contentController.text.toString());
                           myComment = Comment();
                           myComment.authorId = (globals.id).toInt();
                           myComment.content = contentController.text;
-                          myComment.mentions = mentionIds;
+                          myComment.mentions = ExtractUsernames(contentController.text);
                           myComment.parentId = widget.commentId;
                           myComment.publicationId = (widget.id).toInt();
                           createComment();
+                          myComment.content = '';
                           widget.notifyOnNewComment();
                         }
                       }

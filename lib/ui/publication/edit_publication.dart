@@ -5,22 +5,21 @@ import 'package:bookspace/models/publication.dart';
 import 'package:bookspace/models/user.dart';
 import 'package:bookspace/ui/main_view.dart';
 import 'package:bookspace/ui/profile/profile_view.dart';
-import 'package:bookspace/utils/extract_usernames.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 
 import 'package:bookspace/globals.dart' as globals;
 
-class CreatePublicationView extends StatefulWidget {
+class EditPublicationView extends StatefulWidget {
   final int id;
-  CreatePublicationView({Key key, this.id}) : super(key: key);
+  EditPublicationView({Key key, this.id}) : super(key: key);
 
   @override
-  _CreatePublicationViewState createState() => _CreatePublicationViewState();
+  _EditPublicationViewState createState() => _EditPublicationViewState();
 }
 
-class _CreatePublicationViewState extends State<CreatePublicationView> {
+class _EditPublicationViewState extends State<EditPublicationView> {
   User _user;
   var titleController = TextEditingController();
   var descController = TextEditingController();
@@ -31,6 +30,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
   bool errorsGenre = false;
   bool errorsAll = false;
 
+  Publication original;
   Publication myPublication;
 
   void getUser() async {
@@ -41,9 +41,22 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
     }
   }
 
+  void getPublication(int id) async {
+    Publication or = await PublicationController.getPublication(id);
+    if (!disposed) {
+      setState(() => original = or);
+    }
+    setState(() {
+      titleController.text = original.title;
+      descController.text = original.content;
+      genreController.text = original.category;
+    });
+  }
+
   void createPublication() async {
-    int response = await PublicationController.createPublication(myPublication);
+    await PublicationController.editPublication(myPublication, widget.id);
     print(globals.id);
+    print(widget.id);
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
@@ -93,6 +106,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
   @override
   void initState() {
     super.initState();
+    getPublication(widget.id);
   }
 
   @override
@@ -136,7 +150,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                           decoration: InputDecoration(
                               filled: true,
                               fillColor: Colors.white,
-                              hintText: "Escribe tu pregunta aquí...",
+                              //hintText: original.title,
                               border: OutlineInputBorder(),
                               errorText: errorsAll ? errorTitle() : null,
                               suffixIcon: titleController.text.length > 0
@@ -224,6 +238,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.white,
+                            //hintText: original.content,
                             border: OutlineInputBorder(),
                             counterText:
                                 '${descController.text.length}' + '/2000',
@@ -265,6 +280,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                           decoration: InputDecoration(
                               filled: true,
                               fillColor: Colors.white,
+                              //hintText: original.category,
                               border: OutlineInputBorder(),
                               errorText: errorsAll ? errorGenre() : null,
                               suffixIcon: genreController.text.length > 0
@@ -343,19 +359,24 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                             ),
                             onPressed: () {
                               setState(() {
-                                errorsTitle = (errorTitle() != null) ? true : false;
-                                errorsDesc = (errorDesc() != null) ? true : false;
-                                errorsGenre = (errorGenre() != null) ? true : false;
-                                errorsAll = errorsTitle | errorsDesc | errorsGenre;
+                                errorsTitle =
+                                    (errorTitle() != null) ? true : false;
+                                errorsDesc =
+                                    (errorDesc() != null) ? true : false;
+                                errorsGenre =
+                                    (errorGenre() != null) ? true : false;
+                                errorsAll =
+                                    errorsTitle | errorsDesc | errorsGenre;
                               });
                               if (!errorsAll) {
                                 getUser();
                                 myPublication = Publication();
                                 myPublication.title = titleController.text;
                                 myPublication.content = descController.text;
-                                myPublication.authorId = globals.id; //TO-DO  = _user.id; now its hardcoded
-                                myPublication.category = genreController.text; //TO-DO Create genre selector and link it here, now its hardcoded
-                                myPublication.mentions = ExtractUsernames(descController.text);
+                                myPublication.authorId = globals
+                                    .id; //TO-DO  = _user.id; now its hardcoded
+                                myPublication.category = genreController
+                                    .text; //TO-DO Create genre selector and link it here, now its hardcoded
                                 createPublication();
                               }
                             }))

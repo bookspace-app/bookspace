@@ -12,9 +12,10 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'dart:ui' as ui;
 import 'package:bookspace/globals.dart' as globals;
+
 Future<void> main() async {
-  RenderErrorBox.backgroundColor = Colors.transparent; /* Un apaño */
-  RenderErrorBox.textStyle = ui.TextStyle(color: Colors.transparent);
+  //RenderErrorBox.backgroundColor = Colors.transparent; /* Un apaño */
+  //RenderErrorBox.textStyle = ui.TextStyle(color: Colors.transparent);
   runApp(MyApp());
 }
 
@@ -26,16 +27,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   Locale _loc;
 
   @override
   void initState() {
     super.initState();
   }
-  
-  Widget build(BuildContext context) {
 
+  Widget build(BuildContext context) {
     String lang = 'ca';
     if (_loc != null) {
       lang = _loc.languageCode;
@@ -84,7 +83,7 @@ class _MyAppState extends State<MyApp> {
           for (var supportedLocale in supportedLocales) {
             if (supportedLocale.languageCode == l.languageCode &&
                 supportedLocale.countryCode == l.countryCode) {
-                  _loc = supportedLocale;
+              _loc = supportedLocale;
               return supportedLocale;
             }
           }
@@ -102,8 +101,10 @@ class _MyAppState extends State<MyApp> {
         '/': (context) => MainView(renderIndex: 'home', view: HomeView()),
         '/home': (context) => MainView(renderIndex: 'home', view: HomeView()),
         // When navigating to the "/profile" route, build the Profile widget.
-        '/profile': (context) => MainView(renderIndex: 'profile', view: ProfileView()),
-        '/activity': (context) => MainView(renderIndex: 'activity', view: ActivityView()),
+        '/profile': (context) =>
+            MainView(renderIndex: 'profile', view: ProfileView()),
+        '/activity': (context) =>
+            MainView(renderIndex: 'activity', view: ActivityView()),
       },
     );
   }

@@ -1,4 +1,6 @@
+import 'package:bookspace/controllers/user_controller.dart';
 import 'package:bookspace/models/publication.dart';
+import 'package:bookspace/models/user.dart';
 import 'package:bookspace/ui/main_view.dart';
 import 'package:bookspace/ui/profile/profile_view.dart';
 import 'package:flutter/gestures.dart';
@@ -9,11 +11,13 @@ class PublicationHero extends StatelessWidget {
 
   final publication;
   final bool isPublication;
+  final Function() scrollOnReply;
 
   PublicationHero({
     Key key,
     this.publication,
-    this.isPublication
+    this.isPublication,
+    @required this.scrollOnReply,
   }) : super(key: key);
 
   @override
@@ -58,7 +62,9 @@ class PublicationHero extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => MainView(
                         renderIndex: 'home',
-                        view: ProfileView(),
+                        view: ProfileView(
+                          username: m.group(0).substring(1),
+                        ),
                       )
                     ),
                   );
@@ -235,7 +241,7 @@ class PublicationHero extends StatelessWidget {
                             child: GestureDetector(
                               onTap: () { 
                                 print('Tap');
-                                Navigator.pop(context);
+                                scrollOnReply();
                               },
                               child: Icon(
                                 Icons.reply,
