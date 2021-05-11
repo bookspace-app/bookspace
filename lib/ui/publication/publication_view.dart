@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bookspace/controllers/comment_controller.dart';
 import 'package:bookspace/controllers/publication_controller.dart';
 import 'package:bookspace/models/comment.dart';
@@ -27,10 +29,12 @@ class _PublicationViewState extends State<PublicationView> {
   List<Comment> _comments;
   // Rate is the number of comments that are added
   // when you ask for more
-  int rate = 2;
+  int rate = 3;
   // Loaded comments is the initial number of loaded comments
   // in the view
-  int loadedComments = 2;
+  int loadedComments = 0;
+
+  bool refreshed = false;
 
   // API call to get the publication of the view by id
   void getPublication(int id) async {
@@ -42,10 +46,15 @@ class _PublicationViewState extends State<PublicationView> {
       // If there are no comments, do not overload
       // by API call
       if (_publication.comments ==  0) {
-        setState(() => loadedComments = 0);
+        setState(() => _comments = comments);
       } else {
         comments = await CommentController.getComments(_publication.commentsUri);
         setState(() => _comments = comments);
+        setState(() => loadedComments = (
+          _publication.comments >= rate
+          ? rate
+          : _publication.comments
+        ));
         print(_comments);
       }
     }
@@ -61,11 +70,15 @@ class _PublicationViewState extends State<PublicationView> {
       // If there are no replies, do not overload
       // by API call
       if (_comment.replies ==  0) {
-        setState(() => loadedComments = 0);
         setState(() => _comments = comments);
       } else  {
         comments = await CommentController.getComments(_comment.repliesUri);
         setState(() => _comments = comments);
+        setState(() => loadedComments = (
+          _comment.replies >= rate
+          ? rate
+          : _comment.replies
+        ));
         print(_comments);
       }
     }
@@ -91,15 +104,48 @@ class _PublicationViewState extends State<PublicationView> {
 
   }
 
+  void refreshWrapper() {
+    setState(() => refreshed = true);
+    refresh();
+  }
+
   // Refresh the view on update
   // When new comments are added
   void refresh() {
+    print('Refreshed state: $refreshed');
+    print('==================================');
+    print('REFRESHING');
+    print('==================================');
+    print('CURRENT RATE: $rate');
+    print('CURRENT LOADED:$loadedComments');
     if (widget.isPublication) {
       getPublication(widget.id);
     } else {
       getComment(widget.id);
     }
+    print('==================================');
+    print('REFRESHED');
+    print('==================================');
+    if (refreshed) {
+      Future.delayed(Duration(milliseconds:500)).then((_) {
+        refresh();
+        setState(() {
+          refreshed = false;
+          return null;
+        });
+      });
+    } else {
+      return null;
+    }
   }
+
+  final _controller = ScrollController();
+
+  void scrollDown() => _controller.animateTo(
+    _controller.position.maxScrollExtent,
+    duration: Duration(milliseconds: 500),
+    curve: Curves.fastOutSlowIn,
+  );
   
   @override
   Widget build(BuildContext context) {
@@ -129,9 +175,14 @@ class _PublicationViewState extends State<PublicationView> {
                       int comments = (widget.isPublication)
                       ? _publication.comments
                       : _comment.replies;
+                      print('TOTAL NUM: $comments');
                       loadedComments = (loadedComments + rate > comments)
                       ? comments
                       : loadedComments + rate; 
+                      print('AFTER UPDATE LOADED: $loadedComments');
+                      setState(() {
+                        refreshed = false;
+                      });
                     }
                   );
                 }
@@ -141,8 +192,14 @@ class _PublicationViewState extends State<PublicationView> {
         ), 
       );
     }
+    for (var i = 0; i < loadedComments; i++) {
+      print('${widget.isPublication}  ${_comments[i].parentId}');
+      print((_comments[i].parentId == null && widget.isPublication) );
+      print((_comments[i].parentId>0 && !(widget.isPublication)) );
+    }
     // Return the view if the objects are loaded (are not null)
     return ((_publication != null || _comment != null) && _comments != null)? ListView(
+       controller: _controller,
        children: <Widget>[
          // Publication hero is the top widget that
          // shows the content of the contribution
@@ -151,6 +208,7 @@ class _PublicationViewState extends State<PublicationView> {
             ? _publication
             : _comment,
             isPublication: widget.isPublication,
+            scrollOnReply: scrollDown
           ),
          // User card is the widget of the author
          UserCard(
@@ -179,13 +237,17 @@ class _PublicationViewState extends State<PublicationView> {
          ),
          // This iterator renders the comments
          // to the principal contribution of the view
-         for (var i = 0; i < loadedComments; i++)Container(
+         for (var i = 0; i < loadedComments; i++) Container(
            child: Column(
             children: <Widget> [
+              ((_comments[i].parentId == 0 && widget.isPublication) 
+              || (_comments[i].parentId > 0 && !(widget.isPublication))) ? 
               ResponseCard(
                 response: _comments[i]
-              ),
+              ) : Container(),
               // The corresponding author of the comment
+              ((_comments[i].parentId == 0 && widget.isPublication) 
+              || (_comments[i].parentId > 0 && !(widget.isPublication))) ? 
               UserCard(
                 commentId: _comments[i].id,
                 author: _comments[i].author,
@@ -195,7 +257,7 @@ class _PublicationViewState extends State<PublicationView> {
                 likes: _comments[i].likes,
                 dislikes: _comments[i].dislikes,
                 replies: _comments[i].replies,
-              ),
+              ) : Container(),
             ]
           )
          ),
@@ -218,7 +280,7 @@ class _PublicationViewState extends State<PublicationView> {
             commentId: (widget.isPublication)
             ? null
             : _comment.id,
-            notifyOnNewComment: refresh
+            notifyOnNewComment: refreshWrapper
           )
        ],
     ): Center(child:CircularProgressIndicator());
