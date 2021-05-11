@@ -48,6 +48,7 @@ class _SignUpState extends State<SignUp> {
   bool errorsEmail = false;
   bool errorsPass = false;
   bool errorsPassR = false;
+  bool errorsDob = false;
   bool errorsAll = false;
 
   User _user;
@@ -65,9 +66,9 @@ class _SignUpState extends State<SignUp> {
     print(users);
   }
 
-  Future<void> postUser(
-      String username, String name, String email, String pass) async {
-    User user = await UserController.postUser(username, name, email, pass);
+  Future<void> postUser(String username, String name, String email, String pass,
+      String dob) async {
+    User user = await UserController.postUser(username, name, email, pass, dob);
     if (!disposed) {
       setState(() {
         _user = user;
@@ -91,6 +92,22 @@ class _SignUpState extends State<SignUp> {
   }*/
 
   //Error Check
+  String errorDob() {
+    if (yearController.text.isEmpty ||
+        dayController.text.isEmpty ||
+        monthController.text.isEmpty) {
+      return "Empty Field";
+    } else if (yearController.text.length != 4) {
+      return "year introduced wrong";
+    } else if (monthController.text.length > 2) {
+      return "month introduced wrong";
+    } else if (monthController.text.length > 2) {
+      return "day introduced wrong";
+    } else {
+      return null;
+    }
+  }
+
   String errorUserName() {
     if (userNameController.text.isEmpty)
       return "${AppLocalizations.of(context).translate("emptyField")}";
@@ -424,6 +441,7 @@ class _SignUpState extends State<SignUp> {
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: "Y",
+                        errorText: errorsAll ? errorDob() : null,
                       ),
                     ),
                   )
@@ -472,12 +490,17 @@ class _SignUpState extends State<SignUp> {
                                   errorsPassR = true;
                                 else
                                   errorsPassR = false;
+                                if (errorDob() != null)
+                                  errorsDob = true;
+                                else
+                                  errorsDob = false;
                                 errorsAll = errorsUserName |
                                     errorsName |
                                     errorsSurName |
                                     errorsEmail |
                                     errorsPass |
-                                    errorsPassR;
+                                    errorsPassR |
+                                    errorsDob;
                               });
                               if (!errorsAll) {
                                 /*datos.add(userNameController.text);
@@ -485,14 +508,21 @@ class _SignUpState extends State<SignUp> {
                                     surNameController.text);
                                 datos.add(emailController.text); */
 
+                                String dob = yearController.text +
+                                    "-" +
+                                    monthController.text +
+                                    "-" +
+                                    dayController.text;
+
                                 postUser(
-                                  userNameController.text,
-                                  nameController.text +
-                                      ' ' +
-                                      surNameController.text,
-                                  emailController.text,
-                                  passController.text,
-                                ).then((value) {
+                                        userNameController.text,
+                                        nameController.text +
+                                            ' ' +
+                                            surNameController.text,
+                                        emailController.text,
+                                        passController.text,
+                                        dob)
+                                    .then((value) {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
