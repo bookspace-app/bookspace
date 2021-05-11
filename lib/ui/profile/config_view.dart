@@ -1,3 +1,4 @@
+import 'package:bookspace/controllers/user_controller.dart';
 import 'package:bookspace/ui/login/sign_in.dart';
 import 'package:bookspace/ui/profile/edit_profile_view.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,10 @@ class ConfigView extends StatefulWidget {
 
 class _ConfigViewState extends State<ConfigView> {
   int idUser;
+
+  void logout(int id) async {
+    UserController.logout(id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +74,7 @@ class _ConfigViewState extends State<ConfigView> {
               onPressed: () {
                 globals.id = idUser;
                 print(globals.id);
+                logout(globals.id);
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => SignIn()),

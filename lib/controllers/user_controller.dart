@@ -189,7 +189,6 @@ class UserController {
 
   // GET favorite categories by ID
   static Future<List<String>> getCategories(int id) async {
-    String cat;
     List<String> categories;
     try {
       Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id/categories");
@@ -209,15 +208,11 @@ class UserController {
 
       print('Response status: $statusCode\n Response body: $requestBody\n');
       if (statusCode == 200) {
-        final data = jsonDecode(response.body) as Map;
-        for (String name in data.keys) {
-          final value = data[name];
-          print('[$name:$value]');
-        }
-        print("\n");
-        cat = json.decode(response.body);
-        categories = cat.split(" ");
+        categories = json.decode(response.body);
       }
+      json.decode(response.body).forEach((result) {
+        categories.add(result);
+      });
     } catch (e) {
       print('error caught: $e');
     }
@@ -258,6 +253,11 @@ class UserController {
     } catch (e) {
       print('error caught: $e');
     }
+    return true;
+  }
+
+  //DELETE USER KEY (LOGOUT)
+  static Future<bool> logout(int id) async {
     return true;
   }
 }

@@ -60,6 +60,10 @@ class _EditProfileViewState extends State<EditProfileView> {
     _id = _user.id;
   }
 
+  void printList(List<String> cat) {
+    for (int i = 0; i < cat.length; ++i) print(cat[i]);
+  }
+
   void getCategories() async {
     List<String> cat = await UserController.getCategories(globals.id);
     categories = cat;
@@ -272,7 +276,7 @@ class _EditProfileViewState extends State<EditProfileView> {
               //color: Colors.orange,
               constraints: BoxConstraints.expand(height: 85, width: 100),
               child: TextFieldTags(
-                  initialTags: ['hola', 'adeu'], //categories,
+                  initialTags: categories,
                   tagsStyler: TagsStyler(
                       tagTextStyle: TextStyle(fontWeight: FontWeight.bold),
                       tagDecoration: BoxDecoration(
@@ -296,16 +300,16 @@ class _EditProfileViewState extends State<EditProfileView> {
                       helperText: "",
                       hintText: "put categories"),
                   onTag: (tag) {
-                    categories.add(tag);
+                    //categories.add(tag);
                   },
                   onDelete: (tag) {
-                    bool trobat = false;
+                    /*bool trobat = false;
                     for (int i = 0; i < categories.length && !trobat; i++) {
                       if (categories[i] == tag) {
                         categories.removeAt(i);
                         trobat = true;
                       }
-                    }
+                    }*/
                   })),
           //BUTTON SUBMIT
           Container(
@@ -315,6 +319,7 @@ class _EditProfileViewState extends State<EditProfileView> {
               child: ElevatedButton(
                 onPressed: () {
                   //setState(() {
+                  printList(categories);
                   _name = nameController.text;
                   _username = usernameController.text;
                   _email = emailController.text;
