@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bookspace/controllers/comment_controller.dart';
 import 'package:bookspace/controllers/publication_controller.dart';
 import 'package:bookspace/models/comment.dart';
@@ -93,22 +95,39 @@ class _PublicationViewState extends State<PublicationView> {
     super.dispose();
   }
 
+  void refreshWrapper() {
+    setState(() => refreshed = true);
+    refresh();
+  }
+
   // Refresh the view on update
   // When new comments are added
   void refresh() {
+    print('Refreshed state: $refreshed');
+    print('==================================');
+    print('REFRESHING');
+    print('==================================');
     print('CURRENT RATE: $rate');
     print('CURRENT LOADED:$loadedComments');
     if (widget.isPublication) {
       getPublication(widget.id);
-      print('CURRENT LIMIT: ${_publication.comments}');
     } else {
       getComment(widget.id);
-      print('CURRENT LIMIT: ${_comment.replies}');
     }
-
-    setState(() {
-      refreshed = false;
-    });
+    print('==================================');
+    print('REFRESHED');
+    print('==================================');
+    if (refreshed) {
+      Future.delayed(Duration(milliseconds:500)).then((_) {
+        refresh();
+        setState(() {
+          refreshed = false;
+          return null;
+        });
+      });
+    } else {
+      return null;
+    }
   }
 
   @override
@@ -153,21 +172,25 @@ class _PublicationViewState extends State<PublicationView> {
       );
     }
 
-    print('NUMBER OF LOADED COMMENTS:$loadedComments');
-    print('PUBLICATION:$_publication');
-    print('COMMENT:$_comment');
-    print('COMMENTS: $_comments');
+    for (var i = 0; i < loadedComments; i++) {
+      print('${widget.isPublication}  ${_comments[i].parentId}');
+      print((_comments[i].parentId == null && widget.isPublication) );
+      print((_comments[i].parentId>0 && !(widget.isPublication)) );
+    }
     // Return the view if the objects are loaded (are not null)
-    return ((_publication != null || _comment != null) && _comments != null)
-        ? ListView(
-            children: <Widget>[
-              // Publication hero is the top widget that
-              // shows the content of the contribution
-              PublicationHero(
-                publication: (widget.isPublication) ? _publication : _comment,
-                isPublication: widget.isPublication,
-              ),
-              // User card is the widget of the author
+    return ((_publication != null || _comment != null) && _comments != null)? ListView(
+       controller: _controller,
+       children: <Widget>[
+         // Publication hero is the top widget that
+         // shows the content of the contribution
+          PublicationHero(
+            publication: (widget.isPublication) 
+            ? _publication
+            : _comment,
+            isPublication: widget.isPublication,
+            scrollOnReply: scrollDown
+          ),
+         // User card is the widget of the author
               UserCard(
                 commentId: _publication.id,
                 author: (widget.isPublication)

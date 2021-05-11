@@ -1,11 +1,58 @@
+import 'package:bookspace/models/mention.dart';
 import 'package:bookspace/utils/humanize.dart';
 import 'package:flutter/material.dart';
+import 'package:bookspace/globals.dart' as globals;
 
-class Mention extends StatelessWidget {
-  const Mention({Key key}) : super(key: key);
+class MentionCard extends StatelessWidget {
+
+  final Mention mention;
+
+  const MentionCard({
+    Key key, 
+    this.mention
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
+    Widget ParsedContent(String content, bool atTitle) {
+
+      RegExp usernameExp = new RegExp(r"\@\w+");
+      Iterable<Match> usernameMatches = usernameExp.allMatches(content);
+      List<String> usernames = [];
+      usernameMatches.forEach((m)=>usernames.add(m.group(0)));
+      RegExp wordsExp = new RegExp(r"[^\@\w+]|[-'a-zA-ZÀ-ÖØ-öø-ÿ-@]+|[!$%^&*()_+|~=`{}#@\[\]:;'’<>?,.\/"
+        '"”'
+        "]+");
+      Iterable wordsMatches = wordsExp.allMatches(content);
+
+      return RichText(
+        text: TextSpan(
+          //text: content,
+          style: DefaultTextStyle.of(context).style,
+          children: [
+            for (Match m in wordsMatches)
+            usernames.contains(m.group(0).trim())
+            ? TextSpan(
+              text: m.group(0), 
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: atTitle? 20: 16,
+                color: globals.primary,
+              ),
+            )
+            : TextSpan(
+              text: '${m.group(0)}', 
+              style: TextStyle(
+                fontWeight: atTitle? FontWeight.bold: FontWeight.normal,
+                fontSize: atTitle? 20: 16,
+              )
+            )
+          ],
+        ),
+      );
+    }
+
     return Container(
       child: Container(
         decoration: BoxDecoration(
@@ -21,15 +68,16 @@ class Mention extends StatelessWidget {
               height: 50,
               child: Row(
                 children: <Widget> [
-                  Expanded(
-                    flex: 8,
-                    child: Container(
+                  Container(
+                    width: 250,
                       padding: EdgeInsets.only(left: 10),
                       // color: Colors.blue[200],
                       child: Row(
                         children: <Widget>[
                           Image.asset('./assets/images/No_pic.png'),   
-                          Container(
+                          Flexible(
+                            child:Container(
+                            //color: Colors.pink[200],
                             padding: EdgeInsets.only(left: 10),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -37,15 +85,16 @@ class Mention extends StatelessWidget {
                               children: <Widget> [
                                 Container(
                                   child: Text(
-                                    '@{author.username}',
+                                    '@${mention.author.name}',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold
                                     ),
+                                    overflow: TextOverflow.ellipsis,
                                   )
                                 ),
                                 Container(
                                   child: Text(
-                                    '{author.rank}',
+                                    '${mention.author.rank}',
                                     style: TextStyle(
                                       fontWeight: FontWeight.normal
                                     ),
@@ -53,11 +102,11 @@ class Mention extends StatelessWidget {
                                 ),
                               ],
                             )
-                          )
+                          ))
                         ],
                       )
-                    )
-                  ),
+                    ),
+                  
                   Expanded(
                     flex: 5,
                     child: Container(
@@ -69,7 +118,7 @@ class Mention extends StatelessWidget {
                             children: <Widget> [
                               Container(
                                 child: Text(
-                                  'Pregunta',
+                                  '${mention.type}',
                                   style: TextStyle(
                                     fontWeight: FontWeight.normal
                                   ),
@@ -77,8 +126,7 @@ class Mention extends StatelessWidget {
                               ),
                               Container(
                                 child: Text(
-                                  //'{TimeAgo.timeAgoSinceDate(dop)}',
-                                  'Hace 1 segundo',
+                                  '${TimeAgo.timeAgoSinceDate(mention.dop)}',
                                   style: TextStyle(
                                     fontWeight: FontWeight.normal
                                   ),
@@ -98,7 +146,7 @@ class Mention extends StatelessWidget {
                   Expanded(
                     child: Container(
                       padding: EdgeInsets.all(5),
-                      child: Text("Life itself is an exciting gift no matter how unhappy, brutal, boring and torturing It is because without life you exist nowhere, you feel nothing and you are nothing. So, Life actually gives you the chance to go for an adventure of finding happiness for yourself and to find the happiness you have to feel the sadness of life which is the only way to find happiness. And, In between this endless cycle of happiness and sadness life exists.")
+                      child: ParsedContent(mention.content, false)
                     ),
                   ),
                 ],

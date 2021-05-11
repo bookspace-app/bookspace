@@ -4,6 +4,7 @@ import 'package:bookspace/app_localizations.dart';
 import 'package:bookspace/ui/activity/activity_view.dart';
 import 'package:bookspace/ui/chat/chat_list_view.dart';
 import 'package:bookspace/ui/home/home_view.dart';
+import 'package:bookspace/ui/profile/config_view.dart';
 import 'package:bookspace/ui/profile/edit_profile_view.dart';
 import 'package:bookspace/ui/profile/profile_view.dart';
 import 'package:bookspace/ui/publication/create_publication_view.dart';
@@ -104,19 +105,47 @@ class _MainViewState extends State<MainView> {
         actions: (_rendered == "profile")
             ? [
                 PopupMenuButton<String>(onSelected: (value) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => EditProfileView()),
-                  );
+                  if (value == "Editar perfil") {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EditProfileView()),
+                    );
+                  } else if (value == "Configuration") {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ConfigView()),
+                    );
+                  }
                 }, itemBuilder: (BuildContext context) {
                   return [
                     PopupMenuItem(
-                      child: Text(AppLocalizations.of(context)
-                          .translate("editProfile")),
+                      child: Row(
+                        children: [
+                          Icon(Icons.edit),
+                          Container(
+                            margin: EdgeInsets.only(left: 10),
+                            child: Text(AppLocalizations.of(context)
+                                .translate("editProfile")),
+                          )
+                        ],
+                      ),
                       value: "Editar perfil",
-                    )
+                    ),
+                    PopupMenuItem(
+                      child: Row(
+                        children: [
+                          Icon(Icons.brightness_low_rounded),
+                          Container(
+                            margin: EdgeInsets.only(left: 10),
+                            child: Text('Configuration'),
+                          )
+                        ],
+                      ),
+                      value: "Configuration",
+                    ),
                   ];
-                })
+                }),
                 /*
             IconButton(
                 icon: Icon(Icons.more_vert),
