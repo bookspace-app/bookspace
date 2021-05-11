@@ -8,6 +8,7 @@ import 'package:bookspace/ui/profile/config_view.dart';
 import 'package:bookspace/ui/profile/edit_profile_view.dart';
 import 'package:bookspace/ui/profile/profile_view.dart';
 import 'package:bookspace/ui/publication/create_publication_view.dart';
+import 'package:bookspace/ui/publication/edit_publication.dart';
 import 'package:bookspace/ui/publication/publication_view.dart';
 import 'package:bookspace/ui/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
