@@ -108,8 +108,8 @@ class UserController {
   }
 
   //POST user
-  static Future<User> postUser(
-      String username, String name, String email, String pass) async {
+  static Future<User> postUser(String username, String name, String email,
+      String pass, String dob) async {
     User user;
 
     try {
@@ -127,7 +127,7 @@ class UserController {
         'name': name,
         'email': email,
         'password': pass,
-        'dob': "1996-04-26",
+        'dob': dob,
       };
 
       // Make POST request
@@ -173,8 +173,6 @@ class UserController {
       // Make POST request
       http.Response response =
           await http.put(uri, headers: headers, body: json.encode(body));
-
-      print("HOLIIIII" + response.body.toString());
 
       int statusCode = response.statusCode;
 
@@ -224,13 +222,11 @@ class UserController {
     }
     return false;
   }
-
-  //GET USER TAGS NAMES
-  static Future<List<String>> getUserTags(int id) async {
-    List<Tag> tags = [];
-    List<String> tags_string = [];
+  // GET favorite categories by ID
+  static Future<List<String>> getCategories(int id) async {
+    List<String> categories;
     try {
-      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/$id/tags");
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id/categories");
 
       // Define headers
       Map<String, String> headers = {
@@ -247,16 +243,56 @@ class UserController {
 
       print('Response status: $statusCode\n Response body: $requestBody\n');
       if (statusCode == 200) {
-        json.decode(response.body).forEach((result) {
-          tags.add(Tag.fromJson(result));
-          for (int i = 0; i < tags.length; i++) {
-            tags_string[i] = tags[i].name;
-          }
-        });
+        categories = json.decode(response.body);
+      }
+      json.decode(response.body).forEach((result) {
+        categories.add(result);
+      });
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return categories;
+  }
+
+  //UPDATE USER CATEGORIES
+  static Future<bool> updateCategories(List<String> cat, int id) async {
+    List<String> cat;
+    try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id/categories");
+
+      //define headers
+      Map<String, String> headers = {
+        //"Authorization": "JWT $authToken",
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
+
+      //Define body
+      Map<String, List<String>> body = {
+        'categories': cat,
+      };
+
+      // Make PUT request
+      http.Response response =
+          await http.put(uri, headers: headers, body: json.encode(body));
+
+      // Request status and body
+      int statusCode = response.statusCode;
+      String requestBody = response.body;
+
+      print('Response status: $statusCode\n Response body: $requestBody\n');
+
+      if (statusCode == 201) {
+        cat = json.decode(response.body);
       }
     } catch (e) {
       print('error caught: $e');
     }
-    return tags_string;
+    return true;
+  }
+
+  //DELETE USER KEY (LOGOUT)
+  static Future<bool> logout(int id) async {
+    return true;
   }
 }
