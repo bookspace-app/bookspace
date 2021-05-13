@@ -118,7 +118,7 @@ class _PublicationViewState extends State<PublicationView> {
     print('REFRESHED');
     print('==================================');
     if (refreshed) {
-      Future.delayed(Duration(milliseconds:500)).then((_) {
+      Future.delayed(Duration(milliseconds: 500)).then((_) {
         refresh();
         setState(() {
           refreshed = false;
@@ -129,6 +129,14 @@ class _PublicationViewState extends State<PublicationView> {
       return null;
     }
   }
+
+  final _controller = ScrollController();
+
+  void scrollDown() => _controller.animateTo(
+        _controller.position.maxScrollExtent,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.fastOutSlowIn,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -174,23 +182,21 @@ class _PublicationViewState extends State<PublicationView> {
 
     for (var i = 0; i < loadedComments; i++) {
       print('${widget.isPublication}  ${_comments[i].parentId}');
-      print((_comments[i].parentId == null && widget.isPublication) );
-      print((_comments[i].parentId>0 && !(widget.isPublication)) );
+      print((_comments[i].parentId == null && widget.isPublication));
+      print((_comments[i].parentId > 0 && !(widget.isPublication)));
     }
     // Return the view if the objects are loaded (are not null)
-    return ((_publication != null || _comment != null) && _comments != null)? ListView(
-       controller: _controller,
-       children: <Widget>[
-         // Publication hero is the top widget that
-         // shows the content of the contribution
-          PublicationHero(
-            publication: (widget.isPublication) 
-            ? _publication
-            : _comment,
-            isPublication: widget.isPublication,
-            scrollOnReply: scrollDown
-          ),
-         // User card is the widget of the author
+    return ((_publication != null || _comment != null) && _comments != null)
+        ? ListView(
+            controller: _controller,
+            children: <Widget>[
+              // Publication hero is the top widget that
+              // shows the content of the contribution
+              PublicationHero(
+                  publication: (widget.isPublication) ? _publication : _comment,
+                  isPublication: widget.isPublication,
+                  scrollOnReply: scrollDown),
+              // User card is the widget of the author
               UserCard(
                 commentId: _publication.id,
                 author: (widget.isPublication)
