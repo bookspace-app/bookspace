@@ -82,32 +82,31 @@ class CommentController {
 
   // POST comments
 
-  static Future<bool> createComment(Comment comment) async {    
-    
+  static Future<bool> createComment(Comment comment) async {
     Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/comments");
 
-    try{
-      Map<String,String> headers = {
+    try {
+      Map<String, String> headers = {
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
       };
 
       Map<String, dynamic> commentMap = comment.toJson();
       var body = json.encode(commentMap);
- 
+
       // Make POST request
-      http.Response response = await http.post(uri, headers: headers, body: body);
-      
-  /*print('Create comment response code: ${response.statusCode}: ${response.body}\n');*/
+      http.Response response =
+          await http.post(uri, headers: headers, body: body);
+
+      /*print('Create comment response code: ${response.statusCode}: ${response.body}\n');*/
 
       if (response.statusCode == 200) {
         return true;
-      }  
-    } catch(e) {
+      }
+    } catch (e) {
       print('error caught: $e');
     }
     return false;
-  } 
   }
 
   /*//UPDATE likes and dislikes
