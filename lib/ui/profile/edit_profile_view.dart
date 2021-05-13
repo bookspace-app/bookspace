@@ -120,7 +120,7 @@ class _EditProfileViewState extends State<EditProfileView> {
           titlePreEditText('Tags'),
 
           //EDIT TEXT TAGS. No lo hago con el metodo "editTextProfile" porque es distinto a los demás
-          Container(
+
           Container(
               //color: Colors.orange,
               constraints: BoxConstraints.expand(height: 85, width: 100),
