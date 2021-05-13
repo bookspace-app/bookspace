@@ -13,12 +13,14 @@ class PublicationHero extends StatelessWidget {
   final publication;
   final bool isPublication;
   final Function() scrollOnReply;
+  final Function() notifyOnNewVote;
 
   PublicationHero({
     Key key,
     this.publication,
     this.isPublication,
     @required this.scrollOnReply,
+    @required this.notifyOnNewVote,
   }) : super(key: key);
 
   Future<int> like(int Pid, int Uid) async {
@@ -133,6 +135,7 @@ class PublicationHero extends StatelessWidget {
                                   child: GestureDetector(
                                     onTap: () {
                                       like(publication.id, globals.id);
+                                      notifyOnNewVote();
                                       /*Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -180,6 +183,7 @@ class PublicationHero extends StatelessWidget {
                                   child: GestureDetector(
                                     onTap: () {
                                       dislike(publication.id, globals.id);
+                                      notifyOnNewVote();
                                       /*Navigator.push(
                                         context,
                                         MaterialPageRoute(

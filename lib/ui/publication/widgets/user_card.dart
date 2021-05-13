@@ -19,6 +19,7 @@ class UserCard extends StatelessWidget {
   final DateTime dop;
   final bool principal;
   final bool isPublication;
+  final Function() notifyOnChange;
 
   int likes;
   int dislikes;
@@ -38,6 +39,7 @@ class UserCard extends StatelessWidget {
     this.likes,
     this.dislikes,
     this.replies,
+    @required this.notifyOnChange
   }) : super(key: key);
 
   void deleteP(int id) async {
@@ -130,7 +132,7 @@ class UserCard extends StatelessWidget {
                                 actions: <Widget>[
                                   TextButton(
                                     onPressed: () {
-                                      Navigator.pop(context);
+                                      notifyOnChange();
                                     },
                                     child: const Text('OK'),
                                   ),

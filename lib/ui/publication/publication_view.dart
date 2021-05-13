@@ -195,7 +195,9 @@ class _PublicationViewState extends State<PublicationView> {
               PublicationHero(
                   publication: (widget.isPublication) ? _publication : _comment,
                   isPublication: widget.isPublication,
-                  scrollOnReply: scrollDown),
+                  scrollOnReply: scrollDown,
+                  notifyOnNewVote: refreshWrapper
+                ),
               // User card is the widget of the author
               UserCard(
                 commentId: _publication.id,
@@ -237,6 +239,7 @@ class _PublicationViewState extends State<PublicationView> {
                     likes: _comments[i].likes,
                     dislikes: _comments[i].dislikes,
                     replies: _comments[i].replies,
+                    notifyOnChange: refreshWrapper
                   ),
                 ])),
               // If the number of loaded comments has
@@ -255,7 +258,7 @@ class _PublicationViewState extends State<PublicationView> {
                       ? _publication.id
                       : _comment.publicationId,
                   commentId: (widget.isPublication) ? null : _comment.id,
-                  notifyOnNewComment: refresh)
+                  notifyOnNewComment: refreshWrapper)
             ],
           )
         : Center(child: CircularProgressIndicator());
