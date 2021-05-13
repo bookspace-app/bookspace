@@ -70,7 +70,7 @@ class _ActivityViewState extends State<ActivityView> {
                       builder: (context) => MainView(
                         renderIndex: 'home',
                         view: PublicationView(
-                          id: 1,// TODO:  _mentions[index].mentionUri,
+                          id: _mentions[index].id,
                           isPublication: (_mentions[index].type == 'publication'),
                         ),
                       )
