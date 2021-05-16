@@ -1,13 +1,16 @@
 import 'package:bookspace/app_localizations.dart';
 import 'package:bookspace/controllers/publication_controller.dart';
+import 'package:bookspace/controllers/tag_controller.dart';
 import 'package:bookspace/controllers/user_controller.dart';
 import 'package:bookspace/models/publication.dart';
+import 'package:bookspace/models/tag.dart';
 import 'package:bookspace/models/user.dart';
 import 'package:bookspace/ui/main_view.dart';
 import 'package:bookspace/ui/profile/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:textfield_tags/textfield_tags.dart';
+import 'package:smart_select/smart_select.dart';
 
 import 'package:bookspace/globals.dart' as globals;
 
@@ -23,7 +26,6 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
   User _user;
   var titleController = TextEditingController();
   var descController = TextEditingController();
-  var genreController = TextEditingController();
 
   bool errorsTitle = false;
   bool errorsDesc = false;
@@ -32,12 +34,32 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
 
   Publication myPublication;
 
+  List<int>  selectedGenres = [0];
+
+  List<Tag> _allTags;
+  List<String> selectedTags = [];
+  List<int> publTags;
+
   void getUser() async {
-    User user =
-        await UserController.getUser(globals.id); //TO-DO Get current user id
+    User user = await UserController.getUser(globals.id); //TO-DO Get current user id
     if (!disposed) {
       setState(() => _user = user);
     }
+  }
+
+  void getAllTags() async {
+    List<Tag> allTags = await TagController.getAllTags();
+    if (!disposed) {
+      setState(() => _allTags = allTags);
+    }
+  }
+
+  void createTag(User user, String name, int publId) async {
+    Tag tag;
+    tag.authorId = user.id;
+    tag.name = name;
+    tag.publicationId = publId;
+    int response = await TagController.createTag(tag); 
   }
 
   void createPublication() async {
@@ -51,6 +73,34 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                   view: ProfileView(),
                 )),
         ModalRoute.withName('/'));
+  }
+
+  void treatTags(List<String> selectedTags) {
+    getAllTags();
+
+    for (var i = 0; i < selectedTags.length; i++){
+      String currentTag = selectedTags[i];
+      bool created = false;
+      for (var j = 0; j < _allTags.length; j++){
+        if(currentTag == _allTags[j].name) {
+          created = true;
+          break;
+        }
+      }
+      if (!created) createTag(_user, currentTag, myPublication.id);
+    }
+
+    for (var i = 0; i < selectedTags.length; i++){
+      String currentTag = selectedTags[i];
+      bool created = false;
+      for (var j = 0; j < _allTags.length; j++){
+        if(currentTag == _allTags[j].name) {
+          publTags.add(_allTags[j].id);
+          break;
+        }
+      }
+    }
+
   }
 
 //Error Check
@@ -73,9 +123,9 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
   }
 
   String errorGenre() {
-    if (genreController.text.isEmpty)
+    if (selectedGenres.length < 2)
       return "${AppLocalizations.of(context).translate("noGenre")}";
-    return null;
+    return "";
   }
 
   bool disposed = false;
@@ -85,7 +135,6 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
     // Clean up the controller when the widget is disposed.
     titleController.dispose();
     descController.dispose();
-    genreController.dispose();
     super.dispose();
   }
 
@@ -106,7 +155,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                 padding: EdgeInsets.fromLTRB(15, 15, 15, 2),
                 child: Row(children: [
                   Text(
-                    "Título",
+                    "${AppLocalizations.of(context).translate("titulo")}",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18.0,
@@ -118,7 +167,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                 padding: EdgeInsets.fromLTRB(15, 2, 15, 2),
                 child: Row(children: [
                   Text(
-                    "Sé específico a la hora de preguntar",
+                    "${AppLocalizations.of(context).translate("tituloDesc")}",
                     style: TextStyle(fontSize: 14.0, color: Colors.grey),
                   ),
                 ]),
@@ -135,7 +184,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                           decoration: InputDecoration(
                               filled: true,
                               fillColor: Colors.white,
-                              hintText: "Escribe tu pregunta aquí...",
+                              hintText: "${AppLocalizations.of(context).translate("tituloHelpTxt")}",
                               border: OutlineInputBorder(),
                               errorText: errorsAll ? errorTitle() : null,
                               suffixIcon: titleController.text.length > 0
@@ -153,7 +202,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                 padding: EdgeInsets.fromLTRB(15, 5, 15, 2),
                 child: Row(children: [
                   Text(
-                    "Descripción",
+                    "${AppLocalizations.of(context).translate("descripcion")}",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18.0,
@@ -162,10 +211,10 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                 ]),
               ),
               Container(
-                padding: EdgeInsets.fromLTRB(15, 2, 15, 2),
+                padding: EdgeInsets.fromLTRB(10, 2, 15, 2),
                 width: 400,
                 child: Text(
-                  "Incluye toda la información necesaria para que los demás usuarios puedan dar una respuesta ",
+                  "${AppLocalizations.of(context).translate("descripcionDesc")}",
                   style: TextStyle(fontSize: 14.0, color: Colors.grey),
                 ),
               ),
@@ -235,7 +284,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                 padding: EdgeInsets.fromLTRB(15, 5, 15, 2),
                 child: Row(children: [
                   Text(
-                    "Género",
+                    "${AppLocalizations.of(context).translate("genero")}",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18.0,
@@ -247,34 +296,45 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                 padding: EdgeInsets.fromLTRB(15, 2, 15, 2),
                 child: Row(children: [
                   Text(
-                    "Escoge el género literario que más se adecue",
+                    "${AppLocalizations.of(context).translate("generoDesc")}",
                     style: TextStyle(fontSize: 14.0, color: Colors.grey),
                   ),
                 ]),
               ),
               Container(
-                padding: EdgeInsets.fromLTRB(15, 2, 15, 5),
+                padding: EdgeInsets.fromLTRB(15, 2, 15, 0),
                 child: Row(children: [
                   Expanded(
-                      child: TextFormField(
-                          controller: genreController,
-                          onChanged: (text) {
-                            setState(() {});
-                          },
-                          decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Colors.white,
-                              border: OutlineInputBorder(),
-                              errorText: errorsAll ? errorGenre() : null,
-                              suffixIcon: genreController.text.length > 0
-                                  ? IconButton(
-                                      icon: Icon(Icons.clear),
-                                      onPressed: () {
-                                        setState(() {
-                                          genreController.clear();
-                                        });
-                                      })
-                                  : null)))
+                    child: SmartSelect<int>.multiple(
+                      modalFilter: true,
+                      modalTitle: "${AppLocalizations.of(context).translate("genero")}",
+                      placeholder: 'Escoge el género literario que más se adecue',
+                      modalFilterHint: "HEY",
+                      modalHeaderStyle: S2ModalHeaderStyle(
+                          backgroundColor: globals.primary,
+                          textStyle: TextStyle(color: Colors.black),
+                          iconTheme: IconThemeData(color: Colors.black, opacity: 1),
+                          actionsIconTheme: IconThemeData(color: Colors.black, opacity: 1),
+                        ),
+                      value: selectedGenres,
+                      choiceItems: globals.genres.map<S2Choice<int>>((S2Choice<int> x) {
+                        return S2Choice<int>(
+                          value: x.value,
+                          title: AppLocalizations.of(context).translate(x.title),
+                        );
+                      }).toList(),
+                      onChange: (state) => setState(() => selectedGenres = state.value),
+                    )
+                  ),
+                ]),
+              ),
+              Container(
+                padding: EdgeInsets.fromLTRB(25, 0, 15, 2),
+                child: Row(children: [
+                  Text(
+                    errorsAll ? errorGenre() : "",
+                    style: TextStyle(fontSize: 12.0, color: Colors.red),
+                  ),
                 ]),
               ),
               Container(
@@ -293,7 +353,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                 padding: EdgeInsets.fromLTRB(15, 2, 15, 2),
                 child: Row(children: [
                   Text(
-                    "Pon las etiquetas que describan mejor tu pregunta",
+                    "${AppLocalizations.of(context).translate("tagsDesc")}",
                     style: TextStyle(fontSize: 14.0, color: Colors.grey),
                   ),
                 ]),
@@ -302,6 +362,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                   //color: Colors.orange,
                   padding: EdgeInsets.fromLTRB(15, 2, 15, 0),
                   child: TextFieldTags(
+                    initialTags: selectedTags,
                       tagsStyler: TagsStyler(
                           tagTextStyle: TextStyle(fontWeight: FontWeight.bold),
                           tagDecoration: BoxDecoration(
@@ -318,8 +379,12 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                         textFieldFilled: true,
                         textFieldFilledColor: Colors.white,
                       ),
-                      onTag: (tag) {},
-                      onDelete: (tag) {})),
+                      onTag: (tag) {
+                        selectedTags.add(tag);                        
+                      },
+                      onDelete: (tag) {}
+                    )
+                  ),
               Container(
                 //color: Colors.pink,
                 padding: EdgeInsets.fromLTRB(15, 0, 15, 5),
@@ -330,35 +395,35 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                       .center, //Center Row contents vertically,
                   children: <Widget>[
                     SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.30,
-                        height: 35,
-                        child: RaisedButton(
-                            textColor: Colors.white,
-                            color: Color.fromRGBO(250, 198, 65, 1),
-                            child: Text(
-                              'Publicar',
-                              style: TextStyle(
-                                  fontSize: 18.0, color: Colors.black),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                errorsTitle = (errorTitle() != null) ? true : false;
-                                errorsDesc = (errorDesc() != null) ? true : false;
-                                errorsGenre = (errorGenre() != null) ? true : false;
-                                errorsAll = errorsTitle | errorsDesc | errorsGenre;
-                              });
-                              if (!errorsAll) {
-                                getUser();
-                                myPublication = Publication();
-                                myPublication.title = titleController.text;
-                                myPublication.content = descController.text;
-                                myPublication.authorId = globals
-                                    .id; //TO-DO  = _user.id; now its hardcoded
-                                myPublication.category = genreController
-                                    .text; //TO-DO Create genre selector and link it here, now its hardcoded
-                                createPublication();
-                              }
-                            }))
+                      width: MediaQuery.of(context).size.width * 0.30,
+                      height: 35,
+                      child: RaisedButton(
+                          textColor: Colors.white,
+                          color: Color.fromRGBO(250, 198, 65, 1),
+                          child: Text(
+                            '${AppLocalizations.of(context).translate("publicar")}',
+                            style: TextStyle(
+                              fontSize: 18.0, color: Colors.black),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              errorsTitle = (errorTitle() != null) ? true : false;
+                              errorsDesc = (errorDesc() != null) ? true : false;
+                              errorsGenre = (errorGenre() != null) ? true : false;
+                              errorsAll = errorsTitle | errorsDesc | errorsGenre;
+                            });
+                            if (!errorsAll) {
+                              getUser();
+                              myPublication = Publication();
+                              treatTags(selectedTags);
+                              myPublication.title = titleController.text;
+                              myPublication.content = descController.text;
+                              myPublication.authorId = globals.id; //TO-DO  = _user.id; now its hardcoded
+                              myPublication.category = globals.genres[selectedGenres[1]-1].title; //TO-DO Enable multi genre posting
+                              myPublication.tags = publTags;
+                              createPublication();
+                            }
+                          }))
                   ],
                 ),
               ),

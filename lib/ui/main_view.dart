@@ -98,34 +98,35 @@ class _MainViewState extends State<MainView> {
         backgroundColor: Colors.white,
         leadingWidth: 100,
         leading: Image.asset('./assets/images/No_pic.png',
-            fit: BoxFit
-                .fitHeight), //TO-DO: Hacer mas grande el logo de la AppBar
+            fit: BoxFit.fitHeight
+            ), //TO-DO: Hacer mas grande el logo de la AppBar
         actions: (_rendered == "profile")
-            ? [
-                PopupMenuButton<String>(onSelected: (value) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => EditProfileView()),
-                  );
-                }, itemBuilder: (BuildContext context) {
-                  return [
-                    PopupMenuItem(
-                      child: Text(AppLocalizations.of(context)
-                          .translate("editProfile")),
-                      value: "Editar perfil",
-                    )
-                  ];
-                })
-                /*
-            IconButton(
-                icon: Icon(Icons.more_vert),
-                iconSize: 40, 
-                color: Colors.grey,
-                onPressed: () { },
-            ),
-            */
-              ]
-            : null,
+          ? [
+              PopupMenuButton<String>(onSelected: (value) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EditProfileView()),
+                );
+              }, 
+              itemBuilder: (BuildContext context) {
+                return [
+                  PopupMenuItem(
+                    child: Text(AppLocalizations.of(context)
+                        .translate("editProfile")),
+                    value: "Editar perfil",
+                  )
+                ];
+              })
+              /*
+              IconButton(
+                  icon: Icon(Icons.more_vert),
+                  iconSize: 40, 
+                  color: Colors.grey,
+                  onPressed: () { },
+              ),
+              */
+          ]
+          : null,
       ),
       body: widget.view ??
           Container(

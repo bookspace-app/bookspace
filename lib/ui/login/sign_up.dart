@@ -54,7 +54,6 @@ class _SignUpState extends State<SignUp> {
     if (!disposed) {
       setState(() => _users = users);
     }
-    print(users);
   }
 
   Future<void> postUser(
