@@ -19,6 +19,7 @@ class UserCard extends StatelessWidget {
   final DateTime dop;
   final bool principal;
   final bool isPublication;
+  final Function() notifyOnChange;
 
   int likes;
   int dislikes;
@@ -38,15 +39,16 @@ class UserCard extends StatelessWidget {
     this.likes,
     this.dislikes,
     this.replies,
+    @required this.notifyOnChange
   }) : super(key: key);
 
   void deleteP(int id) async {
-    int statuscode = await PublicationController.deletePublication(id);
+    var statuscode = await PublicationController.deletePublication(id);
     print(statuscode);
   }
 
   void deleteC(int id) async {
-    int statuscode = await CommentController.deleteComment(id);
+    var statuscode = await CommentController.deleteComment(id);
     print(statuscode);
   }
 
@@ -119,7 +121,7 @@ class UserCard extends StatelessWidget {
                     flex: 1,
                     //color: Colors.blue[200],
                     child: PopupMenuButton<String>(onSelected: (value) {
-                      if (value == "Editar") {
+                      if (value == 'Editar') {
                         if (globals.id != author.id) {
                           showDialog(
                             context: context,
@@ -130,7 +132,7 @@ class UserCard extends StatelessWidget {
                                 actions: <Widget>[
                                   TextButton(
                                     onPressed: () {
-                                      Navigator.pop(context);
+                                      notifyOnChange();
                                     },
                                     child: const Text('OK'),
                                   ),
@@ -167,7 +169,7 @@ class UserCard extends StatelessWidget {
                             },
                           );
                         }
-                      } else if (value == "Borrar") {
+                      } else if (value == 'Borrar') {
                         if (globals.id == author.id) {
                           if (isPublication) {
                             deleteP(commentId);
@@ -195,7 +197,7 @@ class UserCard extends StatelessWidget {
                             },
                           );
                         }
-                      } else if (value == "Fav") {
+                      } else if (value == 'Fav') {
                         if (!isPublication) {
                           showDialog(
                             context: context,
@@ -215,12 +217,14 @@ class UserCard extends StatelessWidget {
                               );
                             },
                           );
-                        } else
+                        } else {
                           print('Tap');
+                        }
                       }
                     }, itemBuilder: (BuildContext context) {
                       return [
                         PopupMenuItem(
+                          value: 'Editar',
                           child: Row(
                             children: [
                               Icon(Icons.edit),
@@ -230,9 +234,9 @@ class UserCard extends StatelessWidget {
                               )
                             ],
                           ),
-                          value: "Editar",
                         ),
                         PopupMenuItem(
+                          value: 'Borrar',
                           child: Row(
                             children: [
                               Icon(Icons.delete),
@@ -242,9 +246,9 @@ class UserCard extends StatelessWidget {
                               )
                             ],
                           ),
-                          value: "Borrar",
                         ),
                         PopupMenuItem(
+                          value: 'Fav',
                           child: Row(
                             children: [
                               Icon(Icons.favorite),
@@ -254,7 +258,6 @@ class UserCard extends StatelessWidget {
                               )
                             ],
                           ),
-                          value: "Fav",
                         ),
                       ];
                     }))
@@ -373,7 +376,7 @@ class UserCard extends StatelessWidget {
                                               child: GestureDetector(
                                                 onTap: () {
                                                   print(
-                                                      'Goto comment $commentId');
+                                                      'Go to comment $commentId');
                                                   Navigator.push(
                                                     context, // TODO: pass id to PublicationView
                                                     MaterialPageRoute(
