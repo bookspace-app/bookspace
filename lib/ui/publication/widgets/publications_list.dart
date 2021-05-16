@@ -80,8 +80,10 @@ class _PublicationsListState extends State<PublicationsList> {
         })
       );
     } else {
-      return Container(
-       child: Text('No hay publis aun'),
+      return Center(
+        child: Container(
+          child: Text('No hay publis aun'),
+        )
       );
     }
   }
