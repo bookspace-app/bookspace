@@ -95,6 +95,9 @@ class _EditProfileViewState extends State<EditProfileView> {
 
   //UPDATE CATEGORIES
   void updateCategories(List<String> categories, int id) {
+    if (selectedGenres.length > 0) {
+      categoriesToString();
+    }
     UserController.updateCategories(categories, id);
   }
 
@@ -341,5 +344,18 @@ class _EditProfileViewState extends State<EditProfileView> {
       _imageFile = pickedFile;
     });
     _path = pickedFile.path;
+  }
+
+  void categoriesToString() {
+    categories = [];
+    for (int i = 0; i < selectedGenres.length; i++) {
+      categories[i] = globals.genres[selectedGenres[i + 1] - 1].title;
+    }
+  }
+
+  void categoriesToInt() {
+    for (int i = 0; i < categories.length; i++) {
+      selectedGenres[i + 1] = globals.genres[selectedGenres[i + 1] - 1].value;
+    }
   }
 }
