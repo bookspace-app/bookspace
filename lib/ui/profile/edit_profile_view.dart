@@ -13,7 +13,6 @@ import 'package:bookspace/globals.dart' as globals;
 import 'package:bookspace/ui/widgets/custom_input_box.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:textfield_tags/textfield_tags.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfileView extends StatefulWidget {
   EditProfileView({Key key}) : super(key: key);
@@ -45,6 +44,7 @@ class _EditProfileViewState extends State<EditProfileView> {
 
   User _user;
   List<String> categories = [""];
+  String _path;
 
   /*void addCategories(String cat) {
     print(cat);
@@ -125,7 +125,7 @@ class _EditProfileViewState extends State<EditProfileView> {
           editTextProfile(bioController, 'Description'),
           titlePreEditText('Tags'),
 
-          //EDIT TEXT TAGS. No lo hago con el metodo "editTextProfile" porque es distinto a los demás
+          //EDIT TEXT CATEGORIES. No lo hago con el metodo "editTextProfile" porque es distinto a los demás
           Container(
               //color: Colors.orange,
               constraints: BoxConstraints.expand(height: 85, width: 100),
@@ -174,6 +174,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   _bio = bioController.text;
                   putUser(_username, _name, _email, _bio, _id);
                   //updateCategories(categories, _id);
+                  //updatePhoto(_path);
 
                   Navigator.push(
                     context,
@@ -253,7 +254,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                 TextButton.icon(
                     onPressed: () {
                       takePhoto(ImageSource.camera);
-                      savePhoto();
+                      //savePhoto();
                     },
                     icon: Icon(Icons.camera_alt),
                     label: Text('Cámera')),
@@ -263,7 +264,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                 TextButton.icon(
                     onPressed: () {
                       takePhoto(ImageSource.gallery);
-                      savePhoto();
+                      //savePhoto();
                     },
                     icon: Icon(Icons.image),
                     label: Text('Galeria'))
@@ -325,14 +326,6 @@ class _EditProfileViewState extends State<EditProfileView> {
     setState(() {
       _imageFile = pickedFile;
     });
-    String path = pickedFile.path;
-    int i;
-  }
-
-  void savePhoto() async {
-    SharedPreferences saveImage = await SharedPreferences.getInstance();
-    print(
-        'Saved image path: ___________________________________________________________________________________' +
-            saveImage.toString());
+    _path = pickedFile.path;
   }
 }
