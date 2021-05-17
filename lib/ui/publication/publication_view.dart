@@ -195,9 +195,10 @@ class _PublicationViewState extends State<PublicationView> {
               PublicationHero(
                   publication: (widget.isPublication) ? _publication : _comment,
                   isPublication: widget.isPublication,
+                  myVote: false,
+                  myVoted: false,
                   scrollOnReply: scrollDown,
-                  notifyOnNewVote: refreshWrapper
-                ),
+                  notifyOnNewVote: refreshWrapper),
               // User card is the widget of the author
               UserCard(
                 commentId: _publication.id,
@@ -230,17 +231,18 @@ class _PublicationViewState extends State<PublicationView> {
                   ResponseCard(response: _comments[i]),
                   // The corresponding author of the comment
                   UserCard(
-                    commentId: _comments[i].id,
-                    parentId: _publication.id,
-                    author: _comments[i].author,
-                    dop: _comments[i].dop,
-                    principal: false,
-                    isPublication: false,
-                    likes: _comments[i].likes,
-                    dislikes: _comments[i].dislikes,
-                    replies: _comments[i].replies,
-                    notifyOnChange: refreshWrapper
-                  ),
+                      commentId: _comments[i].id,
+                      parentId: _publication.id,
+                      author: _comments[i].author,
+                      dop: _comments[i].dop,
+                      principal: false,
+                      isPublication: false,
+                      likes: _comments[i].likes,
+                      dislikes: _comments[i].dislikes,
+                      myVote: false,
+                      myVoted: false,
+                      replies: _comments[i].replies,
+                      notifyOnChange: refreshWrapper),
                 ])),
               // If the number of loaded comments has
               // not achieved its limit, we can

@@ -219,4 +219,52 @@ class PublicationController {
     }
     return null;
   }
+
+  //Post a favoritos
+  static Future<int> fav(int Pid, int Uid) async {
+    Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications/$Pid/fav/$Uid");
+
+    try {
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
+
+      // Make POST request
+      http.Response response = await http.post(uri, headers: headers);
+
+      //print('Create publication response code: ${response.statusCode}: ${response.body}\n');
+
+      if (response.statusCode == 200) {
+        return response.statusCode;
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return null;
+  }
+
+  //Delete de favoritos
+  static Future<int> delfav(int Pid, int Uid) async {
+    Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications/$Pid/fav/$Uid");
+
+    try {
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
+
+      // Make POST request
+      http.Response response = await http.delete(uri, headers: headers);
+
+      //print('Create publication response code: ${response.statusCode}: ${response.body}\n');
+
+      if (response.statusCode == 200) {
+        return response.statusCode;
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return null;
+  }
 }
