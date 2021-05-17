@@ -21,7 +21,7 @@ class MentionCard extends StatelessWidget {
       Iterable<Match> usernameMatches = usernameExp.allMatches(content);
       List<String> usernames = [];
       usernameMatches.forEach((m)=>usernames.add(m.group(0)));
-      RegExp wordsExp = new RegExp(r"[^\@\w+]|[-'a-zA-ZÀ-ÖØ-öø-ÿ-@]+|[!$%^&*()_+|~=`{}#@\[\]:;'’<>?,.\/"
+      RegExp wordsExp = new RegExp(r"[^\@\w+]|[-'a-zA-ZÀ-ÖØ-öø-ÿ-@-_]+|[!$%^&*()_+|~=`{}#@\[\]:;'’<>?,.\/"
         '"”'
         "]+");
       Iterable wordsMatches = wordsExp.allMatches(content);
