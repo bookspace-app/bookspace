@@ -13,6 +13,7 @@ import 'package:bookspace/globals.dart' as globals;
 import 'package:bookspace/ui/widgets/custom_input_box.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:textfield_tags/textfield_tags.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfileView extends StatefulWidget {
   EditProfileView({Key key}) : super(key: key);
@@ -60,12 +61,14 @@ class _EditProfileViewState extends State<EditProfileView> {
     }
   }*/
 
+  //GET USER
   void getUser() async {
     User user = await UserController.getUser(globals.id);
     if (!disposed) {
       setState(() => _user = user);
       //setState(() => _tags = tags);
     }
+    //Actualizar los edittext con lo de la base de datos
     setState(() {
       nameController.text = _user.name;
       usernameController.text = _user.username;
@@ -75,15 +78,18 @@ class _EditProfileViewState extends State<EditProfileView> {
     _id = _user.id;
   }
 
+  //GET CATEGORIES
   void getCategories() async {
     List<String> cat = await UserController.getCategories(globals.id);
     categories = cat;
   }
 
+  //UPDATE USER
   void putUser(String username, name, email, descrition, int id) async {
     UserController.updateUser(username, name, email, descrition, id);
   }
 
+  //UPDATE CATEGORIES
   void updateCategories(List<String> categories, int id) {
     UserController.updateCategories(categories, id);
   }
@@ -159,6 +165,7 @@ class _EditProfileViewState extends State<EditProfileView> {
               height: 40,
               margin: EdgeInsets.only(top: 20),
               child: ElevatedButton(
+                //Cuando hacemos submit -> update de user y volvemos a la vista de profile
                 onPressed: () {
                   _name = nameController.text;
                   _username = usernameController.text;
@@ -193,6 +200,7 @@ class _EditProfileViewState extends State<EditProfileView> {
     );
   }
 
+  //Widget de la imagen de perfil
   Widget imageProfile() {
     return Center(
       child: Stack(
@@ -224,6 +232,7 @@ class _EditProfileViewState extends State<EditProfileView> {
     );
   }
 
+  //Ventana que te aparece cuando le das a editar foto
   Widget bottomSheet() {
     return Container(
         height: 100,
@@ -244,7 +253,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                 TextButton.icon(
                     onPressed: () {
                       takePhoto(ImageSource.camera);
-                      //savePhoto();
+                      savePhoto();
                     },
                     icon: Icon(Icons.camera_alt),
                     label: Text('Cámera')),
@@ -254,7 +263,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                 TextButton.icon(
                     onPressed: () {
                       takePhoto(ImageSource.gallery);
-                      //savePhoto();
+                      savePhoto();
                     },
                     icon: Icon(Icons.image),
                     label: Text('Galeria'))
@@ -264,6 +273,7 @@ class _EditProfileViewState extends State<EditProfileView> {
         ));
   }
 
+  //Widget para tener un edit text standard y no volver a repetir siempre lo mismo
   Widget editTextProfile(TextEditingController controller, String hintText) {
     return Container(
         constraints: BoxConstraints.expand(height: 50, width: 100),
@@ -297,6 +307,7 @@ class _EditProfileViewState extends State<EditProfileView> {
         ));
   }
 
+  //Widget para hacer un text view standard y no repetirlo siempre
   Widget titlePreEditText(String title) {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 15, 0, 5),
@@ -314,10 +325,14 @@ class _EditProfileViewState extends State<EditProfileView> {
     setState(() {
       _imageFile = pickedFile;
     });
+    String path = pickedFile.path;
+    int i;
   }
 
-  /*void savePhoto() async {
+  void savePhoto() async {
     SharedPreferences saveImage = await SharedPreferences.getInstance();
-    print('Saved image path: ' + saveImage.toString());
-  }*/
+    print(
+        'Saved image path: ___________________________________________________________________________________' +
+            saveImage.toString());
+  }
 }
