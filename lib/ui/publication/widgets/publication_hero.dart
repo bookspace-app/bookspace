@@ -14,11 +14,16 @@ class PublicationHero extends StatelessWidget {
   final bool isPublication;
   final Function() scrollOnReply;
   final Function() notifyOnNewVote;
+  bool myVote;
+  bool myVoted;
+  Color _iconColor = Colors.black;
 
   PublicationHero({
     Key key,
     this.publication,
     this.isPublication,
+    this.myVote,
+    this.myVoted,
     @required this.scrollOnReply,
     @required this.notifyOnNewVote,
   }) : super(key: key);
@@ -134,24 +139,18 @@ class PublicationHero extends StatelessWidget {
                                   padding: EdgeInsets.only(left: 10),
                                   child: GestureDetector(
                                     onTap: () {
+                                      _iconColor = Colors.green[400];
                                       like(publication.id, globals.id);
+                                      myVote = true;
+                                      myVoted = false;
                                       notifyOnNewVote();
-                                      /*Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => MainView(
-                                                  renderIndex: 'home',
-                                                  view: PublicationView(
-                                                    id: publication.id,
-                                                    isPublication:
-                                                        isPublication,
-                                                  ),
-                                                )),
-                                      ); */
                                     },
                                     child: Icon(
                                       Icons.thumb_up,
-                                      //color: _myVote ? Colors.green[400] : Colors.black
+                                      //color: myVote
+                                      //    ? Colors.green[400]
+                                      //    : Colors.black
+                                      color: _iconColor,
                                     ),
                                   ),
                                 )
@@ -183,24 +182,14 @@ class PublicationHero extends StatelessWidget {
                                   child: GestureDetector(
                                     onTap: () {
                                       dislike(publication.id, globals.id);
+                                      myVoted = true;
+                                      myVote = false;
                                       notifyOnNewVote();
-                                      /*Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => MainView(
-                                                  renderIndex: 'home',
-                                                  view: PublicationView(
-                                                    id: publication.id,
-                                                    isPublication:
-                                                        isPublication,
-                                                  ),
-                                                )),
-                                      );*/
                                     },
-                                    child: Icon(
-                                      Icons.thumb_down,
-                                      // color: _myVote ? Colors.red[400] : Colors.black
-                                    ),
+                                    child: Icon(Icons.thumb_down,
+                                        color: myVoted
+                                            ? Colors.red[400]
+                                            : Colors.black),
                                   ),
                                 )
                               ])))),

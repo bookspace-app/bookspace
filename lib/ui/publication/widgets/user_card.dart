@@ -24,6 +24,9 @@ class UserCard extends StatelessWidget {
   int likes;
   int dislikes;
   int replies;
+  bool myVote;
+  bool myVoted;
+  Color color = Colors.black;
 
   UserCard(
       {Key key,
@@ -36,11 +39,23 @@ class UserCard extends StatelessWidget {
       this.likes,
       this.dislikes,
       this.replies,
+      this.myVote,
+      this.myVoted,
       @required this.notifyOnChange})
       : super(key: key);
 
   void deleteP(int id) async {
     var statuscode = await PublicationController.deletePublication(id);
+    print(statuscode);
+  }
+
+  void addfav(int Pid, int Uid) async {
+    var statuscode = await PublicationController.fav(Pid, Uid);
+    print(statuscode);
+  }
+
+  void delfav(int Pid, int Uid) async {
+    var statuscode = await PublicationController.delfav(Pid, Uid);
     print(statuscode);
   }
 
@@ -225,7 +240,13 @@ class UserCard extends StatelessWidget {
                             },
                           );
                         } else {
-                          print('Tap');
+                          if (color == Colors.black) {
+                            color = Colors.yellow;
+                            addfav(commentId, globals.id);
+                          } else {
+                            color = Colors.black;
+                            delfav(commentId, globals.id);
+                          }
                         }
                       }
                     }, itemBuilder: (BuildContext context) {
@@ -258,7 +279,7 @@ class UserCard extends StatelessWidget {
                           value: 'Fav',
                           child: Row(
                             children: [
-                              Icon(Icons.favorite),
+                              Icon(Icons.star, color: color),
                               Container(
                                 margin: EdgeInsets.only(left: 10),
                                 child: Text('Añadir a favoritos'),
@@ -294,7 +315,9 @@ class UserCard extends StatelessWidget {
                                               style: TextStyle(
                                                 fontSize: 20.0,
                                                 fontWeight: FontWeight.bold,
-                                                //color: _myVote ? Colors.green[400] : Colors.black,
+                                                color: (myVote)
+                                                    ? Colors.green[400]
+                                                    : Colors.black,
                                               ),
                                             ),
                                             Container(
@@ -303,12 +326,14 @@ class UserCard extends StatelessWidget {
                                               child: GestureDetector(
                                                 onTap: () {
                                                   like(commentId, globals.id);
+                                                  myVote = true;
+                                                  myVoted = false;
                                                   notifyOnChange();
                                                 },
-                                                child: Icon(
-                                                  Icons.thumb_up,
-                                                  //color: _myVote ? Colors.green[400] : Colors.black
-                                                ),
+                                                child: Icon(Icons.thumb_up,
+                                                    color: (myVote)
+                                                        ? Colors.green[400]
+                                                        : Colors.black),
                                               ),
                                             )
                                           ])))),
@@ -342,12 +367,14 @@ class UserCard extends StatelessWidget {
                                                 onTap: () {
                                                   dislike(
                                                       commentId, globals.id);
+                                                  myVote = false;
+                                                  myVoted = true;
                                                   notifyOnChange();
                                                 },
-                                                child: Icon(
-                                                  Icons.thumb_down,
-                                                  //color: _myVote ? Colors.red[400] : Colors.black
-                                                ),
+                                                child: Icon(Icons.thumb_down,
+                                                    color: (myVoted)
+                                                        ? Colors.red[400]
+                                                        : Colors.black),
                                               ),
                                             )
                                           ])))),
