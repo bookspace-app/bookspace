@@ -222,6 +222,7 @@ class UserController {
     }
     return false;
   }
+
   // GET favorite categories by ID
   static Future<List<String>> getCategories(int id) async {
     List<String> categories;
