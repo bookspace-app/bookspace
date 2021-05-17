@@ -109,43 +109,6 @@ class CommentController {
     return false;
   }
 
-  /*//UPDATE likes and dislikes
-  static Future<bool> update(int likes, int dislikes, int id) async {
-    try {
-      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/comments/$id");
-
-      //define headers
-      Map<String, String> headers = {
-        //"Authorization": "JWT $authToken",
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      };
-
-      //Define body
-      Map<String, int> body = {
-        'likes': likes,
-        'dislikes': dislikes,
-      };
-
-      // Make PUT request
-      http.Response response =
-          await http.put(uri, headers: headers, body: json.encode(body));
-
-      // Request status and body
-      int statusCode = response.statusCode;
-      String requestBody = response.body;
-
-      print('Response status: $statusCode\n Response body: $requestBody\n');
-
-      if (statusCode == 200) {
-        return true;
-      }
-    } catch (e) {
-      print('error caught: $e');
-    }
-    return false;
-  } */
-
   // Delete comment by id
   static Future<int> deleteComment(int id) async {
     Comment comment;
@@ -166,6 +129,54 @@ class CommentController {
 
       print('Delete response status: $statusCode\n');
       return statusCode;
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return null;
+  }
+
+  //likes
+  static Future<int> like(int Pid, int Uid) async {
+    Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/comments/$Pid/like/$Uid");
+
+    try {
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
+
+      // Make POST request
+      http.Response response = await http.post(uri, headers: headers);
+
+      //print('Create publication response code: ${response.statusCode}: ${response.body}\n');
+
+      if (response.statusCode == 200) {
+        return response.statusCode;
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return null;
+  }
+
+  //dislikes
+  static Future<int> dislike(int Pid, int Uid) async {
+    Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/comments/$Pid/dislike/$Uid");
+
+    try {
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
+
+      // Make POST request
+      http.Response response = await http.post(uri, headers: headers);
+
+      //print('Create publication response code: ${response.statusCode}: ${response.body}\n');
+
+      if (response.statusCode == 200) {
+        return response.statusCode;
+      }
     } catch (e) {
       print('error caught: $e');
     }
