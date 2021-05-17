@@ -25,22 +25,19 @@ class UserCard extends StatelessWidget {
   int dislikes;
   int replies;
 
-  bool liked = false;
-  bool disliked = false;
-
-  UserCard({
-    Key key,
-    this.commentId,
-    this.parentId,
-    this.author,
-    this.dop,
-    this.principal,
-    this.isPublication,
-    this.likes,
-    this.dislikes,
-    this.replies,
-    @required this.notifyOnChange
-  }) : super(key: key);
+  UserCard(
+      {Key key,
+      this.commentId,
+      this.parentId,
+      this.author,
+      this.dop,
+      this.principal,
+      this.isPublication,
+      this.likes,
+      this.dislikes,
+      this.replies,
+      @required this.notifyOnChange})
+      : super(key: key);
 
   void deleteP(int id) async {
     var statuscode = await PublicationController.deletePublication(id);
@@ -52,6 +49,17 @@ class UserCard extends StatelessWidget {
     print(statuscode);
   }
 
+  Future<int> like(int Pid, int Uid) async {
+    var status = await CommentController.like(Pid, Uid);
+    return status;
+  }
+
+  Future<int> dislike(int Pid, int Uid) async {
+    var status = await CommentController.dislike(Pid, Uid);
+    return status;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(10),
@@ -132,7 +140,7 @@ class UserCard extends StatelessWidget {
                                 actions: <Widget>[
                                   TextButton(
                                     onPressed: () {
-                                      notifyOnChange();
+                                      Navigator.pop(context);
                                     },
                                     child: const Text('OK'),
                                   ),
@@ -141,7 +149,6 @@ class UserCard extends StatelessWidget {
                             },
                           );
                         } else if (isPublication) {
-                          print(commentId);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -173,10 +180,10 @@ class UserCard extends StatelessWidget {
                         if (globals.id == author.id) {
                           if (isPublication) {
                             deleteP(commentId);
-                            Navigator.pop(context);
+                            notifyOnChange();
                           } else {
                             deleteC(commentId);
-                            Navigator.pop(context);
+                            notifyOnChange();
                           }
                         } else {
                           showDialog(
@@ -295,10 +302,8 @@ class UserCard extends StatelessWidget {
                                                   EdgeInsets.only(left: 10),
                                               child: GestureDetector(
                                                 onTap: () {
-                                                  if (!liked) {
-                                                    liked = true;
-                                                    likes++;
-                                                  }
+                                                  like(commentId, globals.id);
+                                                  notifyOnChange();
                                                 },
                                                 child: Icon(
                                                   Icons.thumb_up,
@@ -335,10 +340,9 @@ class UserCard extends StatelessWidget {
                                                   EdgeInsets.only(left: 10),
                                               child: GestureDetector(
                                                 onTap: () {
-                                                  if (!disliked) {
-                                                    disliked = true;
-                                                    dislikes++;
-                                                  }
+                                                  dislike(
+                                                      commentId, globals.id);
+                                                  notifyOnChange();
                                                 },
                                                 child: Icon(
                                                   Icons.thumb_down,
