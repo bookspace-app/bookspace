@@ -136,9 +136,9 @@ class _ProfileViewState extends State<ProfileView> {
                             ),
                           )),
                       Container(
-                          padding: EdgeInsets.fromLTRB(5, 10, 5, 0),
+                          padding: EdgeInsets.fromLTRB(5, 10, 0, 0),
                           //color: Colors.orange,
-                          //width: 185,
+                          width: MediaQuery.of(context).size.width * 0.5,
                           height:
                               100, //TO-DO Reducir tamaño maximo de la descripcion
                           child: Text("${_user.description}",

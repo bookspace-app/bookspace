@@ -131,14 +131,13 @@ class UserController {
       };
 
       // Make POST request
-      http.Response response =
-          await http.post(uri, headers: headers, body: jsonEncode(body));
+      http.Response response = await http.post(uri, headers: headers, body: jsonEncode(body));
 
       // Request status and body
       int statusCode = response.statusCode;
       String requestBody = response.body;
 
-      /*print('Response status: $statusCode\n Response body: $requestBody\n');*/
+      print('Response status: $statusCode\n Response body: $requestBody\n');
       if (statusCode == 200) {
         user = User.fromJson(json.decode(response.body));
       }

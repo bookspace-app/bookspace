@@ -96,11 +96,10 @@ class PublicationController {
       var body = json.encode(publicationMap);
 
       // Make POST request
-      http.Response response =
-          await http.post(uri, headers: headers, body: body);
+      http.Response response = await http.post(uri, headers: headers, body: body);
 
-      //print('Create publication response code: ${response.statusCode}: ${response.body}\n');
-
+      print('Create publication response code: ${response.statusCode}: ${response.body}\n');
+      print("FALLA AQUI");
       if (response.statusCode == 200) {
         return int.parse(response.body);
       }

@@ -506,13 +506,11 @@ class _SignUpState extends State<SignUp> {
                                 datos.add(nameController.text +
                                     surNameController.text);
                                 datos.add(emailController.text); */
-
                                 String dob = yearController.text +
                                     "-" +
                                     monthController.text +
                                     "-" +
                                     dayController.text;
-
                                 postUser(
                                         userNameController.text,
                                         nameController.text +

@@ -35,7 +35,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
 
   Publication myPublication;
 
-  List<int>  selectedGenres = [0];
+  int selectedGenre = 0;
 
   List<Tag> _allTags;
   List<String> selectedTags = [];
@@ -55,9 +55,9 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
     }
   }
 
-  void createTag(User user, String name, int publId) async {
-    Tag tag;
-    tag.authorId = user.id;
+  void createTag(String name, int publId) async {
+    Tag tag = Tag();
+    tag.authorId = globals.id;    //TOKEN
     tag.name = name;
     tag.publicationId = publId;
     int response = await TagController.createTag(tag); 
@@ -65,43 +65,48 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
 
   void createPublication() async {
     int response = await PublicationController.createPublication(myPublication);
-    print(globals.id);
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-            builder: (context) => MainView(
-                  renderIndex: 'profile',
-                  view: ProfileView(),
-                )),
-        ModalRoute.withName('/'));
+    print("This is $response");
   }
 
   void treatTags(List<String> selectedTags) {
-    getAllTags();
 
-    for (var i = 0; i < selectedTags.length; i++){
+    for (var i = 0; i < selectedTags.length; i++){    //Se miran si existen las tags, sino las crea 
       String currentTag = selectedTags[i];
       bool created = false;
-      for (var j = 0; j < _allTags.length; j++){
+      var j = 0;
+      while (j < _allTags.length && !created) {
         if(currentTag == _allTags[j].name) {
           created = true;
-          break;
         }
+        j++;
       }
-      if (!created) createTag(_user, currentTag, myPublication.id);
+      if (!created) createTag(currentTag, myPublication.id);
+    
     }
 
-    for (var i = 0; i < selectedTags.length; i++){
+    for (var i = 0; i < selectedTags.length; i++){        //Se añaden los id de las tags utilizadas en la publicacion (selectedTags) a la lista de tags de la publicacion (publTags)
       String currentTag = selectedTags[i];
-      bool created = false;
-      for (var j = 0; j < _allTags.length; j++){
+      bool added = false;
+      var j = 0;
+      while (j < _allTags.length && !added) {
         if(currentTag == _allTags[j].name) {
           publTags.add(_allTags[j].id);
-          break;
+          added = true;
         }
+        j++;
       }
     }
+  }
 
+  void getPublication(int id) async {
+    Publication mPublication = await PublicationController.getPublication(id);
+    if (!disposed) {
+      setState(() => myPublication = mPublication);
+    }
+  }
+
+  void updatePublication() async {
+    await PublicationController.editPublication(myPublication, myPublication.id); //No he llegado a testear hasta aqui
   }
 
 //Error Check
@@ -124,9 +129,9 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
   }
 
   String errorGenre() {
-    if (selectedGenres.length < 2)
+    if (selectedGenre == 0)
       return "${AppLocalizations.of(context).translate("noGenre")}";
-    return "";
+    return null;
   }
 
   bool disposed = false;
@@ -142,6 +147,8 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
   @override
   void initState() {
     super.initState();
+    getUser();
+    getAllTags();
   }
 
   @override
@@ -306,25 +313,25 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                 padding: EdgeInsets.fromLTRB(15, 2, 15, 0),
                 child: Row(children: [
                   Expanded(
-                    child: SmartSelect<int>.multiple(
+                    child: SmartSelect<int>.single(
                       modalFilter: true,
                       modalTitle: "${AppLocalizations.of(context).translate("genero")}",
                       placeholder: 'Escoge el género literario que más se adecue',
-                      modalFilterHint: "HEY",
+                      //modalFilterHint: "HEY",
                       modalHeaderStyle: S2ModalHeaderStyle(
                           backgroundColor: globals.primary,
                           textStyle: TextStyle(color: Colors.black),
                           iconTheme: IconThemeData(color: Colors.black, opacity: 1),
                           actionsIconTheme: IconThemeData(color: Colors.black, opacity: 1),
                         ),
-                      value: selectedGenres,
+                      value: selectedGenre,
                       choiceItems: globals.genres.map<S2Choice<int>>((S2Choice<int> x) {
                         return S2Choice<int>(
                           value: x.value,
                           title: AppLocalizations.of(context).translate(x.title),
                         );
                       }).toList(),
-                      onChange: (state) => setState(() => selectedGenres = state.value),
+                      onChange: (state) => setState(() => selectedGenre = state.value),
                     )
                   ),
                 ]),
@@ -414,16 +421,18 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                               errorsAll = errorsTitle | errorsDesc | errorsGenre;
                             });
                             if (!errorsAll) {
-                              getUser();
                               myPublication = Publication();
-                              treatTags(selectedTags);
                               myPublication.title = titleController.text;
                               myPublication.content = descController.text;
                               myPublication.authorId = globals.id; //TO-DO  = _user.id; now its hardcoded
-                              myPublication.category = globals.genres[selectedGenres[1]-1].title; //TO-DO Enable multi genre posting
-                              myPublication.tags = publTags;
+                              myPublication.category = globals.genres[selectedGenre-1].title; //TO-DO Enable multi genre posting
+                              myPublication.tags = [];
                               myPublication.mentions = ExtractUsernames(descController.text);
-                              createPublication();
+                              createPublication();      //Se crea la publicación
+                              //getPublication(id)      //Se hace el get de esta mediante la id que devuelve el response del post
+                              //treatTags(selectedTags);    //Se tratan las tags para hacer un update con estas en la publ creada
+                              //myPublication.tags = publTags;    //Se añaden las tags a la publicación
+                              //updatePublication();              //Se hace el update de publicación con las tags
                             }
                           }))
                   ],
