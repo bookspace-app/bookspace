@@ -16,12 +16,9 @@ class PublicationView extends StatefulWidget {
   final bool isPublication;
   final Function() notifyOnRefresh;
 
-  PublicationView({
-    Key key, 
-    this.id, 
-    this.isPublication,
-    @required this.notifyOnRefresh
-  }) : super(key: key);
+  PublicationView(
+      {Key key, this.id, this.isPublication, @required this.notifyOnRefresh})
+      : super(key: key);
 
   @override
   _PublicationViewState createState() => _PublicationViewState();
@@ -49,14 +46,14 @@ class _PublicationViewState extends State<PublicationView> {
       setState(() => _publication = publication);
       // If there are no comments, do not overload
       // by API call
-      if (_publication.directComments == 0) {
+      if (_publication.comments == 0) {
         setState(() => _comments = comments);
       } else {
         comments =
             await CommentController.getComments(_publication.commentsUri);
         setState(() => _comments = comments);
         setState(() => loadedComments =
-            (_publication.directComments >= rate ? rate : _publication.directComments));
+            (_publication.comments >= rate ? rate : _publication.comments));
         //print(_comments);
       }
     }
@@ -173,7 +170,7 @@ class _PublicationViewState extends State<PublicationView> {
                       // Show comments with the specified rate
                       setState(() {
                         int comments = (widget.isPublication)
-                            ? _publication.directComments
+                            ? _publication.comments
                             : _comment.replies;
                         //('TOTAL NUM: $comments');
                         loadedComments = (loadedComments + rate > comments)
@@ -191,9 +188,9 @@ class _PublicationViewState extends State<PublicationView> {
     }
 
     //for (var i = 0; i < loadedComments; i++) {
-      //print('${widget.isPublication}  ${_comments[i].parentId}');
-      //print((_comments[i].parentId == null && widget.isPublication));
-      //print((_comments[i].parentId > 0 && !(widget.isPublication)));
+    //print('${widget.isPublication}  ${_comments[i].parentId}');
+    //print((_comments[i].parentId == null && widget.isPublication));
+    //print((_comments[i].parentId > 0 && !(widget.isPublication)));
     //}
     // Return the view if the objects are loaded (are not null)
     return ((_publication != null || _comment != null) && _comments != null)
@@ -211,15 +208,12 @@ class _PublicationViewState extends State<PublicationView> {
                   notifyOnNewVote: refreshWrapper),
               // User card is the widget of the author
               UserCard(
-                commentId: (widget.isPublication) 
-                    ? _publication.id
-                    : _comment.id,
+                commentId:
+                    (widget.isPublication) ? _publication.id : _comment.id,
                 author: (widget.isPublication)
                     ? _publication.author
                     : _comment.author,
-                dop: (widget.isPublication) 
-                    ? _publication.dop 
-                    : _comment.dop,
+                dop: (widget.isPublication) ? _publication.dop : _comment.dop,
                 principal: true,
                 isPublication: widget.isPublication,
               ),
@@ -229,7 +223,7 @@ class _PublicationViewState extends State<PublicationView> {
                 padding: EdgeInsets.only(left: 10),
                 child: Text(
                   (widget.isPublication)
-                      ? '${_publication.directComments} responses'
+                      ? '${_publication.comments} responses'
                       : '${_comment.replies} replies',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -240,39 +234,37 @@ class _PublicationViewState extends State<PublicationView> {
               // This iterator renders the comments
               // to the principal contribution of the view
               for (var i = 0; i < loadedComments; i++)
-              // Check the level of recursion
-              (
-                (widget.isPublication && _comments[i].parentId == 0) ||
-                (!widget.isPublication && (widget.id == _comments[i].parentId))
-              ) ? Container(
-                  child: Column(children: <Widget>[
-                    ResponseCard(response: _comments[i]),
-                    // The corresponding author of the comment
-                    UserCard(
-                        commentId: _comments[i].id,
-                        parentId: (widget.isPublication)
-                            ? _publication.id
-                            : _comment.id,
-                        author: _comments[i].author,
-                        dop: _comments[i].dop,
-                        principal: false,
-                        isPublication: false,
-                        likes: _comments[i].likes,
-                        dislikes: _comments[i].dislikes,
-                        myVote: false,
-                        myVoted: false,
-                        replies: _comments[i].replies,
-                        notifyOnChange: refreshWrapper
-                      ),
-                    ]
-                  )
-                ): Container(),
+                // Check the level of recursion
+                ((widget.isPublication && _comments[i].parentId == 0) ||
+                        (!widget.isPublication &&
+                            (widget.id == _comments[i].parentId)))
+                    ? Container(
+                        child: Column(children: <Widget>[
+                        ResponseCard(response: _comments[i]),
+                        // The corresponding author of the comment
+                        UserCard(
+                            commentId: _comments[i].id,
+                            parentId: (widget.isPublication)
+                                ? _publication.id
+                                : _comment.id,
+                            author: _comments[i].author,
+                            dop: _comments[i].dop,
+                            principal: false,
+                            isPublication: false,
+                            likes: _comments[i].likes,
+                            dislikes: _comments[i].dislikes,
+                            myVote: false,
+                            myVoted: false,
+                            replies: _comments[i].replies,
+                            notifyOnChange: refreshWrapper),
+                      ]))
+                    : Container(),
               // If the number of loaded comments has
               // not achieved its limit, we can
               // use the loadMoreComments widget
               (loadedComments <
                       ((widget.isPublication)
-                          ? _publication.directComments
+                          ? _publication.comments
                           : _comment.replies))
                   ? loadMoreComments()
                   : Container(),
