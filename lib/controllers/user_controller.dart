@@ -131,7 +131,8 @@ class UserController {
       };
 
       // Make POST request
-      http.Response response = await http.post(uri, headers: headers, body: jsonEncode(body));
+      http.Response response =
+          await http.post(uri, headers: headers, body: jsonEncode(body));
 
       // Request status and body
       int statusCode = response.statusCode;
@@ -243,11 +244,13 @@ class UserController {
 
       print('Response status: $statusCode\n Response body: $requestBody\n');
       if (statusCode == 200) {
-        categories = json.decode(response.body);
+        var tagsJson = jsonDecode(response.body);
+        print(tagsJson);
+        categories = tagsJson != null ? List.from(tagsJson) : null;
+        print(categories);
+        /*Map map = jsonDecode(response.body);
+        categories = map["favCategories"];*/
       }
-      json.decode(response.body).forEach((result) {
-        categories.add(result);
-      });
     } catch (e) {
       print('error caught: $e');
     }
@@ -256,7 +259,7 @@ class UserController {
 
   //UPDATE USER CATEGORIES
   static Future<bool> updateCategories(List<String> cat, int id) async {
-    List<String> cat;
+    List<String> category;
     try {
       Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id");
 
@@ -283,7 +286,7 @@ class UserController {
       print('Response status: $statusCode\n Response body: $requestBody\n');
 
       if (statusCode == 201) {
-        cat = json.decode(response.body);
+        category = json.decode(response.body);
       }
     } catch (e) {
       print('error caught: $e');

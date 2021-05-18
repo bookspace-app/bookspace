@@ -23,6 +23,12 @@ class _ProfileViewState extends State<ProfileView> {
   User _user;
   List<Publication> _myPublications = [];
   Widget noUser = CircularProgressIndicator();
+  List<String> categories = [];
+
+  void getCategories() async {
+    List<String> cat = await UserController.getCategories(globals.id);
+    categories = cat;
+  }
 
   void getUser(int id) async {
     User user = await UserController.getUser(id);
@@ -78,6 +84,7 @@ class _ProfileViewState extends State<ProfileView> {
     } else if (widget.id != null && widget.username == null) {
       getUser(widget.id);
     }
+    getCategories();
   }
 
   bool disposed = false;
@@ -186,7 +193,7 @@ class _ProfileViewState extends State<ProfileView> {
                     //color: Colors.orange,
                     padding: EdgeInsets.fromLTRB(15, 5, 10, 0),
                     child: Text(
-                      "Tags favoritos",
+                      "Categorias Favoritas",
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 18.0),
                     ),
@@ -199,9 +206,7 @@ class _ProfileViewState extends State<ProfileView> {
                     //color: Colors.orange,
                     padding: EdgeInsets.fromLTRB(15, 5, 10,
                         0), //Para cada tag recibida de la api un campo de texto con fondo gris y letras blancas, padding entre ellos
-                    child: Text(
-                      "Tag box placeholder",
-                    ),
+                    child: categoriasText(),
                   ),
                 ],
               ),
@@ -245,5 +250,16 @@ class _ProfileViewState extends State<ProfileView> {
     } else {
       return Container(child: Center(child: noUser));
     }
+  }
+
+  Widget categoriasText() {
+    String aux = "";
+    for (int i = 0; i < categories.length; i++) {
+      if (i == 0)
+        aux = categories[0];
+      else
+        aux += ", " + categories[i];
+    }
+    return Text(aux);
   }
 }
