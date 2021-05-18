@@ -197,8 +197,8 @@ class _PublicationViewState extends State<PublicationView> {
               PublicationHero(
                   publication: (widget.isPublication) ? _publication : _comment,
                   isPublication: widget.isPublication,
-                  myVote: false,
-                  myVoted: false,
+                  myLike: false, // TODO: change
+                  myDislike: false, // TODO: change
                   scrollOnReply: scrollDown,
                   notifyOnNewVote: refreshWrapper),
               // User card is the widget of the author
@@ -232,29 +232,33 @@ class _PublicationViewState extends State<PublicationView> {
               // This iterator renders the comments
               // to the principal contribution of the view
               for (var i = 0; i < loadedComments; i++)
-              Container(
-                child: Column(children: <Widget>[
-                  ResponseCard(response: _comments[i]),
-                  // The corresponding author of the comment
-                  UserCard(
-                      commentId: _comments[i].id,
-                      parentId: (widget.isPublication)
-                          ? _publication.id
-                          : _comment.id,
-                      author: _comments[i].author,
-                      dop: _comments[i].dop,
-                      principal: false,
-                      isPublication: false,
-                      likes: _comments[i].likes,
-                      dislikes: _comments[i].dislikes,
-                      myVote: false,
-                      myVoted: false,
-                      replies: _comments[i].replies,
-                      notifyOnChange: refreshWrapper
-                    ),
-                  ]
-                )
-              ),
+              // Check the level of recursion
+              (
+                (widget.isPublication && _comments[i].parentId == 0) ||
+                (!widget.isPublication && (widget.id == _comments[i].parentId))
+              ) ? Container(
+                  child: Column(children: <Widget>[
+                    ResponseCard(response: _comments[i]),
+                    // The corresponding author of the comment
+                    UserCard(
+                        commentId: _comments[i].id,
+                        parentId: (widget.isPublication)
+                            ? _publication.id
+                            : _comment.id,
+                        author: _comments[i].author,
+                        dop: _comments[i].dop,
+                        principal: false,
+                        isPublication: false,
+                        likes: _comments[i].likes,
+                        dislikes: _comments[i].dislikes,
+                        myVote: false,
+                        myVoted: false,
+                        replies: _comments[i].replies,
+                        notifyOnChange: refreshWrapper
+                      ),
+                    ]
+                  )
+                ): Container(),
               // If the number of loaded comments has
               // not achieved its limit, we can
               // use the loadMoreComments widget
