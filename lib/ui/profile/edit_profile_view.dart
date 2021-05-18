@@ -70,6 +70,7 @@ class _EditProfileViewState extends State<EditProfileView> {
   //GET CATEGORIES
   void getCategories() async {
     List<String> cat = await UserController.getCategories(globals.id);
+    categoriesToInt();
     categories = cat;
   }
 
@@ -79,11 +80,11 @@ class _EditProfileViewState extends State<EditProfileView> {
   }
 
   //UPDATE CATEGORIES
-  void updateCategories(List<String> categories, int id) {
+  void updateCategories() {
     if (selectedGenres.length > 1) {
       categoriesToString();
     }
-    UserController.updateCategories(categories, id);
+    UserController.updateCategories(categories, _id);
   }
 
   bool disposed = false;
@@ -97,7 +98,7 @@ class _EditProfileViewState extends State<EditProfileView> {
   void initState() {
     super.initState();
     getUser();
-    getCategories();
+    //getCategories();
   }
 
   @override
@@ -175,7 +176,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   _password = passwordController.text;
                   _bio = bioController.text;
                   putUser(_username, _name, _email, _bio, _id);
-                  updateCategories(categories, _id);
+                  updateCategories();
                   //updatePhoto(_path);
 
                   Navigator.push(
@@ -341,7 +342,8 @@ class _EditProfileViewState extends State<EditProfileView> {
 
   void categoriesToInt() {
     for (int i = 0; i < categories.length; i++) {
-      selectedGenres[i + 1] = globals.genres[selectedGenres[i + 1] - 1].value;
+      int valor = globals.genres[selectedGenres[i + 1] - 1].value;
+      selectedGenres.add(valor);
     }
   }
 }
