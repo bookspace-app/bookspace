@@ -198,7 +198,7 @@ class _PublicationHeroState extends State<PublicationHero> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  '${widget.publication.dislikes}',
+                                  '${widget.publication.dislikes * -1}',
                                   textAlign: TextAlign.right,
                                   style: TextStyle(
                                     fontSize: 20.0,
