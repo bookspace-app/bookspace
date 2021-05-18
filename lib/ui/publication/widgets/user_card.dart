@@ -82,7 +82,7 @@ class UserCard extends StatelessWidget {
           decoration: BoxDecoration(
               color: principal ? Colors.yellow[200] : Colors.grey[200],
               border: Border.all(
-                color: principal ? Colors.yellow[800] : Colors.grey[400],
+                color: principal ? Colors.yellow[300] : Colors.grey[300],
               ),
               borderRadius: BorderRadius.all(Radius.circular(5))),
           child: Column(children: <Widget>[
