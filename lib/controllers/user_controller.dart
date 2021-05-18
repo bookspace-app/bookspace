@@ -33,7 +33,7 @@ class UserController {
           print('[$name:$value]');
         }
         print("\n");*/
-        user = User.fromJson(json.decode(response.body));
+        user = User.fromJson(json.decode(utf8.decode(response.bodyBytes)));
       }
     } catch (e) {
       print('error caught: $e');
@@ -68,7 +68,7 @@ class UserController {
           print('[$name:$value]');
         }
         print("\n");*/
-        user = User.fromJson(json.decode(response.body));
+        user = User.fromJson(json.decode(utf8.decode(response.bodyBytes)));
       }
     } catch (e) {
       print('error caught: $e');

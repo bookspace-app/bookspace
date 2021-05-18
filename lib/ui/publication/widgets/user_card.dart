@@ -49,7 +49,7 @@ class UserCard extends StatelessWidget {
     print(statuscode);
   }
 
-  void addfav(int Pid, int Uid) async {
+  /*void addfav(int Pid, int Uid) async {
     var statuscode = await PublicationController.fav(Pid, Uid);
     print(statuscode);
   }
@@ -57,7 +57,7 @@ class UserCard extends StatelessWidget {
   void delfav(int Pid, int Uid) async {
     var statuscode = await PublicationController.delfav(Pid, Uid);
     print(statuscode);
-  }
+  }*/
 
   void deleteC(int id) async {
     var statuscode = await CommentController.deleteComment(id);
@@ -82,7 +82,7 @@ class UserCard extends StatelessWidget {
           decoration: BoxDecoration(
               color: principal ? Colors.yellow[200] : Colors.grey[200],
               border: Border.all(
-                color: principal ? Colors.yellow[800] : Colors.grey[400],
+                color: principal ? Colors.yellow[300] : Colors.grey[300],
               ),
               borderRadius: BorderRadius.all(Radius.circular(5))),
           child: Column(children: <Widget>[
@@ -196,6 +196,7 @@ class UserCard extends StatelessWidget {
                           if (isPublication) {
                             deleteP(commentId);
                             notifyOnChange();
+                            Navigator.pop(context);
                           } else {
                             deleteC(commentId);
                             notifyOnChange();
@@ -219,7 +220,8 @@ class UserCard extends StatelessWidget {
                             },
                           );
                         }
-                      } else if (value == 'Fav') {
+                      }
+                      /*else if (value == 'Fav') {
                         if (!isPublication) {
                           showDialog(
                             context: context,
@@ -248,7 +250,7 @@ class UserCard extends StatelessWidget {
                             delfav(commentId, globals.id);
                           }
                         }
-                      }
+                      }*/
                     }, itemBuilder: (BuildContext context) {
                       return [
                         PopupMenuItem(
@@ -275,7 +277,7 @@ class UserCard extends StatelessWidget {
                             ],
                           ),
                         ),
-                        PopupMenuItem(
+                        /* PopupMenuItem(
                           value: 'Fav',
                           child: Row(
                             children: [
@@ -286,7 +288,7 @@ class UserCard extends StatelessWidget {
                               )
                             ],
                           ),
-                        ),
+                        ),*/
                       ];
                     }))
               ]),

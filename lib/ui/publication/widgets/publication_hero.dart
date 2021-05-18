@@ -9,33 +9,80 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:bookspace/globals.dart' as globals;
 
-class PublicationHero extends StatelessWidget {
+class PublicationHero extends StatefulWidget {
   final publication;
   final bool isPublication;
   final Function() scrollOnReply;
   final Function() notifyOnNewVote;
-  bool myVote;
-  bool myVoted;
-  Color _iconColor = Colors.black;
+  bool myLike;
+  bool myDislike;
 
   PublicationHero({
     Key key,
     this.publication,
     this.isPublication,
-    this.myVote,
-    this.myVoted,
+    this.myLike,
+    this.myDislike,
     @required this.scrollOnReply,
     @required this.notifyOnNewVote,
   }) : super(key: key);
+
+  @override
+  _PublicationHeroState createState() => _PublicationHeroState();
+}
+
+class _PublicationHeroState extends State<PublicationHero> {
+  bool _myLike;
+  bool _myDislike;
+  bool _myVote;
+  List<User> _users = [];
 
   Future<int> like(int Pid, int Uid) async {
     var status = await PublicationController.like(Pid, Uid);
     return status;
   }
 
+  Future<int> unlike(int Pid, int Uid) async {
+    var status = await PublicationController.unlike(Pid, Uid);
+    return status;
+  }
+
   Future<int> dislike(int Pid, int Uid) async {
     var status = await PublicationController.dislike(Pid, Uid);
     return status;
+  }
+
+  Future<int> undislike(int Pid, int Uid) async {
+    var status = await PublicationController.undislike(Pid, Uid);
+    return status;
+  }
+
+  void addfav(int Pid, int Uid) async {
+    var statuscode = await PublicationController.fav(Pid, Uid);
+    print(statuscode);
+  }
+
+  void delfav(int Pid, int Uid) async {
+    var statuscode = await PublicationController.delfav(Pid, Uid);
+    print(statuscode);
+  }
+
+  void getfav(int Pid) async {
+    List<User> users = await PublicationController.getfav(Pid);
+    setState(() => _users = users);
+    for (var i = 0; i < _users.length; i++) {
+      (globals.id == _users[i].id)
+          ? setState(() => _myVote = true)
+          : setState(() => _myVote = false);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() => _myLike = widget.myLike);
+    setState(() => _myDislike = widget.myDislike);
+    getfav(widget.publication.id);
   }
 
   @override
@@ -46,7 +93,7 @@ class PublicationHero extends StatelessWidget {
       List<String> usernames = [];
       usernameMatches.forEach((m) => usernames.add(m.group(0)));
       RegExp wordsExp = new RegExp(
-          r"[^\@\w+]|[-'a-zA-ZÀ-ÖØ-öø-ÿ-@]+|[!$%^&*()_+|~=`{}#@\[\]:;'’<>?,.\/"
+          r"[^\@\w+]|[-'a-zA-ZÀ-ÖØ-öø-ÿ-@-_]+|[!$%^&*()_+|~=`{}#@\[\]:;'’<>?,.\/"
           '"”'
           "]+");
       Iterable wordsMatches = wordsExp.allMatches(content);
@@ -101,13 +148,13 @@ class PublicationHero extends StatelessWidget {
         //color: Colors.pink,
         child: Column(
       children: <Widget>[
-        (isPublication)
+        (widget.isPublication)
             ? Row(
                 children: <Widget>[
                   Expanded(
                       child: Container(
                           padding: EdgeInsets.all(10),
-                          child: ParsedContent(publication.title, true)))
+                          child: ParsedContent(widget.publication.title, true)))
                   // TODO: tags
                 ],
               )
@@ -127,31 +174,37 @@ class PublicationHero extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  '${publication.likes}',
+                                  '${widget.publication.likes}',
                                   textAlign: TextAlign.right,
                                   style: TextStyle(
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.bold,
-                                    //color: _myVote ? Colors.green[400] : Colors.black,
+                                    color: _myLike
+                                        ? Colors.green[400]
+                                        : Colors.black,
                                   ),
                                 ),
                                 Container(
                                   padding: EdgeInsets.only(left: 10),
                                   child: GestureDetector(
                                     onTap: () {
-                                      _iconColor = Colors.green[400];
-                                      like(publication.id, globals.id);
-                                      myVote = true;
-                                      myVoted = false;
-                                      notifyOnNewVote();
+                                      if (!_myLike) {
+                                        like(widget.publication.id, globals.id);
+                                        setState(() => _myLike = true);
+                                        setState(() => _myDislike = false);
+                                        widget.notifyOnNewVote();
+                                      } else {
+                                        dislike(
+                                            widget.publication.id, globals.id);
+                                        setState(() => _myLike = false);
+                                        setState(() => _myDislike = false);
+                                        widget.notifyOnNewVote();
+                                      }
                                     },
-                                    child: Icon(
-                                      Icons.thumb_up,
-                                      //color: myVote
-                                      //    ? Colors.green[400]
-                                      //    : Colors.black
-                                      color: _iconColor,
-                                    ),
+                                    child: Icon(Icons.thumb_up,
+                                        color: _myLike
+                                            ? Colors.green[400]
+                                            : Colors.black),
                                   ),
                                 )
                               ])))),
@@ -169,25 +222,36 @@ class PublicationHero extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  '${publication.dislikes}',
+                                  '${widget.publication.dislikes * -1}',
                                   textAlign: TextAlign.right,
                                   style: TextStyle(
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.bold,
-                                    //color: _myVote ? Colors.red[400] : Colors.black,
+                                    color: _myDislike
+                                        ? Colors.red[400]
+                                        : Colors.black,
                                   ),
                                 ),
                                 Container(
                                   padding: EdgeInsets.only(left: 10),
                                   child: GestureDetector(
                                     onTap: () {
-                                      dislike(publication.id, globals.id);
-                                      myVoted = true;
-                                      myVote = false;
-                                      notifyOnNewVote();
+                                      if (!_myDislike) {
+                                        dislike(
+                                            widget.publication.id, globals.id);
+                                        setState(() => _myLike = false);
+                                        setState(() => _myDislike = true);
+                                        widget.notifyOnNewVote();
+                                      } else {
+                                        dislike(
+                                            widget.publication.id, globals.id);
+                                        setState(() => _myLike = false);
+                                        setState(() => _myDislike = false);
+                                        widget.notifyOnNewVote();
+                                      }
                                     },
                                     child: Icon(Icons.thumb_down,
-                                        color: myVoted
+                                        color: _myDislike
                                             ? Colors.red[400]
                                             : Colors.black),
                                   ),
@@ -195,7 +259,7 @@ class PublicationHero extends StatelessWidget {
                               ])))),
             ),
             // Views and favorite module
-            (isPublication)
+            (widget.isPublication)
                 ? Expanded(
                     child: Container(
                         //color: Colors.orange[300],
@@ -208,7 +272,7 @@ class PublicationHero extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
                                       Text(
-                                        '${publication.views}',
+                                        '${widget.publication.views}',
                                         textAlign: TextAlign.right,
                                         style: TextStyle(
                                           fontSize: 20.0,
@@ -220,12 +284,18 @@ class PublicationHero extends StatelessWidget {
                                         padding: EdgeInsets.only(left: 10),
                                         child: GestureDetector(
                                           onTap: () {
-                                            print('Tap');
+                                            (_myVote)
+                                                ? delfav(widget.publication.id,
+                                                    globals.id)
+                                                : addfav(widget.publication.id,
+                                                    globals.id);
+                                            setState(() => _myVote = !_myVote);
+                                            widget.notifyOnNewVote();
                                           },
-                                          child: Icon(
-                                            Icons.remove_red_eye,
-                                            // color: _myVote ? Colors.yellow[800] : Colors.black
-                                          ),
+                                          child: Icon(Icons.remove_red_eye,
+                                              color: _myVote
+                                                  ? Colors.yellow[800]
+                                                  : Colors.black),
                                         ),
                                       )
                                     ])))),
@@ -235,7 +305,7 @@ class PublicationHero extends StatelessWidget {
             Expanded(
               child: Container(
                   //color: Colors.red[300],
-                  padding: (isPublication)
+                  padding: (widget.isPublication)
                       ? EdgeInsets.symmetric(vertical: 3)
                       : EdgeInsets.fromLTRB(0, 20, 0, 3),
                   child: Center(
@@ -246,9 +316,9 @@ class PublicationHero extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  (isPublication)
-                                      ? '${publication.comments}'
-                                      : '${publication.replies}',
+                                  (widget.isPublication)
+                                      ? '${widget.publication.comments}'
+                                      : '${widget.publication.replies}',
                                   textAlign: TextAlign.right,
                                   style: TextStyle(
                                     fontSize: 20.0,
@@ -261,7 +331,7 @@ class PublicationHero extends StatelessWidget {
                                   child: GestureDetector(
                                     onTap: () {
                                       print('Tap');
-                                      scrollOnReply();
+                                      widget.scrollOnReply();
                                     },
                                     child: Icon(
                                       Icons.reply,
@@ -278,7 +348,7 @@ class PublicationHero extends StatelessWidget {
             width: double.infinity,
             padding: EdgeInsets.all(10),
             //color: Colors.blue[200],
-            child: ParsedContent(publication.content, false))
+            child: ParsedContent(widget.publication.content, false))
       ],
     ));
   }

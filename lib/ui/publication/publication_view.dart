@@ -37,7 +37,7 @@ class _PublicationViewState extends State<PublicationView> {
   void getPublication(int id) async {
     Publication publication = await PublicationController.getPublication(id);
     List<Comment> comments = [];
-    print(publication);
+    //print(publication);
     if (!disposed) {
       setState(() => _publication = publication);
       // If there are no comments, do not overload
@@ -50,7 +50,7 @@ class _PublicationViewState extends State<PublicationView> {
         setState(() => _comments = comments);
         setState(() => loadedComments =
             (_publication.comments >= rate ? rate : _publication.comments));
-        print(_comments);
+        //print(_comments);
       }
     }
   }
@@ -59,7 +59,7 @@ class _PublicationViewState extends State<PublicationView> {
   void getComment(int id) async {
     Comment comment = await CommentController.getComment(id);
     List<Comment> comments = [];
-    print(comment);
+    //print(comment);
     if (!disposed) {
       setState(() => _comment = comment);
       // If there are no replies, do not overload
@@ -71,7 +71,7 @@ class _PublicationViewState extends State<PublicationView> {
         setState(() => _comments = comments);
         setState(() => loadedComments =
             (_comment.replies >= rate ? rate : _comment.replies));
-        print(_comments);
+        //print(_comments);
       }
     }
   }
@@ -79,6 +79,8 @@ class _PublicationViewState extends State<PublicationView> {
   @override
   void initState() {
     super.initState();
+    print('Is publication: ${widget.isPublication}');
+    print('ID: ${widget.id}');
     // Load comment or publication
     // depending on  the type
     if (widget.isPublication) {
@@ -103,20 +105,20 @@ class _PublicationViewState extends State<PublicationView> {
   // Refresh the view on update
   // When new comments are added
   void refresh() {
-    print('Refreshed state: $refreshed');
-    print('==================================');
-    print('REFRESHING');
-    print('==================================');
-    print('CURRENT RATE: $rate');
-    print('CURRENT LOADED:$loadedComments');
+    //print('Refreshed state: $refreshed');
+    //print('==================================');
+    //print('REFRESHING');
+    //print('==================================');
+    //print('CURRENT RATE: $rate');
+    //print('CURRENT LOADED:$loadedComments');
     if (widget.isPublication) {
       getPublication(widget.id);
     } else {
       getComment(widget.id);
     }
-    print('==================================');
-    print('REFRESHED');
-    print('==================================');
+    //print('==================================');
+    //print('REFRESHED');
+    //print('==================================');
     if (refreshed) {
       Future.delayed(Duration(milliseconds: 500)).then((_) {
         refresh();
@@ -165,11 +167,11 @@ class _PublicationViewState extends State<PublicationView> {
                         int comments = (widget.isPublication)
                             ? _publication.comments
                             : _comment.replies;
-                        print('TOTAL NUM: $comments');
+                        //('TOTAL NUM: $comments');
                         loadedComments = (loadedComments + rate > comments)
                             ? comments
                             : loadedComments + rate;
-                        print('AFTER UPDATE LOADED: $loadedComments');
+                        //print('AFTER UPDATE LOADED: $loadedComments');
                         setState(() {
                           refreshed = false;
                         });
@@ -180,11 +182,11 @@ class _PublicationViewState extends State<PublicationView> {
       );
     }
 
-    for (var i = 0; i < loadedComments; i++) {
-      print('${widget.isPublication}  ${_comments[i].parentId}');
-      print((_comments[i].parentId == null && widget.isPublication));
-      print((_comments[i].parentId > 0 && !(widget.isPublication)));
-    }
+    //for (var i = 0; i < loadedComments; i++) {
+      //print('${widget.isPublication}  ${_comments[i].parentId}');
+      //print((_comments[i].parentId == null && widget.isPublication));
+      //print((_comments[i].parentId > 0 && !(widget.isPublication)));
+    //}
     // Return the view if the objects are loaded (are not null)
     return ((_publication != null || _comment != null) && _comments != null)
         ? ListView(
@@ -195,17 +197,21 @@ class _PublicationViewState extends State<PublicationView> {
               PublicationHero(
                   publication: (widget.isPublication) ? _publication : _comment,
                   isPublication: widget.isPublication,
-                  myVote: false,
-                  myVoted: false,
+                  myLike: false, // TODO: change
+                  myDislike: false, // TODO: change
                   scrollOnReply: scrollDown,
                   notifyOnNewVote: refreshWrapper),
               // User card is the widget of the author
               UserCard(
-                commentId: _publication.id,
+                commentId: (widget.isPublication) 
+                    ? _publication.id
+                    : _comment.id,
                 author: (widget.isPublication)
                     ? _publication.author
                     : _comment.author,
-                dop: (widget.isPublication) ? _publication.dop : _comment.dop,
+                dop: (widget.isPublication) 
+                    ? _publication.dop 
+                    : _comment.dop,
                 principal: true,
                 isPublication: widget.isPublication,
               ),
@@ -226,24 +232,33 @@ class _PublicationViewState extends State<PublicationView> {
               // This iterator renders the comments
               // to the principal contribution of the view
               for (var i = 0; i < loadedComments; i++)
-                Container(
-                    child: Column(children: <Widget>[
-                  ResponseCard(response: _comments[i]),
-                  // The corresponding author of the comment
-                  UserCard(
-                      commentId: _comments[i].id,
-                      parentId: _publication.id,
-                      author: _comments[i].author,
-                      dop: _comments[i].dop,
-                      principal: false,
-                      isPublication: false,
-                      likes: _comments[i].likes,
-                      dislikes: _comments[i].dislikes,
-                      myVote: false,
-                      myVoted: false,
-                      replies: _comments[i].replies,
-                      notifyOnChange: refreshWrapper),
-                ])),
+              // Check the level of recursion
+              (
+                (widget.isPublication && _comments[i].parentId == 0) ||
+                (!widget.isPublication && (widget.id == _comments[i].parentId))
+              ) ? Container(
+                  child: Column(children: <Widget>[
+                    ResponseCard(response: _comments[i]),
+                    // The corresponding author of the comment
+                    UserCard(
+                        commentId: _comments[i].id,
+                        parentId: (widget.isPublication)
+                            ? _publication.id
+                            : _comment.id,
+                        author: _comments[i].author,
+                        dop: _comments[i].dop,
+                        principal: false,
+                        isPublication: false,
+                        likes: _comments[i].likes,
+                        dislikes: _comments[i].dislikes,
+                        myVote: false,
+                        myVoted: false,
+                        replies: _comments[i].replies,
+                        notifyOnChange: refreshWrapper
+                      ),
+                    ]
+                  )
+                ): Container(),
               // If the number of loaded comments has
               // not achieved its limit, we can
               // use the loadMoreComments widget
