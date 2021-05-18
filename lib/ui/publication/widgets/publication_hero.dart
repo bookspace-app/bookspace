@@ -27,13 +27,15 @@ class PublicationHero extends StatefulWidget {
     @required this.notifyOnNewVote,
   }) : super(key: key);
 
-@override
+  @override
   _PublicationHeroState createState() => _PublicationHeroState();
 }
 
 class _PublicationHeroState extends State<PublicationHero> {
   bool _myLike;
   bool _myDislike;
+  bool _myVote;
+  List<User> _users = [];
 
   Future<int> like(int Pid, int Uid) async {
     var status = await PublicationController.like(Pid, Uid);
@@ -55,11 +57,32 @@ class _PublicationHeroState extends State<PublicationHero> {
     return status;
   }
 
+  void addfav(int Pid, int Uid) async {
+    var statuscode = await PublicationController.fav(Pid, Uid);
+    print(statuscode);
+  }
+
+  void delfav(int Pid, int Uid) async {
+    var statuscode = await PublicationController.delfav(Pid, Uid);
+    print(statuscode);
+  }
+
+  void getfav(int Pid) async {
+    List<User> users = await PublicationController.getfav(Pid);
+    setState(() => _users = users);
+    for (var i = 0; i < _users.length; i++) {
+      (globals.id == _users[i].id)
+          ? setState(() => _myVote = true)
+          : setState(() => _myVote = false);
+    }
+  }
+
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     setState(() => _myLike = widget.myLike);
     setState(() => _myDislike = widget.myDislike);
+    getfav(widget.publication.id);
   }
 
   @override
@@ -156,7 +179,9 @@ class _PublicationHeroState extends State<PublicationHero> {
                                   style: TextStyle(
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.bold,
-                                    color: _myLike ? Colors.green[400] : Colors.black,
+                                    color: _myLike
+                                        ? Colors.green[400]
+                                        : Colors.black,
                                   ),
                                 ),
                                 Container(
@@ -169,18 +194,17 @@ class _PublicationHeroState extends State<PublicationHero> {
                                         setState(() => _myDislike = false);
                                         widget.notifyOnNewVote();
                                       } else {
-                                        dislike(widget.publication.id, globals.id);
+                                        dislike(
+                                            widget.publication.id, globals.id);
                                         setState(() => _myLike = false);
                                         setState(() => _myDislike = false);
                                         widget.notifyOnNewVote();
                                       }
                                     },
-                                    child: Icon(
-                                      Icons.thumb_up,
-                                      color: _myLike
-                                          ? Colors.green[400]
-                                          : Colors.black
-                                    ),
+                                    child: Icon(Icons.thumb_up,
+                                        color: _myLike
+                                            ? Colors.green[400]
+                                            : Colors.black),
                                   ),
                                 )
                               ])))),
@@ -203,7 +227,9 @@ class _PublicationHeroState extends State<PublicationHero> {
                                   style: TextStyle(
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.bold,
-                                    color: _myDislike ? Colors.red[400] : Colors.black,
+                                    color: _myDislike
+                                        ? Colors.red[400]
+                                        : Colors.black,
                                   ),
                                 ),
                                 Container(
@@ -211,12 +237,14 @@ class _PublicationHeroState extends State<PublicationHero> {
                                   child: GestureDetector(
                                     onTap: () {
                                       if (!_myDislike) {
-                                        dislike(widget.publication.id, globals.id);
+                                        dislike(
+                                            widget.publication.id, globals.id);
                                         setState(() => _myLike = false);
                                         setState(() => _myDislike = true);
                                         widget.notifyOnNewVote();
                                       } else {
-                                        dislike(widget.publication.id, globals.id);
+                                        dislike(
+                                            widget.publication.id, globals.id);
                                         setState(() => _myLike = false);
                                         setState(() => _myDislike = false);
                                         widget.notifyOnNewVote();
@@ -256,12 +284,18 @@ class _PublicationHeroState extends State<PublicationHero> {
                                         padding: EdgeInsets.only(left: 10),
                                         child: GestureDetector(
                                           onTap: () {
-                                            print('Tap');
+                                            (_myVote)
+                                                ? delfav(widget.publication.id,
+                                                    globals.id)
+                                                : addfav(widget.publication.id,
+                                                    globals.id);
+                                            setState(() => _myVote = !_myVote);
+                                            widget.notifyOnNewVote();
                                           },
-                                          child: Icon(
-                                            Icons.remove_red_eye,
-                                            // color: _myVote ? Colors.yellow[800] : Colors.black
-                                          ),
+                                          child: Icon(Icons.remove_red_eye,
+                                              color: _myVote
+                                                  ? Colors.yellow[800]
+                                                  : Colors.black),
                                         ),
                                       )
                                     ])))),

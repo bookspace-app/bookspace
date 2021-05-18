@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:bookspace/config.dart';
 import 'package:bookspace/models/publication.dart';
+import 'package:bookspace/models/user.dart';
 import 'package:http/http.dart' as http;
 
 class PublicationController {
@@ -246,7 +247,8 @@ class PublicationController {
 
   //Delete de dislike
   static Future<int> undislike(int Pid, int Uid) async {
-    Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications/$Pid/dislike/$Uid");
+    Uri uri =
+        Uri.https(BACKEND_AUTHORITY, "$API/publications/$Pid/dislike/$Uid");
 
     try {
       Map<String, String> headers = {
@@ -314,5 +316,36 @@ class PublicationController {
       print('error caught: $e');
     }
     return null;
+  }
+
+  //get favourites users
+  static Future<List<User>> getfav(int Pid) async {
+    List<User> users = [];
+    try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications/$Pid/fav");
+
+      // Define headers
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
+
+      // Make GET request
+      http.Response response = await http.get(uri, headers: headers);
+
+      // Request status and body
+      int statusCode = response.statusCode;
+      String requestBody = response.body;
+
+      /*print('Response status: $statusCode\n Response body: $requestBody\n');*/
+      if (statusCode == 200) {
+        json.decode(response.body).forEach((result) {
+          users.add(User.fromJson(result));
+        });
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return users;
   }
 }
