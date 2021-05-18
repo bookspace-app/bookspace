@@ -48,7 +48,9 @@ class _SignUpState extends State<SignUp> {
   bool errorsEmail = false;
   bool errorsPass = false;
   bool errorsPassR = false;
-  bool errorsDob = false;
+  bool errorsDob_d = false;
+  bool errorsDob_m = false;
+  bool errorsDob_y = false;
   bool errorsAll = false;
 
   User _user;
@@ -91,17 +93,31 @@ class _SignUpState extends State<SignUp> {
   }*/
 
   //Error Check
-  String errorDob() {
-    if (yearController.text.isEmpty ||
-        dayController.text.isEmpty ||
-        monthController.text.isEmpty) {
+  String errorDob_d() {
+    if (dayController.text.isEmpty) {
+      return "Empty Field";
+    } else if (dayController.text.length > 2) {
+      return "wrong format";
+    } else {
+      return null;
+    }
+  }
+
+  String errorDob_m() {
+    if (monthController.text.isEmpty) {
+      return "Empty Field";
+    } else if (monthController.text.length > 2) {
+      return "wrong format";
+    } else {
+      return null;
+    }
+  }
+
+  String errorDob_y() {
+    if (yearController.text.isEmpty) {
       return "Empty Field";
     } else if (yearController.text.length != 4) {
-      return "year introduced wrong";
-    } else if (monthController.text.length > 2) {
-      return "month introduced wrong";
-    } else if (monthController.text.length > 2) {
-      return "day introduced wrong";
+      return "wrong format";
     } else {
       return null;
     }
@@ -417,6 +433,7 @@ class _SignUpState extends State<SignUp> {
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: "D",
+                        errorText: errorsAll ? errorDob_d() : null,
                       ),
                     ),
                   ),
@@ -428,6 +445,7 @@ class _SignUpState extends State<SignUp> {
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: "M",
+                        errorText: errorsAll ? errorDob_m() : null,
                       ),
                     ),
                   ),
@@ -440,7 +458,7 @@ class _SignUpState extends State<SignUp> {
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: "Y",
-                        errorText: errorsAll ? errorDob() : null,
+                        errorText: errorsAll ? errorDob_y() : null,
                       ),
                     ),
                   )
@@ -489,17 +507,27 @@ class _SignUpState extends State<SignUp> {
                                   errorsPassR = true;
                                 else
                                   errorsPassR = false;
-                                if (errorDob() != null)
-                                  errorsDob = true;
+                                if (errorDob_d() != null)
+                                  errorsDob_d = true;
                                 else
-                                  errorsDob = false;
+                                  errorsDob_d = false;
+                                if (errorDob_m() != null)
+                                  errorsDob_m = true;
+                                else
+                                  errorsDob_m = false;
+                                if (errorDob_y() != null)
+                                  errorsDob_d = true;
+                                else
+                                  errorsDob_y = false;
                                 errorsAll = errorsUserName |
                                     errorsName |
                                     errorsSurName |
                                     errorsEmail |
                                     errorsPass |
                                     errorsPassR |
-                                    errorsDob;
+                                    errorsDob_d |
+                                    errorsDob_m |
+                                    errorsDob_y;
                               });
                               if (!errorsAll) {
                                 /*datos.add(userNameController.text);
