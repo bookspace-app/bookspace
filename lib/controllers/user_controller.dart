@@ -259,7 +259,7 @@ class UserController {
   static Future<bool> updateCategories(List<String> cat, int id) async {
     List<String> cat;
     try {
-      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id/categories");
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id");
 
       //define headers
       Map<String, String> headers = {
@@ -270,7 +270,7 @@ class UserController {
 
       //Define body
       Map<String, List<String>> body = {
-        'categories': cat,
+        'favCategories': cat,
       };
 
       // Make PUT request

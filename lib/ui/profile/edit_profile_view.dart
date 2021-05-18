@@ -50,21 +50,6 @@ class _EditProfileViewState extends State<EditProfileView> {
   String _path;
   List<int> selectedGenres = [0];
 
-  /*void addCategories(String cat) {
-    print(cat);
-    categories.add(cat);
-  }
-
-  void deleteCategories(String cat) {
-    bool trobat = false;
-    for (int i = 0; i < categories.length && !trobat; i++) {
-      if (categories[i] == cat) {
-        categories.removeAt(i);
-        trobat = true;
-      }
-    }
-  }*/
-
   //GET USER
   void getUser() async {
     User user = await UserController.getUser(globals.id);
@@ -95,7 +80,7 @@ class _EditProfileViewState extends State<EditProfileView> {
 
   //UPDATE CATEGORIES
   void updateCategories(List<String> categories, int id) {
-    if (selectedGenres.length > 0) {
+    if (selectedGenres.length > 1) {
       categoriesToString();
     }
     UserController.updateCategories(categories, id);
@@ -348,8 +333,9 @@ class _EditProfileViewState extends State<EditProfileView> {
 
   void categoriesToString() {
     categories = [];
-    for (int i = 0; i < selectedGenres.length; i++) {
-      categories[i] = globals.genres[selectedGenres[i + 1] - 1].title;
+    for (int i = 0; i < selectedGenres.length - 1; i++) {
+      String title = globals.genres[selectedGenres[i + 1] - 1].title;
+      categories.add(title);
     }
   }
 
