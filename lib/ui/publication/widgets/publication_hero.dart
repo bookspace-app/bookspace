@@ -32,9 +32,9 @@ class PublicationHero extends StatefulWidget {
 }
 
 class _PublicationHeroState extends State<PublicationHero> {
-  bool _myLike;
-  bool _myDislike;
-  bool _myVote;
+  bool _myLike = false;
+  bool _myDislike = false;
+  bool _myVote = false;
   List<User> _users = [];
 
   Future<int> like(int Pid, int Uid) async {

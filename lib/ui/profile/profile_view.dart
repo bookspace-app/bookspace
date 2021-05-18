@@ -87,6 +87,14 @@ class _ProfileViewState extends State<ProfileView> {
     super.dispose();
   }
 
+  void refresh() async {
+    Future.delayed(Duration(milliseconds: 1500)).then((_) async {
+      List<Publication> myPublications = await PublicationController.getPublications(_user.myPublicationsUri);
+    
+      setState(() => _myPublications = myPublications);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_user != null) {
@@ -137,16 +145,17 @@ class _ProfileViewState extends State<ProfileView> {
                           )),
                       Container(
                           padding: EdgeInsets.fromLTRB(5, 10, 0, 0),
-                          //color: Colors.orange,
+                          color: Colors.orange,
                           width: MediaQuery.of(context).size.width * 0.5,
                           height:
                               100, //TO-DO Reducir tamaño maximo de la descripcion
                           child: Text("${_user.description}",
-                              //"Soy vividor, soñador, amante de las novelas policíacas y el dramatismo.",
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 14.0,
-                              ))),
+                                //"Soy vividor, soñador, amante de las novelas policíacas y el dramatismo.",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 14.0,
+                                )),
+                          ),
                       Container(
                           padding: EdgeInsets.fromLTRB(5, 20, 5,
                               0), //TO-DO Fix the container to a position no matter description length
@@ -220,7 +229,9 @@ class _ProfileViewState extends State<ProfileView> {
                                 renderIndex: 'profile',
                                 view: PublicationView(
                                     id: _myPublications[index].id,
-                                    isPublication: true),
+                                    isPublication: true,
+                                    notifyOnRefresh: refresh,
+                                ),
                               )),
                     );
                   }, // on tap llevar a la view de la publicacion
