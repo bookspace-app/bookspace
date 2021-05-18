@@ -47,6 +47,13 @@ class _PublicationsListState extends State<PublicationsList> {
     super.dispose();
   }
 
+  void refresh() async {
+    Future.delayed(Duration(milliseconds: 1500)).then((_) async {
+      List<Publication> publications = await PublicationController.getPublications();
+      setState(() => _publications = publications);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_publications != null) {
@@ -68,6 +75,7 @@ class _PublicationsListState extends State<PublicationsList> {
                         view: PublicationView(
                           id: _publications[index].id,
                           isPublication: true,
+                          notifyOnRefresh: refresh
                         ),
                       )
                     ),

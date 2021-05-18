@@ -14,7 +14,14 @@ import 'package:bookspace/globals.dart' as globals;
 class PublicationView extends StatefulWidget {
   final int id;
   final bool isPublication;
-  PublicationView({Key key, this.id, this.isPublication}) : super(key: key);
+  final Function() notifyOnRefresh;
+
+  PublicationView({
+    Key key, 
+    this.id, 
+    this.isPublication,
+    @required this.notifyOnRefresh
+  }) : super(key: key);
 
   @override
   _PublicationViewState createState() => _PublicationViewState();
@@ -122,6 +129,7 @@ class _PublicationViewState extends State<PublicationView> {
     if (refreshed) {
       Future.delayed(Duration(milliseconds: 500)).then((_) {
         refresh();
+        widget.notifyOnRefresh();
         setState(() {
           refreshed = false;
           return null;
