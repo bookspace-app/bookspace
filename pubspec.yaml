@@ -27,6 +27,7 @@ dependencies:
     sdk: flutter
   textfield_tags: ^1.1.1
   image_picker: ^0.6.6+5
+  smart_select: ^4.3.2
   
   #community_material_icon: ^5.3.45
   #autocomplete_textfield: ^1.7.3
@@ -34,11 +35,14 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
+  flutter_string_encryption: ^0.3.1
+  lite_rolling_switch: ^0.1.1
+  fluttericon: ^2.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  pedantic: ^1.11.0
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -59,7 +63,6 @@ flutter:
    - lang/en.json
 
     #Images
-   - assets/images/Logo.png
    - assets/images/logo.png
    - assets/images/google.png
    - assets/images/No_pic.png

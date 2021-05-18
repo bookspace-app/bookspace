@@ -9,6 +9,7 @@ import 'package:bookspace/ui/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:bookspace/globals.dart' as globals;
+import 'package:flutter_string_encryption/flutter_string_encryption.dart';
 
 /*class Datos {
   String username;
@@ -33,6 +34,13 @@ class _SignUpState extends State<SignUp> {
   var emailController = TextEditingController();
   var passController = TextEditingController();
   var passRController = TextEditingController();
+  var yearController = TextEditingController();
+  var monthController = TextEditingController();
+  var dayController = TextEditingController();
+
+  String key, password;
+  String encrypt, decrypt;
+  PlatformStringCryptor cryptor;
 
   bool errorsUserName = false;
   bool errorsName = false;
@@ -40,6 +48,7 @@ class _SignUpState extends State<SignUp> {
   bool errorsEmail = false;
   bool errorsPass = false;
   bool errorsPassR = false;
+  bool errorsDob = false;
   bool errorsAll = false;
 
   User _user;
@@ -54,12 +63,11 @@ class _SignUpState extends State<SignUp> {
     if (!disposed) {
       setState(() => _users = users);
     }
-    print(users);
   }
 
-  Future<void> postUser(
-      String username, String name, String email, String pass) async {
-    User user = await UserController.postUser(username, name, email, pass);
+  Future<void> postUser(String username, String name, String email, String pass,
+      String dob) async {
+    User user = await UserController.postUser(username, name, email, pass, dob);
     if (!disposed) {
       setState(() {
         _user = user;
@@ -83,6 +91,22 @@ class _SignUpState extends State<SignUp> {
   }*/
 
   //Error Check
+  String errorDob() {
+    if (yearController.text.isEmpty ||
+        dayController.text.isEmpty ||
+        monthController.text.isEmpty) {
+      return "Empty Field";
+    } else if (yearController.text.length != 4) {
+      return "year introduced wrong";
+    } else if (monthController.text.length > 2) {
+      return "month introduced wrong";
+    } else if (monthController.text.length > 2) {
+      return "day introduced wrong";
+    } else {
+      return null;
+    }
+  }
+
   String errorUserName() {
     if (userNameController.text.isEmpty)
       return "${AppLocalizations.of(context).translate("emptyField")}";
@@ -382,6 +406,46 @@ class _SignUpState extends State<SignUp> {
                   ],
                 ),
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(left: 10),
+                    constraints: BoxConstraints.expand(height: 50, width: 60),
+                    child: TextField(
+                      controller: dayController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: "D",
+                      ),
+                    ),
+                  ),
+                  Text("-"),
+                  Container(
+                    constraints: BoxConstraints.expand(height: 50, width: 60),
+                    child: TextField(
+                      controller: monthController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: "M",
+                      ),
+                    ),
+                  ),
+                  Text("-"),
+                  Container(
+                    margin: EdgeInsets.only(right: 10),
+                    constraints: BoxConstraints.expand(height: 50, width: 100),
+                    child: TextField(
+                      controller: yearController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: "Y",
+                        errorText: errorsAll ? errorDob() : null,
+                      ),
+                    ),
+                  )
+                ],
+              ),
               Padding(
                 padding: EdgeInsets.fromLTRB(10, 30, 30, 30),
                 child: Row(
@@ -399,6 +463,8 @@ class _SignUpState extends State<SignUp> {
                             child: Text('Siguiente'),
                             onPressed: () {
                               setState(() {
+                                //encryption();
+                                //decryption();
                                 if (errorUserName() != null)
                                   errorsUserName = true;
                                 else
@@ -423,12 +489,17 @@ class _SignUpState extends State<SignUp> {
                                   errorsPassR = true;
                                 else
                                   errorsPassR = false;
+                                if (errorDob() != null)
+                                  errorsDob = true;
+                                else
+                                  errorsDob = false;
                                 errorsAll = errorsUserName |
                                     errorsName |
                                     errorsSurName |
                                     errorsEmail |
                                     errorsPass |
-                                    errorsPassR;
+                                    errorsPassR |
+                                    errorsDob;
                               });
                               if (!errorsAll) {
                                 /*datos.add(userNameController.text);
@@ -436,20 +507,27 @@ class _SignUpState extends State<SignUp> {
                                     surNameController.text);
                                 datos.add(emailController.text); */
 
+                                String dob = yearController.text +
+                                    "-" +
+                                    monthController.text +
+                                    "-" +
+                                    dayController.text;
+
                                 postUser(
-                                  userNameController.text,
-                                  nameController.text +
-                                      ' ' +
-                                      surNameController.text,
-                                  emailController.text,
-                                  passController.text,
-                                ).then((value) {
+                                        userNameController.text,
+                                        nameController.text +
+                                            ' ' +
+                                            surNameController.text,
+                                        emailController.text,
+                                        passController.text,
+                                        dob)
+                                    .then((value) {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => SignUp2(
-                                        id: id,
-                                      )),
+                                        builder: (context) => SignUp2(
+                                              id: id,
+                                            )),
                                   );
                                 });
                               }
@@ -471,5 +549,22 @@ class _SignUpState extends State<SignUp> {
                 ),
               ),
             ]));
+  }
+
+  void encryption() async {
+    cryptor = new PlatformStringCryptor();
+    final String salt = await cryptor.generateSalt();
+    password = passController.text;
+    key = await cryptor.generateKeyFromPassword(password, salt);
+    encrypt = await cryptor.encrypt(password, key);
+    print(encrypt);
+    print(key);
+  }
+
+  void decryption() async {
+    try {
+      decrypt = await cryptor.decrypt(encrypt, key);
+      print(decrypt);
+    } catch (error) {}
   }
 }

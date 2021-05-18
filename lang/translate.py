@@ -72,6 +72,52 @@ dictionary = {
         'ca': "Ha d'escriure una descripció per la publcació",
         'es': 'Tienes que escribir una descripción para la publicación'
     },
+    'titulo': {
+        'en': 'Title',
+        'ca': "Títol",
+        'es': 'Título'
+    },
+    'tituloDesc': {
+        'en': 'Be specific when asking',
+        'ca': "Sigues específic a l'hora de preguntar",
+        'es': 'Sé específico a la hora de preguntar'
+    },
+    'tituloHelpTxt': {
+        'en': 'Write your question here ...',
+        'ca': "Escriu la teva pregunta aquí ...",
+        'es': 'Escribe tu pregunta aquí...'
+    },
+    'descripcion': {
+        'en': 'Description',
+        'ca': "Descripció",
+        'es': 'Descripción'
+    },
+    'descripcionDesc': {
+        'en': 'Include all the necessary information so that other users can give an answer',
+        'ca': "Inclou tota la informació necessària perquè els altres usuaris puguin donar una resposta",
+        'es': 'Incluye toda la información necesaria para que los demás usuarios puedan dar una respuesta'
+    },
+    'genero': {
+        'en': 'Genre',
+        'ca': "Gènere",
+        'es': 'Género'
+    },
+    'generoDesc': {
+        'en': 'Choose the literary genre that best suits',
+        'ca': "Escull el gènere literari que més s'adeqüi",
+        'es': 'Escoge el género literario que más se adecue'
+    },
+    'tagsDesc': {
+        'en': 'Put the tags that best describe your question',
+        'ca': "Posa les tags que descriguin millor la teva pregunta",
+        'es': 'Pon las tags que describan mejor tu pregunta'
+    },
+    'publicar': {
+        'en': 'Post',
+        'ca': "Publicar",
+        'es': 'Publicar'
+    },
+
     
 
     #SIGNUP TRANSLATIONS
@@ -145,6 +191,184 @@ dictionary = {
         'en': 'The passwords does not match',
         'ca': 'Les contrasenyes no coincideixen',
         'es': 'Las contraseñas no coinciden'
+    },
+
+
+    #GENRES TRANSLATIONS
+    'Accion': {
+        'en': 'Action',
+        'ca': 'Acció',
+        'es': 'Acción'
+    },
+    'Aventura': {
+        'en': 'Adventure',
+        'ca': 'Aventura',
+        'es': 'Aventura'
+    },
+    'Literaria': {
+        'en': 'Literary',
+        'ca': 'Literària',
+        'es': 'Literaria'
+    },
+    'Contemporanea': {
+        'en': 'Contemporary',
+        'ca': 'Contemporània',
+        'es': 'Contemporánea'
+    },
+    'Negra': {
+        'en': 'Thriller',
+        'ca': 'Novel·la negra',
+        'es': 'Novela negra'
+    },
+    'Historica': {
+        'en': 'Historical',
+        'ca': 'Historica',
+        'es': 'Histórica'
+    },
+    'Romantica': {
+        'en': 'Romantic',
+        'ca': 'Romantica',
+        'es': 'Romántica'
+    },
+    'Erotica': {
+        'en': 'Erotica',
+        'ca': 'Eròtica',
+        'es': 'Erótica'
+    },
+    'Poesia': {
+        'en': 'Poetry',
+        'ca': 'Poesia',
+        'es': 'Poesía'
+    }, 
+    'Teatro': {
+        'en': 'Theater',
+        'ca': 'Teatre',
+        'es': 'Teatro'
+    },  
+    'Terror': {
+        'en': 'Terror',
+        'ca': 'Terror',
+        'es': 'Terror'
+    },  
+    'Comic': {
+        'en': 'Comic',
+        'ca': 'Còmic',
+        'es': 'Cómic'
+    }, 
+    'Manga': {
+        'en': 'Manga',
+        'ca': 'Manga',
+        'es': 'Manga'
+    }, 
+    'SciFi': {
+        'en': 'Science fiction',
+        'ca': 'Ciència ficció',
+        'es': 'Ciencia ficción'
+    }, 
+    'Fantasia': {
+        'en': 'Fantasy',
+        'ca': 'Fantasia',
+        'es': 'Fantasía'
+    },
+    'Infantil': {
+        'en': 'Childish',
+        'ca': 'Infantil',
+        'es': 'Infantil'
+    },
+    'Economia': {
+        'en': 'Economy',
+        'ca': 'Economia',
+        'es': 'Economía'
+    },
+    'Cocina': {
+        'en': 'Cook',
+        'ca': 'Cuina',
+        'es': 'Cocina'
+    },
+    'Comedia': {
+        'en': 'Comedy',
+        'ca': 'Comèdia',
+        'es': 'Comedia'
+    },
+    'Documental': {
+        'en': 'Documentary',
+        'ca': 'Documental',
+        'es': 'Documental'
+    },
+    'Drama': {
+        'en': 'Drama',
+        'ca': 'Drama',
+        'es': 'Drama'
+    },
+    'Suspense': {
+        'en': 'Suspense',
+        'ca': 'Suspens',
+        'es': 'Suspense'
+    },
+    'Juvenil': {
+        'en': 'Youth',
+        'ca': 'Juvenil',
+        'es': 'Juvenil'
+    },
+    'Adulto': {
+        'en': 'Adult',
+        'ca': 'Adult',
+        'es': 'Adulto'
+    },
+    'Belico': {
+        'en': 'Warlike',
+        'ca': 'Bèl·lic',
+        'es': 'Bélico'
+    },
+    'Crimen': {
+        'en': 'Crime',
+        'ca': 'Crim',
+        'es': 'Crimen'
+    },
+    'Deporte': {
+        'en': 'Sport',
+        'ca': 'Esport',
+        'es': 'Deporte'
+    },
+    'Historia': {
+        'en': 'History',
+        'ca': 'Història',
+        'es': 'Historia'
+    },
+    'Biografia': {
+        'en': 'Biography',
+        'ca': 'Biografia',
+        'es': 'Biografía'
+    },
+    'Policiaco': {
+        'en': 'Crime novel',
+        'ca': 'Policíac',
+        'es': 'Policiaco'
+    },
+    'Familiar': {
+        'en': 'Family',
+        'ca': 'Familiar',
+        'es': 'Familiar'
+    },
+    'Western': {
+        'en': 'Western',
+        'ca': 'Western',
+        'es': 'Western'
+    },
+    'Religion': {
+        'en': 'Religion',
+        'ca': 'Religió',
+        'es': 'Religión'
+    },
+    'Futurismo': {
+        'en': 'Futurism',
+        'ca': 'Futurisme',
+        'es': 'Futurismo'
+    },
+    'Otro': {
+        'en': 'Others',
+        'ca': 'Altres',
+        'es': 'Otros'
     },
 
 }

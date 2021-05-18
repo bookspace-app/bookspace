@@ -43,14 +43,32 @@ class _EditProfileViewState extends State<EditProfileView> {
   var _id;
 
   User _user;
-  List<String> _tags;
+  List<String> categories = [""];
+  String _path;
 
+  /*void addCategories(String cat) {
+    print(cat);
+    categories.add(cat);
+  }
+
+  void deleteCategories(String cat) {
+    bool trobat = false;
+    for (int i = 0; i < categories.length && !trobat; i++) {
+      if (categories[i] == cat) {
+        categories.removeAt(i);
+        trobat = true;
+      }
+    }
+  }*/
+
+  //GET USER
   void getUser() async {
     User user = await UserController.getUser(globals.id);
     if (!disposed) {
       setState(() => _user = user);
       //setState(() => _tags = tags);
     }
+    //Actualizar los edittext con lo de la base de datos
     setState(() {
       nameController.text = _user.name;
       usernameController.text = _user.username;
@@ -60,8 +78,20 @@ class _EditProfileViewState extends State<EditProfileView> {
     _id = _user.id;
   }
 
+  //GET CATEGORIES
+  void getCategories() async {
+    List<String> cat = await UserController.getCategories(globals.id);
+    categories = cat;
+  }
+
+  //UPDATE USER
   void putUser(String username, name, email, descrition, int id) async {
     UserController.updateUser(username, name, email, descrition, id);
+  }
+
+  //UPDATE CATEGORIES
+  void updateCategories(List<String> categories, int id) {
+    UserController.updateCategories(categories, id);
   }
 
   bool disposed = false;
@@ -75,6 +105,7 @@ class _EditProfileViewState extends State<EditProfileView> {
   void initState() {
     super.initState();
     getUser();
+    getCategories();
   }
 
   @override
@@ -94,11 +125,12 @@ class _EditProfileViewState extends State<EditProfileView> {
           editTextProfile(bioController, 'Description'),
           titlePreEditText('Tags'),
 
-          //EDIT TEXT TAGS. No lo hago con el metodo "editTextProfile" porque es distinto a los demás
+          //EDIT TEXT CATEGORIES. No lo hago con el metodo "editTextProfile" porque es distinto a los demás
           Container(
+              //color: Colors.orange,
               constraints: BoxConstraints.expand(height: 85, width: 100),
               child: TextFieldTags(
-                  initialTags: _tags,
+                  initialTags: categories,
                   tagsStyler: TagsStyler(
                       tagTextStyle: TextStyle(fontWeight: FontWeight.bold),
                       tagDecoration: BoxDecoration(
@@ -120,16 +152,20 @@ class _EditProfileViewState extends State<EditProfileView> {
                         ),
                       ),
                       helperText: "",
-                      hintText: "put tags"),
-                  onTag: (tag) {},
-                  onDelete: (tag) {})),
-
+                      hintText: "put categories"),
+                  onTag: (tag) {
+                    //addCategories(tag);
+                  },
+                  onDelete: (tag) {
+                    //deleteCategories(tag);
+                  })),
           //BUTTON SUBMIT
           Container(
               alignment: Alignment.bottomCenter,
               height: 40,
               margin: EdgeInsets.only(top: 20),
               child: ElevatedButton(
+                //Cuando hacemos submit -> update de user y volvemos a la vista de profile
                 onPressed: () {
                   _name = nameController.text;
                   _username = usernameController.text;
@@ -137,6 +173,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                   _password = passwordController.text;
                   _bio = bioController.text;
                   putUser(_username, _name, _email, _bio, _id);
+                  //updateCategories(categories, _id);
+                  //updatePhoto(_path);
 
                   Navigator.push(
                     context,
@@ -163,6 +201,7 @@ class _EditProfileViewState extends State<EditProfileView> {
     );
   }
 
+  //Widget de la imagen de perfil
   Widget imageProfile() {
     return Center(
       child: Stack(
@@ -194,6 +233,7 @@ class _EditProfileViewState extends State<EditProfileView> {
     );
   }
 
+  //Ventana que te aparece cuando le das a editar foto
   Widget bottomSheet() {
     return Container(
         height: 100,
@@ -234,6 +274,7 @@ class _EditProfileViewState extends State<EditProfileView> {
         ));
   }
 
+  //Widget para tener un edit text standard y no volver a repetir siempre lo mismo
   Widget editTextProfile(TextEditingController controller, String hintText) {
     return Container(
         constraints: BoxConstraints.expand(height: 50, width: 100),
@@ -267,6 +308,7 @@ class _EditProfileViewState extends State<EditProfileView> {
         ));
   }
 
+  //Widget para hacer un text view standard y no repetirlo siempre
   Widget titlePreEditText(String title) {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 15, 0, 5),
@@ -284,10 +326,6 @@ class _EditProfileViewState extends State<EditProfileView> {
     setState(() {
       _imageFile = pickedFile;
     });
+    _path = pickedFile.path;
   }
-
-  /*void savePhoto() async {
-    SharedPreferences saveImage = await SharedPreferences.getInstance();
-    print('Saved image path: ' + saveImage.toString());
-  }*/
 }

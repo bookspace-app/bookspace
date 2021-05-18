@@ -13,11 +13,7 @@ import 'package:intl/intl.dart';
 class ProfileView extends StatefulWidget {
   final int id;
   final String username;
-  ProfileView({
-    Key key, 
-    this.id,
-    this.username
-  }) : super(key: key);
+  ProfileView({Key key, this.id, this.username}) : super(key: key);
 
   @override
   _ProfileViewState createState() => _ProfileViewState();
@@ -32,9 +28,10 @@ class _ProfileViewState extends State<ProfileView> {
     User user = await UserController.getUser(id);
     if (!disposed) {
       setState(() => _user = user);
-      if (_user != null) getPublications(_user);
+      if (_user != null)
+        getPublications(_user);
       else {
-        Future.delayed(Duration(milliseconds:500)).then((_) {
+        Future.delayed(Duration(milliseconds: 500)).then((_) {
           setState(() {
             noUser = Text("This user does not exist");
           });
@@ -47,9 +44,10 @@ class _ProfileViewState extends State<ProfileView> {
     User user = await UserController.getUserByUsername(username);
     if (!disposed) {
       setState(() => _user = user);
-      if (_user != null) getPublications(_user);
+      if (_user != null)
+        getPublications(_user);
       else {
-        Future.delayed(Duration(milliseconds:500)).then((_) {
+        Future.delayed(Duration(milliseconds: 500)).then((_) {
           setState(() {
             noUser = Text("This user does not exist");
           });
@@ -109,8 +107,8 @@ class _ProfileViewState extends State<ProfileView> {
                               borderRadius: BorderRadius.circular(20),
                               child: Image.asset(
                                 './assets/images/No_pic.png', //TO-DO if userpic == null show No_pic else userpic
-                                height: 170,
-                                width: 170,
+                                height: 160,
+                                width: 160,
                                 fit: BoxFit.fill,
                               ),
                             )),
@@ -140,7 +138,7 @@ class _ProfileViewState extends State<ProfileView> {
                       Container(
                           padding: EdgeInsets.fromLTRB(5, 10, 5, 0),
                           //color: Colors.orange,
-                          width: 185,
+                          //width: 185,
                           height:
                               100, //TO-DO Reducir tamaño maximo de la descripcion
                           child: Text("${_user.description}",
@@ -165,7 +163,7 @@ class _ProfileViewState extends State<ProfileView> {
                                 new TextSpan(
                                     text: " · " +
                                         "Se unió al día\n" +
-                                        "${DateFormat.yMd().format(_user.dor)}"),
+                                        "${DateFormat.yMMMMd().format(_user.dor)}"),
                               ],
                             ),
                           ))
