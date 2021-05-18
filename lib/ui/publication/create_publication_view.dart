@@ -5,6 +5,7 @@ import 'package:bookspace/controllers/user_controller.dart';
 import 'package:bookspace/models/publication.dart';
 import 'package:bookspace/models/tag.dart';
 import 'package:bookspace/models/user.dart';
+import 'package:bookspace/ui/home/home_view.dart';
 import 'package:bookspace/ui/main_view.dart';
 import 'package:bookspace/ui/profile/profile_view.dart';
 import 'package:bookspace/utils/extract_usernames.dart';
@@ -35,14 +36,15 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
 
   Publication myPublication;
 
-  List<int>  selectedGenres = [0];
+  int selectedGenre = 0;
 
   List<Tag> _allTags;
   List<String> selectedTags = [];
   List<int> publTags;
 
   void getUser() async {
-    User user = await UserController.getUser(globals.id); //TO-DO Get current user id
+    User user =
+        await UserController.getUser(globals.id); //TO-DO Get current user id
     if (!disposed) {
       setState(() => _user = user);
     }
@@ -55,53 +57,59 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
     }
   }
 
-  void createTag(User user, String name, int publId) async {
-    Tag tag;
-    tag.authorId = user.id;
+  void createTag(String name, int publId) async {
+    Tag tag = Tag();
+    tag.authorId = globals.id; //TOKEN
     tag.name = name;
     tag.publicationId = publId;
-    int response = await TagController.createTag(tag); 
+    int response = await TagController.createTag(tag);
   }
 
-  void createPublication() async {
+  void createPublication(Publication myPublication) async {
     int response = await PublicationController.createPublication(myPublication);
-    print(globals.id);
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-            builder: (context) => MainView(
-                  renderIndex: 'profile',
-                  view: ProfileView(),
-                )),
-        ModalRoute.withName('/'));
+    print("This is $response");
   }
 
   void treatTags(List<String> selectedTags) {
-    getAllTags();
-
-    for (var i = 0; i < selectedTags.length; i++){
+    for (var i = 0; i < selectedTags.length; i++) {
+      //Se miran si existen las tags, sino las crea
       String currentTag = selectedTags[i];
       bool created = false;
-      for (var j = 0; j < _allTags.length; j++){
-        if(currentTag == _allTags[j].name) {
+      var j = 0;
+      while (j < _allTags.length && !created) {
+        if (currentTag == _allTags[j].name) {
           created = true;
-          break;
         }
+        j++;
       }
-      if (!created) createTag(_user, currentTag, myPublication.id);
+      if (!created) createTag(currentTag, myPublication.id);
     }
 
-    for (var i = 0; i < selectedTags.length; i++){
+    for (var i = 0; i < selectedTags.length; i++) {
+      //Se añaden los id de las tags utilizadas en la publicacion (selectedTags) a la lista de tags de la publicacion (publTags)
       String currentTag = selectedTags[i];
-      bool created = false;
-      for (var j = 0; j < _allTags.length; j++){
-        if(currentTag == _allTags[j].name) {
+      bool added = false;
+      var j = 0;
+      while (j < _allTags.length && !added) {
+        if (currentTag == _allTags[j].name) {
           publTags.add(_allTags[j].id);
-          break;
+          added = true;
         }
+        j++;
       }
     }
+  }
 
+  void getPublication(int id) async {
+    Publication mPublication = await PublicationController.getPublication(id);
+    if (!disposed) {
+      setState(() => myPublication = mPublication);
+    }
+  }
+
+  void updatePublication() async {
+    await PublicationController.editPublication(
+        myPublication, myPublication.id); //No he llegado a testear hasta aqui
   }
 
 //Error Check
@@ -124,9 +132,9 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
   }
 
   String errorGenre() {
-    if (selectedGenres.length < 2)
+    if (selectedGenre == 0)
       return "${AppLocalizations.of(context).translate("noGenre")}";
-    return "";
+    return null;
   }
 
   bool disposed = false;
@@ -142,6 +150,8 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
   @override
   void initState() {
     super.initState();
+    getUser();
+    getAllTags();
   }
 
   @override
@@ -185,7 +195,8 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                           decoration: InputDecoration(
                               filled: true,
                               fillColor: Colors.white,
-                              hintText: "${AppLocalizations.of(context).translate("tituloHelpTxt")}",
+                              hintText:
+                                  "${AppLocalizations.of(context).translate("tituloHelpTxt")}",
                               border: OutlineInputBorder(),
                               errorText: errorsAll ? errorTitle() : null,
                               suffixIcon: titleController.text.length > 0
@@ -306,27 +317,30 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                 padding: EdgeInsets.fromLTRB(15, 2, 15, 0),
                 child: Row(children: [
                   Expanded(
-                    child: SmartSelect<int>.multiple(
-                      modalFilter: true,
-                      modalTitle: "${AppLocalizations.of(context).translate("genero")}",
-                      placeholder: 'Escoge el género literario que más se adecue',
-                      modalFilterHint: "HEY",
-                      modalHeaderStyle: S2ModalHeaderStyle(
-                          backgroundColor: globals.primary,
-                          textStyle: TextStyle(color: Colors.black),
-                          iconTheme: IconThemeData(color: Colors.black, opacity: 1),
-                          actionsIconTheme: IconThemeData(color: Colors.black, opacity: 1),
-                        ),
-                      value: selectedGenres,
-                      choiceItems: globals.genres.map<S2Choice<int>>((S2Choice<int> x) {
-                        return S2Choice<int>(
-                          value: x.value,
-                          title: AppLocalizations.of(context).translate(x.title),
-                        );
-                      }).toList(),
-                      onChange: (state) => setState(() => selectedGenres = state.value),
-                    )
-                  ),
+                      child: SmartSelect<int>.single(
+                    modalFilter: true,
+                    modalTitle:
+                        "${AppLocalizations.of(context).translate("genero")}",
+                    placeholder: 'Escoge el género literario que más se adecue',
+                    //modalFilterHint: "HEY",
+                    modalHeaderStyle: S2ModalHeaderStyle(
+                      backgroundColor: globals.primary,
+                      textStyle: TextStyle(color: Colors.black),
+                      iconTheme: IconThemeData(color: Colors.black, opacity: 1),
+                      actionsIconTheme:
+                          IconThemeData(color: Colors.black, opacity: 1),
+                    ),
+                    value: selectedGenre,
+                    choiceItems:
+                        globals.genres.map<S2Choice<int>>((S2Choice<int> x) {
+                      return S2Choice<int>(
+                        value: x.value,
+                        title: AppLocalizations.of(context).translate(x.title),
+                      );
+                    }).toList(),
+                    onChange: (state) =>
+                        setState(() => selectedGenre = state.value),
+                  )),
                 ]),
               ),
               Container(
@@ -363,7 +377,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                   //color: Colors.orange,
                   padding: EdgeInsets.fromLTRB(15, 2, 15, 0),
                   child: TextFieldTags(
-                    initialTags: selectedTags,
+                      initialTags: selectedTags,
                       tagsStyler: TagsStyler(
                           tagTextStyle: TextStyle(fontWeight: FontWeight.bold),
                           tagDecoration: BoxDecoration(
@@ -381,11 +395,9 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                         textFieldFilledColor: Colors.white,
                       ),
                       onTag: (tag) {
-                        selectedTags.add(tag);                        
+                        selectedTags.add(tag);
                       },
-                      onDelete: (tag) {}
-                    )
-                  ),
+                      onDelete: (tag) {})),
               Container(
                 //color: Colors.pink,
                 padding: EdgeInsets.fromLTRB(15, 0, 15, 5),
@@ -396,36 +408,55 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                       .center, //Center Row contents vertically,
                   children: <Widget>[
                     SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.30,
-                      height: 35,
-                      child: RaisedButton(
-                          textColor: Colors.white,
-                          color: Color.fromRGBO(250, 198, 65, 1),
-                          child: Text(
-                            '${AppLocalizations.of(context).translate("publicar")}',
-                            style: TextStyle(
-                              fontSize: 18.0, color: Colors.black),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              errorsTitle = (errorTitle() != null) ? true : false;
-                              errorsDesc = (errorDesc() != null) ? true : false;
-                              errorsGenre = (errorGenre() != null) ? true : false;
-                              errorsAll = errorsTitle | errorsDesc | errorsGenre;
-                            });
-                            if (!errorsAll) {
-                              getUser();
-                              myPublication = Publication();
-                              treatTags(selectedTags);
-                              myPublication.title = titleController.text;
-                              myPublication.content = descController.text;
-                              myPublication.authorId = globals.id; //TO-DO  = _user.id; now its hardcoded
-                              myPublication.category = globals.genres[selectedGenres[1]-1].title; //TO-DO Enable multi genre posting
-                              myPublication.tags = publTags;
-                              myPublication.mentions = ExtractUsernames(descController.text);
-                              createPublication();
-                            }
-                          }))
+                        width: MediaQuery.of(context).size.width * 0.30,
+                        height: 35,
+                        child: RaisedButton(
+                            textColor: Colors.white,
+                            color: Color.fromRGBO(250, 198, 65, 1),
+                            child: Text(
+                              '${AppLocalizations.of(context).translate("publicar")}',
+                              style: TextStyle(
+                                  fontSize: 18.0, color: Colors.black),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                errorsTitle =
+                                    (errorTitle() != null) ? true : false;
+                                errorsDesc =
+                                    (errorDesc() != null) ? true : false;
+                                errorsGenre =
+                                    (errorGenre() != null) ? true : false;
+                                errorsAll =
+                                    errorsTitle | errorsDesc | errorsGenre;
+                              });
+                              if (!errorsAll) {
+                                myPublication = Publication();
+                                myPublication.title = titleController.text;
+                                myPublication.content = descController.text;
+                                myPublication.authorId = globals
+                                    .id; //TO-DO  = _user.id; now its hardcoded
+                                myPublication.category = globals
+                                    .genres[selectedGenre - 1]
+                                    .title; //TO-DO Enable multi genre posting
+                                myPublication.tags = [];
+                                myPublication.mentions =
+                                    ExtractUsernames(descController.text);
+                                createPublication(
+                                    myPublication); //Se crea la publicación
+                                Navigator.push(
+                                  context, // TODO: pass id to PublicationView
+                                  MaterialPageRoute(
+                                      builder: (context) => MainView(
+                                            renderIndex: 'home',
+                                            view: HomeView(),
+                                          )),
+                                );
+                                //getPublication(id)      //Se hace el get de esta mediante la id que devuelve el response del post
+                                //treatTags(selectedTags);    //Se tratan las tags para hacer un update con estas en la publ creada
+                                //myPublication.tags = publTags;    //Se añaden las tags a la publicación
+                                //updatePublication();              //Se hace el update de publicación con las tags
+                              }
+                            }))
                   ],
                 ),
               ),

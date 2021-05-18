@@ -30,8 +30,7 @@ class CommentController {
           print('[$name:$value]'); 
         }
         print("\n");*/
-        comment =
-            Comment.fromJson(json.decode(utf8.decode(response.bodyBytes)));
+        comment = Comment.fromJson(json.decode(utf8.decode(response.bodyBytes)));
       }
     } catch (e) {
       print('error caught: $e');

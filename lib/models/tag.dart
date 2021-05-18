@@ -13,6 +13,7 @@ class Tag{
   int authorId;
   int publicationId;
   String publicactionsAppearUri;
+  String usersUri;
 
   Tag({
     this.id,
@@ -21,15 +22,15 @@ class Tag{
     this.authorId,
     this.publicationId,
     this.publicactionsAppearUri,
+    this.usersUri,
   });
 
   factory Tag.fromJson(Map<String, dynamic> json) => Tag(
     id: json["id"],
     name: json["name"],
     author: User.fromJson(json["author"]),
-    authorId: json["authorId"],
-    publicationId: json["publication"],
     publicactionsAppearUri: json["publications"],
+    usersUri: json["users"],
   );
 
   Map<String, dynamic> toJson() => {
