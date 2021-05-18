@@ -244,11 +244,13 @@ class UserController {
 
       print('Response status: $statusCode\n Response body: $requestBody\n');
       if (statusCode == 200) {
-        categories = json.decode(response.body);
+        var tagsJson = jsonDecode(response.body);
+        print(tagsJson);
+        categories = tagsJson != null ? List.from(tagsJson) : null;
+        print(categories);
+        /*Map map = jsonDecode(response.body);
+        categories = map["favCategories"];*/
       }
-      json.decode(response.body).forEach((result) {
-        categories.add(result);
-      });
     } catch (e) {
       print('error caught: $e');
     }

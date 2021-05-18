@@ -70,8 +70,8 @@ class _EditProfileViewState extends State<EditProfileView> {
   //GET CATEGORIES
   void getCategories() async {
     List<String> cat = await UserController.getCategories(globals.id);
-    categoriesToInt();
     categories = cat;
+    //categoriesToInt();
   }
 
   //UPDATE USER
@@ -98,7 +98,7 @@ class _EditProfileViewState extends State<EditProfileView> {
   void initState() {
     super.initState();
     getUser();
-    //getCategories();
+    getCategories();
   }
 
   @override
@@ -342,7 +342,8 @@ class _EditProfileViewState extends State<EditProfileView> {
 
   void categoriesToInt() {
     for (int i = 0; i < categories.length; i++) {
-      int valor = globals.genres[selectedGenres[i + 1] - 1].value;
+      //int aux = globals.genres[categories[i]]
+      int valor = globals.genres[i].value;
       selectedGenres.add(valor);
     }
   }

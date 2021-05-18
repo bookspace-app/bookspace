@@ -84,7 +84,7 @@ class _ProfileViewState extends State<ProfileView> {
     } else if (widget.id != null && widget.username == null) {
       getUser(widget.id);
     }
-    //getCategories();
+    getCategories();
   }
 
   bool disposed = false;
