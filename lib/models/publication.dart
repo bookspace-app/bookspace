@@ -44,6 +44,7 @@ class Publication {
   int views;
   int totalLikes;
   int comments;
+  int directComments;
   User author;
 
   // URIs
@@ -71,6 +72,7 @@ class Publication {
     this.views,
     this.totalLikes,
     this.comments,
+    this.directComments,
     this.author,
     this.likedByUri,
     this.dislikedByUri,
@@ -91,6 +93,7 @@ class Publication {
         views: json["nviews"], // ESTO ESTA MAL EN EL BACK
         totalLikes: json["totalLikes"],
         comments: json["ncomments"],  // ESTO ESTA MAL EN EL BACK
+        directComments: json["ndirectComments"],
         author: User.fromJson(json["author"]),
         likedByUri: json["likedByUri"],
         dislikedByUri: json["dislikedByUri"],

@@ -49,14 +49,14 @@ class _PublicationViewState extends State<PublicationView> {
       setState(() => _publication = publication);
       // If there are no comments, do not overload
       // by API call
-      if (_publication.comments == 0) {
+      if (_publication.directComments == 0) {
         setState(() => _comments = comments);
       } else {
         comments =
             await CommentController.getComments(_publication.commentsUri);
         setState(() => _comments = comments);
         setState(() => loadedComments =
-            (_publication.comments >= rate ? rate : _publication.comments));
+            (_publication.directComments >= rate ? rate : _publication.directComments));
         //print(_comments);
       }
     }
@@ -173,7 +173,7 @@ class _PublicationViewState extends State<PublicationView> {
                       // Show comments with the specified rate
                       setState(() {
                         int comments = (widget.isPublication)
-                            ? _publication.comments
+                            ? _publication.directComments
                             : _comment.replies;
                         //('TOTAL NUM: $comments');
                         loadedComments = (loadedComments + rate > comments)
@@ -229,7 +229,7 @@ class _PublicationViewState extends State<PublicationView> {
                 padding: EdgeInsets.only(left: 10),
                 child: Text(
                   (widget.isPublication)
-                      ? '${_publication.comments} responses'
+                      ? '${_publication.directComments} responses'
                       : '${_comment.replies} replies',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -272,7 +272,7 @@ class _PublicationViewState extends State<PublicationView> {
               // use the loadMoreComments widget
               (loadedComments <
                       ((widget.isPublication)
-                          ? _publication.comments
+                          ? _publication.directComments
                           : _comment.replies))
                   ? loadMoreComments()
                   : Container(),
