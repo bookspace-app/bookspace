@@ -99,9 +99,9 @@ class _MainViewState extends State<MainView> {
             AppLocalizations.of(context).translate("$_rendered").toString()),
         backgroundColor: Colors.white,
         leadingWidth: 100,
-        leading: Image.asset('./assets/images/No_pic.png',
-            fit: BoxFit.fitHeight
-            ), //TO-DO: Hacer mas grande el logo de la AppBar
+        leading: Image.asset('./assets/images/logo.png',
+            fit: BoxFit
+                .fitHeight), //TO-DO: Hacer mas grande el logo de la AppBar
         actions: (_rendered == "profile")
             ? [
                 PopupMenuButton<String>(onSelected: (value) {
