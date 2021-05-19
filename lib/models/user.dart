@@ -5,6 +5,9 @@ User userFromJson(String str) => User.fromJson(json.decode(str));
 
 String userToJson(User data) => json.encode(data.toJson());
 
+/*List<String> fromJsonCategories(String str) =>
+    fromJsonCategories(json.decode(str));*/
+
 enum Rank { WORKER, SOLDIER, HAREM, QUEEN }
 
 extension RankExtension on Rank {
@@ -83,30 +86,30 @@ class User {
       this.myMentionsUri});
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-    id: json["id"],
-    email: json["email"],
-    name: json["name"],
-    username: json["username"],
-    password: json["password"],
-    description: json["description"],
-    age: json["age"],
-    dor: DateTime.parse(json["dor"]),
-    rank: (json["rank"]),
-    //rank: int.tryParse(json["rank"]),
-    myPublicationsUri: json["publicationsUri"],
-    likedCommentsUri: json["likedCommentsUri"],
-    dislikedCommentsUri: json["dislikedCommentsUri"],
-    favPublicationsUri: json["favouritePublicationsUri"],
-    myCommentsUri: json["commentsUri"],
-    likedPublicationsUri: json["likedPublicationsUri"],
-    dislikedPublicationsUri: json["dislikedPublicationsUri"],
-    blockedUsersUri: json["blockedUsersUri"],
-    profilePicUri: json["profilePicUri"],
-    myTagsUri: json["createdTagsUri"],
-    favTagsUri: json["favTagsUri"],
-    favCategoriesUri: json["favCategoriesUri"],
-    myMentionsUri: json["mentionsUri"],
-  );
+        id: json["id"],
+        email: json["email"],
+        name: json["name"],
+        username: json["username"],
+        password: json["password"],
+        description: json["description"],
+        age: json["age"],
+        dor: DateTime.parse(json["dor"]),
+        rank: (json["rank"]),
+        //rank: int.tryParse(json["rank"]),
+        myPublicationsUri: json["publicationsUri"],
+        likedCommentsUri: json["likedCommentsUri"],
+        dislikedCommentsUri: json["dislikedCommentsUri"],
+        favPublicationsUri: json["favouritePublicationsUri"],
+        myCommentsUri: json["commentsUri"],
+        likedPublicationsUri: json["likedPublicationsUri"],
+        dislikedPublicationsUri: json["dislikedPublicationsUri"],
+        blockedUsersUri: json["blockedUsersUri"],
+        profilePicUri: json["profilePicUri"],
+        myTagsUri: json["createdTagsUri"],
+        favTagsUri: json["favTagsUri"],
+        favCategoriesUri: json["favCategoriesUri"],
+        myMentionsUri: json["mentionsUri"],
+      );
 
   Map<String, dynamic> toJson() => {
         "email": email,
