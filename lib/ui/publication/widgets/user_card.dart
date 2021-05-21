@@ -45,7 +45,8 @@ class UserCard extends StatelessWidget {
       : super(key: key);
 
   void deleteP(int id) async {
-    var statuscode = await PublicationController.deletePublication(id);
+    var statuscode =
+        await PublicationController.deletePublication(id, globals.token);
     print(statuscode);
   }
 

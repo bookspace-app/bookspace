@@ -97,9 +97,11 @@ class PublicationController {
       var body = json.encode(publicationMap);
 
       // Make POST request
-      http.Response response = await http.post(uri, headers: headers, body: body);
+      http.Response response =
+          await http.post(uri, headers: headers, body: body);
 
-      print('Create publication response code: ${response.statusCode}: ${response.body}\n');
+      print(
+          'Create publication response code: ${response.statusCode}: ${response.body}\n');
       print("FALLA AQUI");
       if (response.statusCode == 200) {
         return int.parse(response.body);
@@ -146,7 +148,7 @@ class PublicationController {
   }
 
   // Delete publication by id
-  static Future<int> deletePublication(int id) async {
+  static Future<int> deletePublication(int id, String token) async {
     Publication publication;
     try {
       Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications/$id");
@@ -155,6 +157,7 @@ class PublicationController {
       Map<String, String> headers = {
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
+        'auth': token,
       };
 
       // Make GET request
@@ -172,13 +175,14 @@ class PublicationController {
   }
 
   //likes
-  static Future<int> like(int Pid, int Uid) async {
+  static Future<int> like(int Pid, int Uid, String token) async {
     Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications/$Pid/like/$Uid");
 
     try {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'auth': token,
       };
 
       // Make POST request
@@ -196,13 +200,14 @@ class PublicationController {
   }
 
   //Delete de like
-  static Future<int> unlike(int Pid, int Uid) async {
+  static Future<int> unlike(int Pid, int Uid, String token) async {
     Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications/$Pid/like/$Uid");
 
     try {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'auth': token,
       };
 
       // Make POST request
@@ -220,7 +225,7 @@ class PublicationController {
   }
 
   //dislikes
-  static Future<int> dislike(int Pid, int Uid) async {
+  static Future<int> dislike(int Pid, int Uid, String token) async {
     Uri uri =
         Uri.https(BACKEND_AUTHORITY, "$API/publications/$Pid/dislike/$Uid");
 
@@ -228,6 +233,7 @@ class PublicationController {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'auth': token,
       };
 
       // Make POST request
@@ -245,7 +251,7 @@ class PublicationController {
   }
 
   //Delete de dislike
-  static Future<int> undislike(int Pid, int Uid) async {
+  static Future<int> undislike(int Pid, int Uid, String token) async {
     Uri uri =
         Uri.https(BACKEND_AUTHORITY, "$API/publications/$Pid/dislike/$Uid");
 
@@ -253,6 +259,7 @@ class PublicationController {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'auth': token,
       };
 
       // Make POST request
@@ -270,13 +277,14 @@ class PublicationController {
   }
 
   //Post a favoritos
-  static Future<int> fav(int Pid, int Uid) async {
+  static Future<int> fav(int Pid, int Uid, String token) async {
     Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications/$Pid/fav/$Uid");
 
     try {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'auth': token,
       };
 
       // Make POST request
@@ -294,13 +302,14 @@ class PublicationController {
   }
 
   //Delete de favoritos
-  static Future<int> delfav(int Pid, int Uid) async {
+  static Future<int> delfav(int Pid, int Uid, String token) async {
     Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications/$Pid/fav/$Uid");
 
     try {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'auth': token,
       };
 
       // Make POST request
@@ -317,11 +326,11 @@ class PublicationController {
     return null;
   }
 
-  //get favourites users
-  static Future<List<User>> getfav(int Pid) async {
+  //get liked/disliked/favourited users
+  static Future<List<User>> getfav(int Pid, String action) async {
     List<User> users = [];
     try {
-      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications/$Pid/fav");
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications/$Pid/$action");
 
       // Define headers
       Map<String, String> headers = {

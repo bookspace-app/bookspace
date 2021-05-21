@@ -14,8 +14,8 @@ import 'dart:ui' as ui;
 import 'package:bookspace/globals.dart' as globals;
 
 Future<void> main() async {
-  RenderErrorBox.backgroundColor = Colors.transparent; /* Un apaño */
-  RenderErrorBox.textStyle = ui.TextStyle(color: Colors.transparent);
+  //RenderErrorBox.backgroundColor = Colors.transparent; /* Un apaño */
+  //RenderErrorBox.textStyle = ui.TextStyle(color: Colors.transparent);
   runApp(MyApp());
 }
 
@@ -94,7 +94,7 @@ class _MyAppState extends State<MyApp> {
         return supportedLocales.first;
       },
 
-      initialRoute: '/', // TODO : SignIn
+      initialRoute: '/login', // TODO : SignIn
       routes: {
         // When navigating to the "/" route, build the Home widget.
         '/login': (context) => SignIn(),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:bookspace/globals.dart';
 import 'package:bookspace/models/tag.dart';
 import 'package:intl/intl.dart';
 import 'package:bookspace/config.dart';
@@ -294,8 +295,68 @@ class UserController {
     return true;
   }
 
+  //login sesion
+  static Future<Map<String, dynamic>> postlogin(
+      String username, String password) async {
+    try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/login");
+
+      // Define headers
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
+
+      //Define body
+      Map<String, String> body = {
+        'email': username,
+        'password': password,
+      };
+
+      // Make POST request
+      http.Response response =
+          await http.post(uri, headers: headers, body: jsonEncode(body));
+
+      // Request status and body
+      int statusCode = response.statusCode;
+      Map<String, dynamic> requestBody = jsonDecode(response.body) as Map;
+
+      print('Response status: $statusCode\n Response body: $requestBody\n');
+      if (statusCode == 200) {
+        return requestBody;
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return null;
+  }
+
   //DELETE USER KEY (LOGOUT)
-  static Future<bool> logout(int id) async {
-    return true;
+  static Future<bool> logout(int id, String token) async {
+    try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id/logout");
+
+      // Define headers
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'auth': token,
+      };
+
+      // Make POST request
+      http.Response response = await http.post(uri, headers: headers);
+
+      // Request status and body
+      int statusCode = response.statusCode;
+      String requestBody = response.body;
+
+      print('Response status: $statusCode\n Response body: $requestBody\n');
+      if (statusCode == 200) {
+        return true;
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return false;
   }
 }
