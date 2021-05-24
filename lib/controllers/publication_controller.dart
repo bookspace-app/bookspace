@@ -43,14 +43,18 @@ class PublicationController {
   }
 
   // Get ALL publications or get publications of a specific user (specify URI)
-  static Future<List<Publication>> getPublications([String URI]) async {
+  static Future<List<Publication>> getPublications([String URI, String genre]) async {
     List<Publication> publications = [];
     try {
       Uri uri = Uri.https(
           BACKEND_AUTHORITY,
           (URI == null)
-              ? "$API/publications"
-              : RegExp(r"(?<=.com).*$").stringMatch(URI).toString());
+              ? '$API/publications'
+              : RegExp(r'(?<=.com).*$').stringMatch(URI).toString(),
+          (genre == null)
+              ? null
+              : { 'sort' : genre }
+            );
 
       // Define headers
       Map<String, String> headers = {
