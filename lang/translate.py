@@ -38,6 +38,11 @@ dictionary = {
         'ca': 'Edita Perfil',
         'es': 'Edita Perfil'
     },
+    'search': {
+        'en': 'Search',
+        'ca': 'Busca',
+        'es': 'Búsqueda'
+    },
 
 
     #CREATEPUBLICATION TRANSLATIONS

@@ -10,6 +10,7 @@ import 'package:bookspace/ui/profile/profile_view.dart';
 import 'package:bookspace/ui/publication/create_publication_view.dart';
 import 'package:bookspace/ui/publication/edit_publication.dart';
 import 'package:bookspace/ui/publication/publication_view.dart';
+import 'package:bookspace/ui/search/search_view.dart';
 import 'package:bookspace/ui/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:bookspace/globals.dart' as globals;
@@ -26,13 +27,14 @@ class MainView extends StatefulWidget {
 }
 
 class _MainViewState extends State<MainView> {
-  String _rendered = "home";
+  String _rendered = 'home';
   Map<String, Widget> _views = {
-    "home": HomeView(),
-    "chatList": ChatListView(),
-    "createPublication": CreatePublicationView(),
-    "activity": ActivityView(),
-    "profile": ProfileView(),
+    'home': HomeView(),
+    'chatList': ChatListView(),
+    'createPublication': CreatePublicationView(),
+    'activity': ActivityView(),
+    'profile': ProfileView(),
+    'search': SearchView(),
   };
 
   @override
@@ -96,7 +98,7 @@ class _MainViewState extends State<MainView> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-            AppLocalizations.of(context).translate("$_rendered").toString()),
+            AppLocalizations.of(context).translate('$_rendered').toString()),
         backgroundColor: Colors.white,
         leadingWidth: 100,
         leading: Image.asset('./assets/images/logo.png',
@@ -146,16 +148,20 @@ class _MainViewState extends State<MainView> {
                     ),
                   ];
                 }),
-                /*
-            IconButton(
-                icon: Icon(Icons.more_vert),
-                iconSize: 40, 
-                color: Colors.grey,
-                onPressed: () { },
-            ),
-            */
               ]
-            : null,
+            : (
+              (_rendered == 'home') 
+              ? [
+                  IconButton(
+                    icon: Icon(Icons.search),
+                    color: globals.secondary,
+                    onPressed: () {
+                      changeView('search');
+                    },
+                  )
+                ]//
+              : null
+            ),
       ),
       body: widget.view ??
           Container(
