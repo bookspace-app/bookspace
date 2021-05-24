@@ -1,4 +1,7 @@
 import 'package:bookspace/app_localizations.dart';
+import 'package:bookspace/controllers/publication_controller.dart';
+import 'package:bookspace/models/publication.dart';
+import 'package:bookspace/ui/publication/widgets/publication_card.dart';
 import 'package:flutter/material.dart';
 import 'package:bookspace/globals.dart' as globals;
 
@@ -12,6 +15,10 @@ class SearchView extends StatefulWidget {
 class _SearchViewState extends State<SearchView> {
 
   bool selectedPublis = true;
+  List<Publication> _publications = [];
+  List<Publication> _selected = [];
+
+  String query = '';
 
   final List<String> _genres = [
     'all',
@@ -52,6 +59,47 @@ class _SearchViewState extends State<SearchView> {
     'other'
   ]; 
   String _selectedGenre;
+
+  void getPublications([String genre]) async {
+    // ignore: omit_local_variable_types
+    List<Publication> publications = await PublicationController.getPublications(null, genre);
+    
+    if (!disposed){
+      setState(() => _publications = publications);
+    }
+  }
+
+  void search(String text) {
+    print('Searching $text...');
+    // ignore: omit_local_variable_types
+    // ignore: valid_regexps
+    // Expression containing search query
+    RegExp regExp = RegExp(r''+text+'', caseSensitive: false);
+    if (_publications != null) {
+      // Temp array to store selected publis
+      List<Publication> selected = [];
+      for (final publi in _publications){
+        // If content or text has query add to selected
+        if (regExp.hasMatch(publi.content) || regExp.hasMatch(publi.title)) {
+          selected.add(publi);
+        }
+      }
+      setState(() => _selected = selected);
+    }
+  }
+
+  @override
+  void initState() { 
+    super.initState();
+    getPublications();
+  }
+
+  bool disposed = false;
+  @override
+  void dispose() {
+    disposed = true;
+    super.dispose();
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -138,8 +186,12 @@ class _SearchViewState extends State<SearchView> {
                     //hintText: AppLocalizations.of(context).translate("search-bar"),
                   ),
                   onChanged: (text) {
-                    //addSugestion(text);
-                    print("First text field: $text");
+                    setState(() => query = text);
+                    if (selectedPublis) {
+                      search(query);
+                    } else {
+                      
+                    }
                   },
                 ),		
               ),
@@ -154,9 +206,13 @@ class _SearchViewState extends State<SearchView> {
                   onChanged: (newGenre) {
                     setState(() =>_selectedGenre = newGenre);
                     if (_selectedGenre == 'all') {
-                      //getPublications();
+                      getPublications();
+                      //await Future.delayed(Duration(milliseconds: 200));
+                      search(query);
                     } else {
-                      //getPublications(_selectedGenre);
+                      getPublications(_selectedGenre);
+                      //await Future.delayed(Duration(milliseconds: 200));
+                      search(query);
                     }
                   },
                   items: _genres.map((genre) {
@@ -172,15 +228,39 @@ class _SearchViewState extends State<SearchView> {
           ),	
         ),
         
-
-        /*Expanded(
-          child: CustomScrollView(
-            slivers: <Widget>[
-              ItemsGrid(items: items)
-            ],
-            
-          ), 
-        ), */     
+        // List of publications by genre
+          Expanded(
+            child: ListView(
+              children: List.generate(_selected.length, (index) {
+                return Column(
+                  children: <Widget>[
+                    Container(height: (index == 0) ? 10 : 0),
+                    InkWell(
+                      onTap: () {
+                        /*Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MainView(
+                              renderIndex: 'home',
+                              view: PublicationView(
+                                id: _publications[index].id,
+                                isPublication: true,
+                                //notifyOnRefresh: 
+                              ),
+                            )
+                          )
+                        );*/
+                      },
+                      child: PublicationCard(
+                        publication: _selected[index]
+                      ), // on tap llevar a la view de la publicacion
+                    ), 
+                    Divider() 
+                  ]
+                );
+              })
+            ),
+          ),   
       ]
     );
   }
