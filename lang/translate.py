@@ -375,6 +375,16 @@ dictionary = {
         'ca': 'Altres',
         'es': 'Otros'
     },
+    'all': {
+        'en': 'All',
+        'ca': 'Tots',
+        'es': 'Todos'
+    },
+    'filter': {
+        'en': 'Filter by category',
+        'ca': 'Filtrar per categoria',
+        'es': 'Filtrar por categoria'
+    },
 
 }
 

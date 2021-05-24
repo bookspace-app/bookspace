@@ -70,5 +70,7 @@
     "western": "Western",
     "religion": "Religion",
     "futurism": "Futurism",
-    "other": "Others"
+    "other": "Others",
+    "all": "All",
+    "filter": "Filter by category"
 }
