@@ -84,7 +84,9 @@ class PublicationController {
   }
 
   // POST publications
-  static Future<int> createPublication(Publication publication) async {
+  static Future<Publication> createPublication(Publication publication) async {
+    Publication publicationRet;
+    
     Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications");
 
     try {
@@ -100,9 +102,8 @@ class PublicationController {
       http.Response response = await http.post(uri, headers: headers, body: body);
 
       print('Create publication response code: ${response.statusCode}: ${response.body}\n');
-      print("FALLA AQUI");
       if (response.statusCode == 200) {
-        return int.parse(response.body);
+        return publicationRet = Publication.fromJson(json.decode(response.body));
       }
     } catch (e) {
       print('error caught: $e');

@@ -50,7 +50,7 @@ dictionary = {
     'noGenre': {
         'en': 'You have to select at least 1 genre',
         'ca': 'Ha de seleccionar al menys un gènere',
-        'es': 'Tienes que seleccioanar al menos un género'
+        'es': 'Tienes que seleccionar al menos un género'
     },
     'noTitle': {
         'en': 'You have to write a title for the publication',
