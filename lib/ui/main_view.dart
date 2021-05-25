@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:bookspace/app_localizations.dart';
 import 'package:bookspace/ui/activity/activity_view.dart';
 import 'package:bookspace/ui/chat/chat_list_view.dart';
+import 'package:bookspace/ui/chat/chat_view.dart';
 import 'package:bookspace/ui/home/home_view.dart';
 import 'package:bookspace/ui/profile/config_view.dart';
 import 'package:bookspace/ui/profile/edit_profile_view.dart';
@@ -29,7 +30,7 @@ class _MainViewState extends State<MainView> {
   String _rendered = "home";
   Map<String, Widget> _views = {
     "home": HomeView(),
-    "chatList": ChatListView(),
+    "chatList": ChatView(),
     "createPublication": CreatePublicationView(),
     "activity": ActivityView(),
     "profile": ProfileView(),
