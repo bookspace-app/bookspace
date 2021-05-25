@@ -30,7 +30,8 @@ class CommentController {
           print('[$name:$value]'); 
         }
         print("\n");*/
-        comment = Comment.fromJson(json.decode(utf8.decode(response.bodyBytes)));
+        comment =
+            Comment.fromJson(json.decode(utf8.decode(response.bodyBytes)));
       }
     } catch (e) {
       print('error caught: $e');
@@ -109,7 +110,7 @@ class CommentController {
   }
 
   // Delete comment by id
-  static Future<int> deleteComment(int id) async {
+  static Future<int> deleteComment(int id, String token) async {
     Comment comment;
     try {
       Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/comments/$id");
@@ -118,6 +119,7 @@ class CommentController {
       Map<String, String> headers = {
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
+        'auth': token,
       };
 
       // Make DELETE request
@@ -135,13 +137,14 @@ class CommentController {
   }
 
   //likes
-  static Future<int> like(int Pid, int Uid) async {
+  static Future<int> like(int Pid, int Uid, String token) async {
     Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/comments/$Pid/like/$Uid");
 
     try {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'auth': token,
       };
 
       // Make POST request
@@ -159,13 +162,14 @@ class CommentController {
   }
 
   //dislikes
-  static Future<int> dislike(int Pid, int Uid) async {
+  static Future<int> dislike(int Pid, int Uid, String token) async {
     Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/comments/$Pid/dislike/$Uid");
 
     try {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'auth': token,
       };
 
       // Make POST request
