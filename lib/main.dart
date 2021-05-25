@@ -94,7 +94,7 @@ class _MyAppState extends State<MyApp> {
         return supportedLocales.first;
       },
 
-      initialRoute: '/login', // TODO : SignIn
+      initialRoute: '/home', // TODO : SignIn
       routes: {
         // When navigating to the "/" route, build the Home widget.
         '/login': (context) => SignIn(),

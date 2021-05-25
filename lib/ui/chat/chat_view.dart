@@ -23,9 +23,9 @@ class _ChatViewState extends State<ChatView> {
   }
 
   void initializeChat() async {
-    clientG = Client(chatApiKey, logLevel: Level.SEVERE);
+    //clientG = Client(chatApiKey, logLevel: Level.SEVERE);
 
-    await StreamApi.initUser(clientG,
+    /*await StreamApi.initUser(clientG,
         username: 'usernameRandom',
         urlImage:
             'https://digitalisthub.com/wp-content/uploads/2017/02/google-logo.jpg',
@@ -39,21 +39,22 @@ class _ChatViewState extends State<ChatView> {
         id: 'sample',
         image:
             'https://digitalisthub.com/wp-content/uploads/2017/02/google-logo.jpg',
-        idMembers: members);
+        idMembers: members);*/
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("CHATS"),
-      ),
-      body: StreamChat(
+        appBar: AppBar(
+          title: Text("CHATS"),
+        ),
+        body:
+            Container() /*StreamChat(
         child: StreamChannel(
           child: ChannelPage(),
           channel: channelG,
         ),
-      ),
-    );
+      ),*/
+        );
   }
 }
