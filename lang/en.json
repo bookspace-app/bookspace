@@ -6,6 +6,7 @@
     "activity": "Activity",
     "profile": "Profile",
     "editProfile": "Edit Profile",
+    "search": "Search",
     "longContent": "The description is too long",
     "noGenre": "You have to select at least 1 genre",
     "noTitle": "You have to write a title for the publication",
@@ -70,5 +71,7 @@
     "western": "Western",
     "religion": "Religion",
     "futurism": "Futurism",
-    "other": "Others"
+    "other": "Others",
+    "all": "All",
+    "filter": "Filter by category"
 }

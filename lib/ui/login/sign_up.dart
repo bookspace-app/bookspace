@@ -552,7 +552,7 @@ class _SignUpState extends State<SignUp> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => SignUp2(
-                                              id: id,
+                                              id: _user.id,
                                             )),
                                   );
                                 });

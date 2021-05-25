@@ -38,51 +38,66 @@ class _PublicationHeroState extends State<PublicationHero> {
   List<User> _users = [];
 
   Future<int> like(int Pid, int Uid) async {
-    var status = await PublicationController.like(Pid, Uid);
+    var status = await PublicationController.like(Pid, Uid, globals.token);
     return status;
   }
 
   Future<int> unlike(int Pid, int Uid) async {
-    var status = await PublicationController.unlike(Pid, Uid);
+    var status = await PublicationController.unlike(Pid, Uid, globals.token);
     return status;
   }
 
   Future<int> dislike(int Pid, int Uid) async {
-    var status = await PublicationController.dislike(Pid, Uid);
+    var status = await PublicationController.dislike(Pid, Uid, globals.token);
     return status;
   }
 
   Future<int> undislike(int Pid, int Uid) async {
-    var status = await PublicationController.undislike(Pid, Uid);
+    var status = await PublicationController.undislike(Pid, Uid, globals.token);
     return status;
   }
 
   void addfav(int Pid, int Uid) async {
-    var statuscode = await PublicationController.fav(Pid, Uid);
+    var statuscode = await PublicationController.fav(Pid, Uid, globals.token);
     print(statuscode);
   }
 
   void delfav(int Pid, int Uid) async {
-    var statuscode = await PublicationController.delfav(Pid, Uid);
+    var statuscode =
+        await PublicationController.delfav(Pid, Uid, globals.token);
     print(statuscode);
   }
 
-  void getfav(int Pid) async {
-    List<User> users = await PublicationController.getfav(Pid);
+  void getfav(int Pid, String action) async {
+    List<User> users = await PublicationController.getfav(Pid, action);
     setState(() => _users = users);
-    for (var i = 0; i < _users.length; i++) {
-      (globals.id == _users[i].id)
-          ? setState(() => _myVote = true)
-          : setState(() => _myVote = false);
+    if (action == 'fav') {
+      for (var i = 0; i < _users.length; i++) {
+        (globals.id == _users[i].id)
+            ? setState(() => _myVote = true)
+            : setState(() => _myVote = false);
+      }
+    } else if (action == 'like') {
+      for (var i = 0; i < _users.length; i++) {
+        (globals.id == _users[i].id)
+            ? setState(() => _myLike = true)
+            : setState(() => _myLike = false);
+      }
+    } else if (action == 'dislike') {
+      for (var i = 0; i < _users.length; i++) {
+        (globals.id == _users[i].id)
+            ? setState(() => _myDislike = true)
+            : setState(() => _myDislike = false);
+      }
     }
   }
 
   @override
   void initState() {
     super.initState();
-    setState(() => _myLike = widget.myLike);
-    setState(() => _myDislike = widget.myDislike);
-    getfav(widget.publication.id);
+    getfav(widget.publication.id, 'fav');
+    getfav(widget.publication.id, 'like');
+    getfav(widget.publication.id, 'dislike');
   }
 
   @override

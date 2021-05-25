@@ -38,6 +38,11 @@ dictionary = {
         'ca': 'Edita Perfil',
         'es': 'Edita Perfil'
     },
+    'search': {
+        'en': 'Search',
+        'ca': 'Busca',
+        'es': 'Búsqueda'
+    },
 
 
     #CREATEPUBLICATION TRANSLATIONS
@@ -374,6 +379,16 @@ dictionary = {
         'en': 'Others',
         'ca': 'Altres',
         'es': 'Otros'
+    },
+    'all': {
+        'en': 'All',
+        'ca': 'Tots',
+        'es': 'Todos'
+    },
+    'filter': {
+        'en': 'Filter by category',
+        'ca': 'Filtrar per categoria',
+        'es': 'Filtrar por categoria'
     },
 
 }
