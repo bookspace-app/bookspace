@@ -6,6 +6,7 @@ import 'package:bookspace/ui/chat/chat_list_view.dart';
 import 'package:bookspace/ui/home/home_view.dart';
 import 'package:bookspace/ui/profile/config_view.dart';
 import 'package:bookspace/ui/profile/edit_profile_view.dart';
+import 'package:bookspace/ui/profile/favspub.dart';
 import 'package:bookspace/ui/profile/profile_view.dart';
 import 'package:bookspace/ui/publication/create_publication_view.dart';
 import 'package:bookspace/ui/publication/edit_publication.dart';
@@ -118,6 +119,15 @@ class _MainViewState extends State<MainView> {
                       context,
                       MaterialPageRoute(builder: (context) => ConfigView()),
                     );
+                  } else if (value == "Publicaciones favoritas") {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MainView(
+                                renderIndex: 'home',
+                                view: Favspub(id: globals.id),
+                              )),
+                    );
                   }
                 }, itemBuilder: (BuildContext context) {
                   return [
@@ -140,28 +150,42 @@ class _MainViewState extends State<MainView> {
                           Icon(Icons.brightness_low_rounded),
                           Container(
                             margin: EdgeInsets.only(left: 10),
-                            child: Text('Configuration'),
+                            //child: Text(AppLocalizations.of(context)
+                            //    .translate("configuration")),
+                            child: Text("Configuration"),
                           )
                         ],
                       ),
                       value: "Configuration",
                     ),
+                    PopupMenuItem(
+                      child: Row(
+                        children: [
+                          Icon(Icons.remove_red_eye),
+                          Container(
+                            margin: EdgeInsets.only(left: 10),
+                            /*child: Text(AppLocalizations.of(context)
+                                .translate("favPubs")), */
+                            child: Text("Favorites"),
+                          )
+                        ],
+                      ),
+                      value: "Publicaciones favoritas",
+                    ),
                   ];
                 }),
               ]
-            : (
-              (_rendered == 'home') 
-              ? [
-                  IconButton(
-                    icon: Icon(Icons.search),
-                    color: globals.secondary,
-                    onPressed: () {
-                      changeView('search');
-                    },
-                  )
-                ]//
-              : null
-            ),
+            : ((_rendered == 'home')
+                ? [
+                    IconButton(
+                      icon: Icon(Icons.search),
+                      color: globals.secondary,
+                      onPressed: () {
+                        changeView('search');
+                      },
+                    )
+                  ] //
+                : null),
       ),
       body: widget.view ??
           Container(
