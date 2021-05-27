@@ -1,7 +1,10 @@
 import 'package:bookspace/app_localizations.dart';
 import 'package:bookspace/controllers/publication_controller.dart';
+import 'package:bookspace/controllers/user_controller.dart';
 import 'package:bookspace/models/publication.dart';
+import 'package:bookspace/models/user.dart';
 import 'package:bookspace/ui/publication/widgets/publication_card.dart';
+import 'package:bookspace/ui/search/widgets/user_search_card.dart';
 import 'package:flutter/material.dart';
 import 'package:bookspace/globals.dart' as globals;
 
@@ -16,7 +19,10 @@ class _SearchViewState extends State<SearchView> {
 
   bool selectedPublis = true;
   List<Publication> _publications = [];
+  List<User> _users = [];
+
   List<Publication> _selected = [];
+  List<User> _selectedUsers = [];
 
   String query = '';
 
@@ -60,12 +66,25 @@ class _SearchViewState extends State<SearchView> {
   ]; 
   String _selectedGenre;
 
+  // Call to get publications
   void getPublications([String genre]) async {
     // ignore: omit_local_variable_types
     List<Publication> publications = await PublicationController.getPublications(null, genre);
     
     if (!disposed){
       setState(() => _publications = publications);
+      setState(() => _selected = _publications);
+    }
+  }
+
+  // Call to get users
+  void getUsers() async {
+    // ignore: omit_local_variable_types
+    List<User> users = await UserController.getAllusers();
+    
+    if (!disposed){
+      setState(() => _users = users);
+      setState(() => _selectedUsers = _users);
     }
   }
 
@@ -75,16 +94,34 @@ class _SearchViewState extends State<SearchView> {
     // ignore: valid_regexps
     // Expression containing search query
     RegExp regExp = RegExp(r''+text+'', caseSensitive: false);
-    if (_publications != null) {
+    if ((_publications != null) && selectedPublis) {
       // Temp array to store selected publis
       List<Publication> selected = [];
-      for (final publi in _publications){
-        // If content or text has query add to selected
-        if (regExp.hasMatch(publi.content) || regExp.hasMatch(publi.title)) {
-          selected.add(publi);
+      if (text != '') {
+        for (final publi in _publications){
+          // If content or text has query add to selected
+          if (regExp.hasMatch(publi.content) || regExp.hasMatch(publi.title)) {
+            selected.add(publi);
+          }
         }
+        setState(() => _selected = selected);
+      } else {
+        setState(() => _selected = _publications);
       }
-      setState(() => _selected = selected);
+    } else if ((_users != null) && !selectedPublis) {
+      // Temp array to store selected users
+      List<User> selectedUsers = [];
+      if (text != '') {
+        for (final u in _users){
+          // If username has query add to selected
+          if (regExp.hasMatch(u.username)) {
+            selectedUsers.add(u);
+          }
+        }
+        setState(() => _selectedUsers = selectedUsers);
+      } else {
+        setState(() => _selectedUsers = _users);
+      }
     }
   }
 
@@ -92,6 +129,7 @@ class _SearchViewState extends State<SearchView> {
   void initState() { 
     super.initState();
     getPublications();
+    getUsers();
   }
 
   bool disposed = false;
@@ -115,7 +153,7 @@ class _SearchViewState extends State<SearchView> {
         onPressed: () {
           setState(() => selectedPublis = true);
         },
-        child: Text(AppLocalizations.of(context).translate('all')),
+        child: Text(AppLocalizations.of(context).translate('publications')),
       ),
     );
 
@@ -132,7 +170,7 @@ class _SearchViewState extends State<SearchView> {
         onPressed: () {
           setState(() => selectedPublis = false);
         },
-        child: Text(AppLocalizations.of(context).translate('all')),
+        child: Text(AppLocalizations.of(context).translate('users')),
         /*onPressed: () {
           setState(() => sponsorized = true);
           getItems();
@@ -169,7 +207,9 @@ class _SearchViewState extends State<SearchView> {
               flex: 1,
               child: Container(	
                 //width: MediaQuery.of(context).size.width * 0.5,	
-                padding: EdgeInsets.only(top:10, bottom: 10, left:10),
+                padding: (selectedPublis)
+                ? EdgeInsets.only(top:10, bottom: 10, left:10)
+                : EdgeInsets.all(10),
                 child: TextField(
                   autofocus: true,
                   textAlignVertical: TextAlignVertical.center, 
@@ -187,16 +227,13 @@ class _SearchViewState extends State<SearchView> {
                   ),
                   onChanged: (text) {
                     setState(() => query = text);
-                    if (selectedPublis) {
-                      search(query);
-                    } else {
-                      
-                    }
+                    search(query);
                   },
                 ),		
               ),
             ),
-            Expanded(
+            (selectedPublis)
+            ? Expanded(
               flex: 1,
               child: Container(
                 padding: EdgeInsets.all(10),
@@ -223,15 +260,18 @@ class _SearchViewState extends State<SearchView> {
                   }).toList(),
                 ),
               )
-            )
+            ):Container()
             ]
           ),	
         ),
         
-        // List of publications by genre
+        // List of publications of users by genre
           Expanded(
             child: ListView(
-              children: List.generate(_selected.length, (index) {
+              children: List.generate(
+                (selectedPublis)
+                ? _selected.length
+                : _selectedUsers.length, (index) {
                 return Column(
                   children: <Widget>[
                     Container(height: (index == 0) ? 10 : 0),
@@ -251,8 +291,11 @@ class _SearchViewState extends State<SearchView> {
                           )
                         );*/
                       },
-                      child: PublicationCard(
+                      child: (selectedPublis)
+                      ? PublicationCard(
                         publication: _selected[index]
+                      ) : UserSearchCard(
+                        user: _selectedUsers[index]
                       ), // on tap llevar a la view de la publicacion
                     ), 
                     Divider() 
