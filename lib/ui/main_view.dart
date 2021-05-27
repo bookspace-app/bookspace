@@ -150,9 +150,9 @@ class _MainViewState extends State<MainView> {
                           Icon(Icons.brightness_low_rounded),
                           Container(
                             margin: EdgeInsets.only(left: 10),
-                            //child: Text(AppLocalizations.of(context)
-                            //    .translate("configuration")),
-                            child: Text("Configuration"),
+                            child: Text(AppLocalizations.of(context)
+                                .translate("configuration")),
+                            //child: Text("Configuration"),
                           )
                         ],
                       ),
@@ -164,9 +164,9 @@ class _MainViewState extends State<MainView> {
                           Icon(Icons.remove_red_eye),
                           Container(
                             margin: EdgeInsets.only(left: 10),
-                            /*child: Text(AppLocalizations.of(context)
-                                .translate("favPubs")), */
-                            child: Text("Favorites"),
+                            child: Text(AppLocalizations.of(context)
+                                .translate("favPubs")),
+                            //child: Text("Favorites"),
                           )
                         ],
                       ),

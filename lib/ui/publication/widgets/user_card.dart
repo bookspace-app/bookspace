@@ -170,9 +170,11 @@ class _UsercardState extends State<UserCard> {
                             )),
                           ],
                         ))),
+
                 Expanded(
                     flex: 1,
                     //color: Colors.blue[200],
+                    //if (globals.id == widget.author.id){
                     child: PopupMenuButton<String>(onSelected: (value) {
                       if (value == 'Editar') {
                         if (globals.id != widget.author.id) {
@@ -252,36 +254,6 @@ class _UsercardState extends State<UserCard> {
                           );
                         }
                       }
-                      /*else if (value == 'Fav') {
-                        if (!isPublication) {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text('Acción no permitida'),
-                                content: Text(
-                                    'No puedes añadir a favoritas un comentario, añada a favoritas la publicación'),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text('OK'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        } else {
-                          if (color == Colors.black) {
-                            color = Colors.yellow;
-                            addfav(commentId, globals.id);
-                          } else {
-                            color = Colors.black;
-                            delfav(commentId, globals.id);
-                          }
-                        }
-                      }*/
                     }, itemBuilder: (BuildContext context) {
                       return [
                         PopupMenuItem(
@@ -308,20 +280,8 @@ class _UsercardState extends State<UserCard> {
                             ],
                           ),
                         ),
-                        /* PopupMenuItem(
-                          value: 'Fav',
-                          child: Row(
-                            children: [
-                              Icon(Icons.star, color: color),
-                              Container(
-                                margin: EdgeInsets.only(left: 10),
-                                child: Text('Añadir a favoritos'),
-                              )
-                            ],
-                          ),
-                        ),*/
                       ];
-                    }))
+                    })) //})
               ]),
             ),
             widget.principal
