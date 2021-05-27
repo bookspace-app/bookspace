@@ -65,9 +65,19 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
     int response = await TagController.createTag(tag);
   }
 
+  bool updatedPubl = false;
+  bool posted = false;
+
   void createPublication(Publication myPublication) async {
-    int response = await PublicationController.createPublication(myPublication);
-    print("This is $response");
+
+    Publication response = await PublicationController.createPublication(myPublication);
+
+    if (!disposed) {
+      setState(() => myPublication = response);
+      print("LOL ${myPublication.id}");
+      setState((){ posted = true; });
+    } 
+    
   }
 
   void treatTags(List<String> selectedTags) {
@@ -97,13 +107,6 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
         }
         j++;
       }
-    }
-  }
-
-  void getPublication(int id) async {
-    Publication mPublication = await PublicationController.getPublication(id);
-    if (!disposed) {
-      setState(() => myPublication = mPublication);
     }
   }
 
@@ -317,41 +320,37 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                 padding: EdgeInsets.fromLTRB(15, 2, 15, 0),
                 child: Row(children: [
                   Expanded(
-                      child: SmartSelect<int>.single(
-                    modalFilter: true,
-                    modalTitle:
-                        "${AppLocalizations.of(context).translate("genero")}",
-                    placeholder: 'Escoge el género literario que más se adecue',
-                    //modalFilterHint: "HEY",
-                    modalHeaderStyle: S2ModalHeaderStyle(
-                      backgroundColor: globals.primary,
-                      textStyle: TextStyle(color: Colors.black),
-                      iconTheme: IconThemeData(color: Colors.black, opacity: 1),
-                      actionsIconTheme:
-                          IconThemeData(color: Colors.black, opacity: 1),
-                    ),
-                    value: selectedGenre,
-                    choiceItems:
-                        globals.genres.map<S2Choice<int>>((S2Choice<int> x) {
-                      return S2Choice<int>(
-                        value: x.value,
-                        title: AppLocalizations.of(context).translate(x.title),
-                      );
-                    }).toList(),
-                    onChange: (state) =>
-                        setState(() => selectedGenre = state.value),
-                  )),
+                    child: SmartSelect<int>.single(
+                      modalFilter: true,
+                      modalTitle: "${AppLocalizations.of(context).translate("genero")}",
+                      placeholder: 'Escoge el género literario que más se adecue',
+                      modalHeaderStyle: S2ModalHeaderStyle(
+                        backgroundColor: globals.primary,
+                        textStyle: TextStyle(color: Colors.black),
+                        iconTheme: IconThemeData(color: Colors.black, opacity: 1),
+                        actionsIconTheme: IconThemeData(color: Colors.black, opacity: 1),
+                      ),
+                      value: selectedGenre,
+                      choiceItems: globals.genres.map<S2Choice<int>>((S2Choice<int> x) {
+                        return S2Choice<int>(
+                          value: x.value,
+                          title: AppLocalizations.of(context).translate(x.title),
+                        );
+                      }).toList(),
+                      onChange: (state) => setState(() => selectedGenre = state.value),
+                    )
+                  ),
                 ]),
               ),
               Container(
                 padding: EdgeInsets.fromLTRB(25, 0, 15, 2),
                 child: Row(children: [
                   Text(
-                    errorsAll ? errorGenre() : "",
+                    errorsAll ? (errorGenre() == null ? "" : errorGenre()) : "",
                     style: TextStyle(fontSize: 12.0, color: Colors.red),
                   ),
                 ]),
-              ),
+              ), 
               Container(
                 padding: EdgeInsets.fromLTRB(15, 5, 15, 2),
                 child: Row(children: [
@@ -402,10 +401,8 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                 //color: Colors.pink,
                 padding: EdgeInsets.fromLTRB(15, 0, 15, 5),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment
-                      .center, //Center Row contents horizontally,
-                  crossAxisAlignment: CrossAxisAlignment
-                      .center, //Center Row contents vertically,
+                  mainAxisAlignment: MainAxisAlignment.center, //Center Row contents horizontally,
+                  crossAxisAlignment: CrossAxisAlignment.center, //Center Row contents vertically,
                   children: <Widget>[
                     SizedBox(
                         width: MediaQuery.of(context).size.width * 0.30,
@@ -420,41 +417,37 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                             ),
                             onPressed: () {
                               setState(() {
-                                errorsTitle =
-                                    (errorTitle() != null) ? true : false;
-                                errorsDesc =
-                                    (errorDesc() != null) ? true : false;
-                                errorsGenre =
-                                    (errorGenre() != null) ? true : false;
-                                errorsAll =
-                                    errorsTitle | errorsDesc | errorsGenre;
+                                errorsTitle = (errorTitle() != null) ? true : false;
+                                errorsDesc = (errorDesc() != null) ? true : false;
+                                errorsGenre = (errorGenre() != null) ? true : false;
+                                errorsAll = errorsTitle | errorsDesc | errorsGenre;
                               });
                               if (!errorsAll) {
                                 myPublication = Publication();
                                 myPublication.title = titleController.text;
                                 myPublication.content = descController.text;
-                                myPublication.authorId = globals
-                                    .id; //TO-DO  = _user.id; now its hardcoded
-                                myPublication.category = globals
-                                    .genres[selectedGenre - 1]
-                                    .title; //TO-DO Enable multi genre posting
+                                myPublication.authorId = globals.id; //TO-DO  = _user.id; now its hardcoded
+                                myPublication.category = globals.genres[selectedGenre - 1].title; //TO-DO Enable multi genre posting
                                 myPublication.tags = [];
-                                myPublication.mentions =
-                                    ExtractUsernames(descController.text);
-                                createPublication(
-                                    myPublication); //Se crea la publicación
-                                Navigator.push(
-                                  context, // TODO: pass id to PublicationView
-                                  MaterialPageRoute(
-                                      builder: (context) => MainView(
-                                            renderIndex: 'home',
-                                            view: HomeView(),
-                                          )),
-                                );
-                                //getPublication(id)      //Se hace el get de esta mediante la id que devuelve el response del post
+                                myPublication.mentions = ExtractUsernames(descController.text);
+                                createPublication(myPublication); //Se crea la publicación
+                                if (posted) {
+                                  print("WOW ${myPublication.id}");
+                                  posted = false;
+                                }
                                 //treatTags(selectedTags);    //Se tratan las tags para hacer un update con estas en la publ creada
                                 //myPublication.tags = publTags;    //Se añaden las tags a la publicación
                                 //updatePublication();              //Se hace el update de publicación con las tags
+                                /*
+                                Navigator.push(context, // TODO: pass id to PublicationView
+                                  MaterialPageRoute(
+                                    builder: (context) => MainView(
+                                      renderIndex: 'home',
+                                      view: HomeView(),
+                                    )
+                                  ),
+                                );
+                                */
                               }
                             }))
                   ],
