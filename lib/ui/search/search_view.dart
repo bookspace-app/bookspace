@@ -3,6 +3,9 @@ import 'package:bookspace/controllers/publication_controller.dart';
 import 'package:bookspace/controllers/user_controller.dart';
 import 'package:bookspace/models/publication.dart';
 import 'package:bookspace/models/user.dart';
+import 'package:bookspace/ui/main_view.dart';
+import 'package:bookspace/ui/profile/profile_view.dart';
+import 'package:bookspace/ui/publication/publication_view.dart';
 import 'package:bookspace/ui/publication/widgets/publication_card.dart';
 import 'package:bookspace/ui/search/widgets/user_search_card.dart';
 import 'package:flutter/material.dart';
@@ -277,19 +280,33 @@ class _SearchViewState extends State<SearchView> {
                     Container(height: (index == 0) ? 10 : 0),
                     InkWell(
                       onTap: () {
-                        /*Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MainView(
-                              renderIndex: 'home',
-                              view: PublicationView(
-                                id: _publications[index].id,
-                                isPublication: true,
-                                //notifyOnRefresh: 
-                              ),
+                        if (selectedPublis) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MainView(
+                                renderIndex: 'home',
+                                view: PublicationView(
+                                  id: _selected[index].id,
+                                  isPublication: true,
+                                  //notifyOnRefresh: 
+                                ),
+                              )
                             )
-                          )
-                        );*/
+                          );
+                        } else  {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MainView(
+                                renderIndex: 'profile',
+                                view: ProfileView(
+                                  username: _selectedUsers[index].username,
+                                ),
+                              )
+                            ),
+                          );
+                        }
                       },
                       child: (selectedPublis)
                       ? PublicationCard(
