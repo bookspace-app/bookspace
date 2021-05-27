@@ -54,7 +54,9 @@ class _SignInState extends State<SignIn> {
     }
     setState(() {
       globals.id = idUser;
+      print(globals.id);
       globals.token = token;
+      print(globals.token);
     });
   }
 
@@ -213,12 +215,14 @@ class _SignInState extends State<SignIn> {
                       });
                       //if (!error) {
                       postlogin(
-                          usernameController.text, passwordController.text);
-                      //falta comprovar contraseña
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => MainView()),
-                      );
+                              usernameController.text, passwordController.text)
+                          .then((value) {
+                        //falta comprovar contraseña
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => MainView()),
+                        );
+                      });
                     }
                     //}
                     )),
