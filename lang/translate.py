@@ -391,6 +391,17 @@ dictionary = {
         'es': 'Filtrar por categoria'
     },
 
+    'publications': {
+        'en': 'Publications',
+        'ca': 'Publicacions',
+        'es': 'Publicaciones'
+    },
+    'users': {
+        'en': 'Users',
+        'ca': 'Usuaris',
+        'es': 'Usuarios'
+    },
+
 }
 
 for lang in locales:

@@ -73,5 +73,7 @@
     "futurism": "Futurismo",
     "other": "Otros",
     "all": "Todos",
-    "filter": "Filtrar por categoria"
+    "filter": "Filtrar por categoria",
+    "publications": "Publicaciones",
+    "users": "Usuarios"
 }
