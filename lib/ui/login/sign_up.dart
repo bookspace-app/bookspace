@@ -9,7 +9,7 @@ import 'package:bookspace/ui/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:bookspace/globals.dart' as globals;
-import 'package:flutter_string_encryption/flutter_string_encryption.dart';
+//import 'package:flutter_string_encryption/flutter_string_encryption.dart';
 
 /*class Datos {
   String username;
@@ -40,7 +40,7 @@ class _SignUpState extends State<SignUp> {
 
   String key, password;
   String encrypt, decrypt;
-  PlatformStringCryptor cryptor;
+  //PlatformStringCryptor cryptor;
 
   bool errorsUserName = false;
   bool errorsName = false;
@@ -576,7 +576,7 @@ class _SignUpState extends State<SignUp> {
               ),
             ]));
   }
-
+/*
   void encryption() async {
     cryptor = new PlatformStringCryptor();
     final String salt = await cryptor.generateSalt();
@@ -592,5 +592,5 @@ class _SignUpState extends State<SignUp> {
       decrypt = await cryptor.decrypt(encrypt, key);
       print(decrypt);
     } catch (error) {}
-  }
+  }*/
 }
