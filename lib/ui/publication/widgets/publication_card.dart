@@ -11,10 +11,6 @@ class PublicationCard extends StatelessWidget {
     this.publication,
   }) : super(key: key);
 
-  int _totalUpvotes = 100;
-  int _totalViews = 4;
-  int _totalResponses = 2;
-
   bool _myVote = false;
   bool _myFavorite = false;
   bool _myResponse = false;
