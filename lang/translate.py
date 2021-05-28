@@ -43,7 +43,16 @@ dictionary = {
         'ca': 'Busca',
         'es': 'Búsqueda'
     },
-
+    'configuration': {
+        'en': 'Configuration',
+        'ca': 'Configuració',
+        'es': 'Configuración'
+    },
+    'favPubs': {
+        'en': 'Favorites',
+        'ca': 'Favorits',
+        'es': 'Favoritos'
+    },
 
     #CREATEPUBLICATION TRANSLATIONS
 

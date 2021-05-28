@@ -292,7 +292,9 @@ class _PublicationHeroState extends State<PublicationHero> {
                                         style: TextStyle(
                                           fontSize: 20.0,
                                           fontWeight: FontWeight.bold,
-                                          // color: _myVote ? Colors.yellow[800] : Colors.black,
+                                          color: _myVote
+                                              ? Colors.yellow[800]
+                                              : Colors.black,
                                         ),
                                       ),
                                       Container(
