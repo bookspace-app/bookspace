@@ -169,11 +169,40 @@ class _PublicationHeroState extends State<PublicationHero> {
                   Expanded(
                       child: Container(
                           padding: EdgeInsets.all(10),
-                          child: ParsedContent(widget.publication.title, true)))
-                  // TODO: tags
+                          child: ParsedContent(widget.publication.title, true)
+                      )
+                  )
                 ],
               )
             : Container(),
+        (widget.isPublication)
+          ? Container(
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
+              child: Wrap(
+                alignment: WrapAlignment.spaceBetween,
+                direction: Axis.horizontal,
+                children: <Widget>[
+                    for (var i = 0; i < widget.publication.tags.length; i++)
+                    Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 5), 
+                      child: Container (
+                        padding: EdgeInsets.fromLTRB(2, 0, 2, 0),
+                        //color: globals.gray,
+                        decoration: BoxDecoration(color: globals.gray ,border: Border.all(color: globals.gray), borderRadius: BorderRadius.all(Radius.circular(5)) ), 
+                        child: Text(
+                          " ${widget.publication.tags[i]} ",
+                          style: TextStyle(
+                            backgroundColor: globals.gray,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              )
+            )
+          : Container(),  
         // Upvotes module
         Row(
           children: <Widget>[

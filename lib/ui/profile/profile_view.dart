@@ -203,8 +203,28 @@ class _ProfileViewState extends State<ProfileView> {
                   ),
                 ],
               ),
-              Row(
+              Wrap(
+                alignment: WrapAlignment.spaceBetween,
+                direction: Axis.horizontal,
                 children: [
+                  for (var i = 0; i < categories.length; i++)
+                  Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 0), 
+                    child: Container (
+                      padding: EdgeInsets.fromLTRB(2, 0, 2, 0),
+                      //color: globals.gray,
+                      decoration: BoxDecoration(color: globals.gray ,border: Border.all(color: globals.gray), borderRadius: BorderRadius.all(Radius.circular(5)) ), 
+                      child: Text(
+                        " ${AppLocalizations.of(context).translate("categories[i]")} ",
+                        style: TextStyle(
+                          backgroundColor: globals.gray,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                  /*
                   for (var xen = 0; xen < categories.length; xen++)
                   Container(
                     //color: Colors.orange,
@@ -218,7 +238,7 @@ class _ProfileViewState extends State<ProfileView> {
                       ),
                     ),
                     //child: categoriasText(),
-                  ),
+                  ),*/
                 ],
               ),
             ],
