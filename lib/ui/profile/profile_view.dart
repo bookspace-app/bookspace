@@ -1,3 +1,4 @@
+import 'package:bookspace/app_localizations.dart';
 import 'package:bookspace/controllers/publication_controller.dart';
 import 'package:bookspace/controllers/user_controller.dart';
 import 'package:bookspace/models/publication.dart';
@@ -195,18 +196,26 @@ class _ProfileViewState extends State<ProfileView> {
                     child: Text(
                       "Categorias Favoritas",
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 18.0),
+                      fontWeight: FontWeight.bold, fontSize: 18.0),
                     ),
                   ),
                 ],
               ),
               Row(
                 children: [
+                  for (var xen = 0; xen < categories.length; xen++)
                   Container(
                     //color: Colors.orange,
-                    padding: EdgeInsets.fromLTRB(15, 5, 10,
-                        0), //Para cada tag recibida de la api un campo de texto con fondo gris y letras blancas, padding entre ellos
-                    child: categoriasText(),
+                    padding: EdgeInsets.fromLTRB(15, 5, 10,0), //Para cada tag recibida de la api un campo de texto con fondo gris y letras blancas, padding entre ellos
+                    child: Text(
+                      categories[xen],
+                      style: TextStyle(
+                        backgroundColor: globals.gray,
+                        color: Colors.white,
+                        fontSize: 10.0,
+                      ),
+                    ),
+                    //child: categoriasText(),
                   ),
                 ],
               ),
@@ -218,31 +227,34 @@ class _ProfileViewState extends State<ProfileView> {
             child: Text(
               'Mis publicaciones',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
-            )),
+            )
+        ),
         for (var index = 0; index < _myPublications.length; index++)
           Column(
-              //TO-DO Add left padding (15) & right padding (?) to publication cards
-              children: <Widget>[
-                Container(height: (index == 0) ? 10 : 0),
-                InkWell(
-                  child: PublicationCard(publication: _myPublications[index]),
-                  onTap: () {
-                    Navigator.push(
-                      context, // TODO: pass id to PublicationView
-                      MaterialPageRoute(
-                          builder: (context) => MainView(
-                                renderIndex: 'profile',
-                                view: PublicationView(
-                                    id: _myPublications[index].id,
-                                    isPublication: true,
-                                    notifyOnRefresh: refresh,
-                                ),
-                              )),
-                    );
-                  }, // on tap llevar a la view de la publicacion
-                ),
-                Divider()
-              ])
+            //TO-DO Add left padding (15) & right padding (?) to publication cards
+            children: <Widget>[
+              Container(height: (index == 0) ? 10 : 0),
+              InkWell(
+                child: PublicationCard(publication: _myPublications[index]),
+                onTap: () {
+                  Navigator.push(
+                    context, // TODO: pass id to PublicationView
+                    MaterialPageRoute(
+                      builder: (context) => MainView(
+                        renderIndex: 'profile',
+                        view: PublicationView(
+                            id: _myPublications[index].id,
+                            isPublication: true,
+                            notifyOnRefresh: refresh,
+                        ),
+                      )
+                    ),
+                  );
+                }, // on tap llevar a la view de la publicacion
+              ),
+              Divider()
+            ]
+          )
       ]);
       /*Container(
        child: Text('hello ${_user.username}'),
@@ -252,14 +264,29 @@ class _ProfileViewState extends State<ProfileView> {
     }
   }
 
+
   Widget categoriasText() {
     String aux = "";
+
+    if (categories.length == 0) return (Text(""));
+
     for (int i = 0; i < categories.length; i++) {
-      if (i == 0)
-        aux = categories[0];
-      else
-        aux += ", " + categories[i];
+      if (i == 0) {
+        print("ESTO ES CAT ${categories[0]}");
+        aux = '${AppLocalizations.of(context).translate("categories[0]")}';
+      } 
+      else {
+        aux += ", " + '${AppLocalizations.of(context).translate("categories[i]")}';
+      }
+      return Text(
+        aux,
+        style: TextStyle(
+          backgroundColor: globals.gray,
+          color: Colors.white,
+          fontSize: 10.0,
+        ),
+      );
     }
-    return Text(aux);
+    return (Text(""));
   }
 }

@@ -38,9 +38,8 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
 
   int selectedGenre = 0;
 
-  List<Tag> _allTags;
   List<String> selectedTags = [];
-  List<int> publTags;
+  //List<int> publTags;
 
   void getUser() async {
     User user =
@@ -50,69 +49,10 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
     }
   }
 
-  void getAllTags() async {
-    List<Tag> allTags = await TagController.getAllTags();
-    if (!disposed) {
-      setState(() => _allTags = allTags);
-    }
-  }
-
-  void createTag(String name, int publId) async {
-    Tag tag = Tag();
-    tag.authorId = globals.id; //TOKEN
-    tag.name = name;
-    tag.publicationId = publId;
-    int response = await TagController.createTag(tag);
-  }
-
-  bool updatedPubl = false;
-  bool posted = false;
-
   void createPublication(Publication myPublication) async {
 
-    Publication response = await PublicationController.createPublication(myPublication);
+    Publication response = await PublicationController.createPublication(myPublication, globals.token);
 
-    if (!disposed) {
-      setState(() => myPublication = response);
-      print("LOL ${myPublication.id}");
-      setState((){ posted = true; });
-    } 
-    
-  }
-
-  void treatTags(List<String> selectedTags) {
-    for (var i = 0; i < selectedTags.length; i++) {
-      //Se miran si existen las tags, sino las crea
-      String currentTag = selectedTags[i];
-      bool created = false;
-      var j = 0;
-      while (j < _allTags.length && !created) {
-        if (currentTag == _allTags[j].name) {
-          created = true;
-        }
-        j++;
-      }
-      if (!created) createTag(currentTag, myPublication.id);
-    }
-
-    for (var i = 0; i < selectedTags.length; i++) {
-      //Se añaden los id de las tags utilizadas en la publicacion (selectedTags) a la lista de tags de la publicacion (publTags)
-      String currentTag = selectedTags[i];
-      bool added = false;
-      var j = 0;
-      while (j < _allTags.length && !added) {
-        if (currentTag == _allTags[j].name) {
-          publTags.add(_allTags[j].id);
-          added = true;
-        }
-        j++;
-      }
-    }
-  }
-
-  void updatePublication() async {
-    await PublicationController.editPublication(
-        myPublication, myPublication.id); //No he llegado a testear hasta aqui
   }
 
 //Error Check
@@ -154,7 +94,6 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
   void initState() {
     super.initState();
     getUser();
-    getAllTags();
   }
 
   @override
@@ -426,18 +365,12 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                                 myPublication = Publication();
                                 myPublication.title = titleController.text;
                                 myPublication.content = descController.text;
-                                myPublication.authorId = globals.id; //TO-DO  = _user.id; now its hardcoded
-                                myPublication.category = globals.genres[selectedGenre - 1].title; //TO-DO Enable multi genre posting
-                                myPublication.tags = [];
+                                myPublication.authorId = globals.id;
+                                myPublication.category = globals.genres[selectedGenre - 1].title;
+                                myPublication.tags = selectedTags;
                                 myPublication.mentions = ExtractUsernames(descController.text);
-                                createPublication(myPublication); //Se crea la publicación
-                                if (posted) {
-                                  print("WOW ${myPublication.id}");
-                                  posted = false;
-                                }
-                                //treatTags(selectedTags);    //Se tratan las tags para hacer un update con estas en la publ creada
-                                //myPublication.tags = publTags;    //Se añaden las tags a la publicación
-                                //updatePublication();              //Se hace el update de publicación con las tags
+
+                                createPublication(myPublication); 
                                 /*
                                 Navigator.push(context, // TODO: pass id to PublicationView
                                   MaterialPageRoute(

@@ -34,7 +34,7 @@ class Publication {
   DateTime dop; 
   int authorId;
   String category;
-  List<int> tags;
+  List<String> tags;
   List<String> mentions;
 
   // OUTPUT

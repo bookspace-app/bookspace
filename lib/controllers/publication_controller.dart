@@ -88,7 +88,7 @@ class PublicationController {
   }
 
   // POST publications
-  static Future<Publication> createPublication(Publication publication) async {
+  static Future<Publication> createPublication(Publication publication, String token) async {
     Publication publicationRet;
     
     Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications");
@@ -97,6 +97,7 @@ class PublicationController {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'auth': token,
       };
 
       Map<String, dynamic> publicationMap = publication.toJson();

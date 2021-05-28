@@ -5,6 +5,7 @@ import 'package:smart_select/smart_select.dart';
 Color primary = getMaterial(0xFFFAC640);
 Color secondary = getMaterial(0xFF314211);
 Color tertiary = getMaterial(0xFF313211);
+Color gray = getMaterial(0xFFD9D9D9);
 int id = 1;
 String token;
 double bottomBarHeight = 60.0;
