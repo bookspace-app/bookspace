@@ -8,7 +8,7 @@
     "editProfile": "Edit Profile",
     "search": "Search",
     "configuration": "Configuration",
-    "favPubs": "Favorites",
+    "favPubs": "Favourites",
     "longContent": "The description is too long",
     "noGenre": "You have to select at least 1 genre",
     "noTitle": "You have to write a title for the publication",
@@ -75,7 +75,5 @@
     "futurism": "Futurism",
     "other": "Others",
     "all": "All",
-    "filter": "Filter by category",
-    "publications": "Publications",
-    "users": "Users"
+    "filter": "Filter by category"
 }

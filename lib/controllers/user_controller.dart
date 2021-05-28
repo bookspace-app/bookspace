@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:bookspace/globals.dart';
+import 'package:bookspace/models/publication.dart';
 import 'package:bookspace/models/tag.dart';
 import 'package:intl/intl.dart';
 import 'package:bookspace/config.dart';
@@ -358,5 +359,36 @@ class UserController {
       print('error caught: $e');
     }
     return false;
+  }
+
+  //get user favorite publications
+  static Future<List<Publication>> getPublications(int id) async {
+    List<Publication> publications = [];
+    try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id/favPublications");
+
+      // Define headers
+      Map<String, String> headers = {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+      };
+
+      // Make GET request
+      http.Response response = await http.get(uri, headers: headers);
+
+      // Request status and body
+      int statusCode = response.statusCode;
+      String requestBody = response.body;
+
+      //print('Response status: $statusCode\n Response body: $requestBody\n');
+      if (statusCode == 200) {
+        json.decode(utf8.decode(response.bodyBytes)).forEach((result) {
+          publications.add(Publication.fromJson(result));
+        });
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return publications;
   }
 }

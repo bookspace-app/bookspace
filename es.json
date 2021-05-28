@@ -10,7 +10,7 @@
     "configuration": "Configuración",
     "favPubs": "Favoritos",
     "longContent": "La descripción es demasiado larga",
-    "noGenre": "Tienes que seleccionar al menos un género",
+    "noGenre": "Tienes que seleccioanar al menos un género",
     "noTitle": "Tienes que escribir un título para la publicación",
     "shortTitle": "El título es demasiado corto",
     "longTitle": "El título es demasiado largo",
@@ -75,7 +75,5 @@
     "futurism": "Futurismo",
     "other": "Otros",
     "all": "Todos",
-    "filter": "Filtrar por categoria",
-    "publications": "Publicaciones",
-    "users": "Usuarios"
+    "filter": "Filtrar por categoria"
 }
