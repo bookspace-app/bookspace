@@ -1,6 +1,7 @@
 import 'package:bookspace/models/publication.dart';
 import 'package:bookspace/utils/humanize.dart';
 import 'package:flutter/material.dart';
+import 'package:bookspace/globals.dart' as globals;
 
 class PublicationCard extends StatelessWidget {
   // Read attributes from
@@ -15,8 +16,20 @@ class PublicationCard extends StatelessWidget {
   bool _myFavorite = false;
   bool _myResponse = false;
 
+  int tagsSize = 0;
+  int printedTags = 0;
+
+  void tagsSpace() {
+    for (var j = 0; j < publication.tags.length && tagsSize <= 24; j++){
+      printedTags = j + 1; 
+      tagsSize = publication.tags[j].length;
+      if (tagsSize > 24) printedTags = j;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    tagsSpace();
     return Container(
       //color: Colors.yellow,
       width: double.infinity,
@@ -153,13 +166,54 @@ class PublicationCard extends StatelessWidget {
                   Container(
                       width: MediaQuery.of(context).size.width * 0.7,
                       // color: Colors.green,
-                      // would be publication.tags
-                      child: Text(
-                        "Tags",
+                      padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                      child: Row ( 
+                        children: [
+                          for (var i = 0; i < printedTags; i++)
+                          Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 0), 
+                            child: Container (
+                              padding: EdgeInsets.fromLTRB(2, 0, 2, 0),
+                              //color: globals.gray,
+                              decoration: BoxDecoration(color: globals.gray ,border: Border.all(color: globals.gray), borderRadius: BorderRadius.all(Radius.circular(5)) ), 
+                              child: Text(
+                                " ${publication.tags[i]} ",
+                                style: TextStyle(
+                                  backgroundColor: globals.gray,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15.0,
+                                ),
+                              ),
+                            ),
+                          ),
+                          if (tagsSize > 24) 
+                            Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 0), 
+                              child: Container (
+                                padding: EdgeInsets.fromLTRB(2, 0, 2, 0),
+                                //color: globals.gray,
+                                decoration: BoxDecoration(color: globals.gray ,border: Border.all(color: globals.gray), borderRadius: BorderRadius.all(Radius.circular(5)) ), 
+                                child: Text(
+                                  " ... ",
+                                  style: TextStyle(
+                                    backgroundColor: globals.gray,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15.0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          
+                        ]
+                      )
+                      
+                      /*child: Text(
+                        "${publication.tags}",
                         style: TextStyle(
                           fontSize: 15.0,
                         ),
-                      )),
+                      */
+                    ),
                   Container(
                       width: MediaQuery.of(context).size.width * 0.7,
                       // color: Colors.green,

@@ -157,8 +157,7 @@ class _PublicationsListState extends State<PublicationsList> {
                       );
                     },
                     child: PublicationCard(
-                        publication: _publications[
-                            index]), // on tap llevar a la view de la publicacion
+                        publication: _publications[index]), // on tap llevar a la view de la publicacion
                   ),
                   Divider()
                 ]);

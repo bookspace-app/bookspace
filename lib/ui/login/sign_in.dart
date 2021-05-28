@@ -54,9 +54,9 @@ class _SignInState extends State<SignIn> {
     }
     setState(() {
       globals.id = idUser;
-      print(globals.id);
+      print("THIS IS ID ${globals.id}");
       globals.token = token;
-      print(globals.token);
+      print("THIS IS TOKEN ${globals.token}");
     });
   }
 

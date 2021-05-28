@@ -233,7 +233,6 @@ class _ProfileViewState extends State<ProfileView> {
         ),
         for (var index = 0; index < _myPublications.length; index++)
           Column(
-<<<<<<< HEAD
             //TO-DO Add left padding (15) & right padding (?) to publication cards
             children: <Widget>[
               Container(height: (index == 0) ? 10 : 0),
@@ -258,30 +257,6 @@ class _ProfileViewState extends State<ProfileView> {
               Divider()
             ]
           )
-=======
-              //TO-DO Add left padding (15) & right padding (?) to publication cards
-              children: <Widget>[
-                Container(height: (index == 0) ? 10 : 0),
-                InkWell(
-                  child: PublicationCard(publication: _myPublications[index]),
-                  onTap: () {
-                    Navigator.push(
-                      context, // TODO: pass id to PublicationView
-                      MaterialPageRoute(
-                          builder: (context) => MainView(
-                                renderIndex: 'profile',
-                                view: PublicationView(
-                                  id: _myPublications[index].id,
-                                  isPublication: true,
-                                  notifyOnRefresh: refresh,
-                                ),
-                              )),
-                    );
-                  }, // on tap llevar a la view de la publicacion
-                ),
-                Divider()
-              ])
->>>>>>> 25efe5e18450a37d37d2e0ced50f26b097c66050
       ]);
       /*Container(
        child: Text('hello ${_user.username}'),

@@ -88,6 +88,7 @@ class Publication {
         content: json["content"],
         dop: DateTime.parse(json["dop"]),
         category: json["category"],
+        tags: json["tags"].cast<String>(),
         likes: json["likes"],
         dislikes: json["dislikes"],
         views: json["nviews"], // ESTO ESTA MAL EN EL BACK
