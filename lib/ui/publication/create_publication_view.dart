@@ -258,16 +258,18 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
               Container(
                 padding: EdgeInsets.fromLTRB(15, 2, 15, 0),
                 child: Row(children: [
-                  Expanded(
+                  Expanded(  
                     child: SmartSelect<int>.single(
+                      title: "",
                       modalFilter: true,
                       modalTitle: "${AppLocalizations.of(context).translate("genero")}",
-                      placeholder: 'Escoge el género literario que más se adecue',
+                      placeholder: "",
                       modalHeaderStyle: S2ModalHeaderStyle(
                         backgroundColor: globals.primary,
                         textStyle: TextStyle(color: Colors.black),
                         iconTheme: IconThemeData(color: Colors.black, opacity: 1),
                         actionsIconTheme: IconThemeData(color: Colors.black, opacity: 1),
+                        centerTitle: true,
                       ),
                       value: selectedGenre,
                       choiceItems: globals.genres.map<S2Choice<int>>((S2Choice<int> x) {
@@ -319,11 +321,12 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                       tagsStyler: TagsStyler(
                           tagTextStyle: TextStyle(fontWeight: FontWeight.bold),
                           tagDecoration: BoxDecoration(
-                            color: Colors.blue[300],
+                            color: globals.gray,
+                            //color: Colors.blue[300],
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                           tagCancelIcon: Icon(Icons.cancel,
-                              size: 18.0, color: Colors.blue[900]),
+                              size: 18.0, color: Colors.red),//color: Colors.blue[900]),
                           tagPadding: const EdgeInsets.all(6.0)),
                       textFieldStyler: TextFieldStyler(
                         isDense: false,

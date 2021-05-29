@@ -123,13 +123,21 @@ class _ProfileViewState extends State<ProfileView> {
                             padding: EdgeInsets.fromLTRB(15, 15, 10, 2),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20),
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage("http://storage.googleapis.com/bookspace-app.appspot.com/1.jpg"),
+                                radius: 75,
+                              ),
+                            ),
+                            /*child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
                               child: Image.asset(
                                 './assets/images/No_pic.png', //TO-DO if userpic == null show No_pic else userpic
                                 height: 160,
                                 width: 160,
                                 fit: BoxFit.fill,
                               ),
-                            )),
+                            )*/
+                        ),
                       ]),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -203,7 +211,7 @@ class _ProfileViewState extends State<ProfileView> {
                   ),
                 ],
               ),
-              Wrap(
+              /*Wrap(
                 alignment: WrapAlignment.spaceBetween,
                 direction: Axis.horizontal,
                 children: [
@@ -240,7 +248,7 @@ class _ProfileViewState extends State<ProfileView> {
                     //child: categoriasText(),
                   ),*/
                 ],
-              ),
+              ),*/
             ],
           ),
         ),
