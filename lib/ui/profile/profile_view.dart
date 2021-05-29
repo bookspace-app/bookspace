@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:bookspace/controllers/publication_controller.dart';
 import 'package:bookspace/controllers/user_controller.dart';
 import 'package:bookspace/models/publication.dart';
@@ -24,10 +25,19 @@ class _ProfileViewState extends State<ProfileView> {
   List<Publication> _myPublications = [];
   Widget noUser = CircularProgressIndicator();
   List<String> categories = [];
+  String _path = null;
 
   void getCategories() async {
     List<String> cat = await UserController.getCategories(globals.id);
     categories = cat;
+  }
+
+  void getProfilePic() async {
+    UserController.getProfilePic(globals.id).then((photoPath) {
+      setState(() {
+        _path = photoPath;
+      });
+    });
   }
 
   void getUser(int id) async {
@@ -85,6 +95,7 @@ class _ProfileViewState extends State<ProfileView> {
       getUser(widget.id);
     }
     getCategories();
+    //getProfilePic();
   }
 
   bool disposed = false;
@@ -96,8 +107,9 @@ class _ProfileViewState extends State<ProfileView> {
 
   void refresh() async {
     Future.delayed(Duration(milliseconds: 1500)).then((_) async {
-      List<Publication> myPublications = await PublicationController.getPublications(_user.myPublicationsUri);
-    
+      List<Publication> myPublications =
+          await PublicationController.getPublications(_user.myPublicationsUri);
+
       setState(() => _myPublications = myPublications);
     });
   }
@@ -120,12 +132,15 @@ class _ProfileViewState extends State<ProfileView> {
                             padding: EdgeInsets.fromLTRB(15, 15, 10, 2),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20),
-                              child: Image.asset(
-                                './assets/images/No_pic.png', //TO-DO if userpic == null show No_pic else userpic
-                                height: 160,
-                                width: 160,
-                                fit: BoxFit.fill,
-                              ),
+                              child: _path == null
+                                  ? Image.asset('./assets/images/No_pic.png',
+                                      height: 160, width: 160, fit: BoxFit.fill)
+                                  : Image.file(
+                                      File(_path),
+                                      height: 50,
+                                      width: 50,
+                                      fit: BoxFit.fill,
+                                    ),
                             )),
                       ]),
                   Column(
@@ -151,18 +166,17 @@ class _ProfileViewState extends State<ProfileView> {
                             ),
                           )),
                       Container(
-                          padding: EdgeInsets.fromLTRB(5, 10, 0, 0),
-                          // color: Colors.orange,
-                          width: MediaQuery.of(context).size.width * 0.5,
-                          height:
-                              100, //TO-DO Reducir tamaño maximo de la descripcion
-                          child: Text("${_user.description}",
-                                //"Soy vividor, soñador, amante de las novelas policíacas y el dramatismo.",
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 14.0,
-                                )),
-                          ),
+                        padding: EdgeInsets.fromLTRB(5, 10, 0, 0),
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        height:
+                            100, //TO-DO Reducir tamaño maximo de la descripcion
+                        child: Text("${_user.description}",
+                            //"Soy vividor, soñador, amante de las novelas policíacas y el dramatismo.",
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 14.0,
+                            )),
+                      ),
                       Container(
                           padding: EdgeInsets.fromLTRB(5, 20, 5,
                               0), //TO-DO Fix the container to a position no matter description length
@@ -233,9 +247,9 @@ class _ProfileViewState extends State<ProfileView> {
                           builder: (context) => MainView(
                                 renderIndex: 'profile',
                                 view: PublicationView(
-                                    id: _myPublications[index].id,
-                                    isPublication: true,
-                                    notifyOnRefresh: refresh,
+                                  id: _myPublications[index].id,
+                                  isPublication: true,
+                                  notifyOnRefresh: refresh,
                                 ),
                               )),
                     );

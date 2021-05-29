@@ -49,6 +49,7 @@ class _EditProfileViewState extends State<EditProfileView> {
   List<String> categories = [];
   String _path;
   List<int> selectedGenres = [0];
+  String absolutePath;
 
   //GET USER
   void getUser() async {
@@ -67,6 +68,11 @@ class _EditProfileViewState extends State<EditProfileView> {
     _id = _user.id;
   }
 
+  void getProfilePic() async {
+    String photoPath = await UserController.getProfilePic(globals.id);
+    _path = photoPath;
+  }
+
   //GET CATEGORIES
   void getCategories() async {
     List<String> cat = await UserController.getCategories(globals.id);
@@ -75,8 +81,8 @@ class _EditProfileViewState extends State<EditProfileView> {
   }
 
   //UPDATE USER
-  void putUser(String username, name, email, descrition, int id) async {
-    UserController.updateUser(username, name, email, descrition, id);
+  void putUser(username, name, email, descrition, id, token) async {
+    UserController.updateUser(username, name, email, descrition, id, token);
   }
 
   //UPDATE CATEGORIES
@@ -84,7 +90,14 @@ class _EditProfileViewState extends State<EditProfileView> {
     if (selectedGenres.length > 1) {
       categoriesToString();
     }
-    UserController.updateCategories(categories, _id);
+    UserController.updateCategories(categories, _id, globals.token);
+  }
+
+  //POST PROFILE PICTURE
+  void updatePhoto(String path) async {
+    File pic = File(_imageFile.path);
+    absolutePath =
+        await UserController.postProfilePic(pic, globals.id, globals.token);
   }
 
   bool disposed = false;
@@ -175,7 +188,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   _email = emailController.text;
                   _password = passwordController.text;
                   _bio = bioController.text;
-                  putUser(_username, _name, _email, _bio, _id);
+                  putUser(_username, _name, _email, _bio, _id, globals.token);
                   updateCategories();
                   //updatePhoto(_path);
 
@@ -330,6 +343,7 @@ class _EditProfileViewState extends State<EditProfileView> {
       _imageFile = pickedFile;
     });
     _path = pickedFile.path;
+    print('_path');
   }
 
   void categoriesToString() {
