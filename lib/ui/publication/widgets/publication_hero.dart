@@ -178,10 +178,13 @@ class _PublicationHeroState extends State<PublicationHero> {
         (widget.isPublication)
           ? Container(
               padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
-              child: Wrap(
-                alignment: WrapAlignment.spaceBetween,
-                direction: Axis.horizontal,
-                children: <Widget>[
+              child: Container(
+                alignment: Alignment.centerLeft, 
+                child:Wrap(
+                  alignment: WrapAlignment.start,
+                  //direction: Axis.horizontal,
+                  //crossAxisAlignment: WrapCrossAlignment.start,
+                  children: <Widget>[
                     for (var i = 0; i < widget.publication.tags.length; i++)
                     Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 5), 
                       child: Container (
@@ -199,7 +202,8 @@ class _PublicationHeroState extends State<PublicationHero> {
                         ),
                       ),
                     ),
-                ],
+                  ],
+                )
               )
             )
           : Container(),  
