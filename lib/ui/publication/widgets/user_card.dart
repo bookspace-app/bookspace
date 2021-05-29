@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:bookspace/app_localizations.dart';
 import 'package:bookspace/globals.dart' as globals;
 
-class UserCard extends StatelessWidget {
+class UserCard extends StatefulWidget {
   final int commentId;
   final int parentId;
   final User author;
@@ -44,34 +44,62 @@ class UserCard extends StatelessWidget {
       @required this.notifyOnChange})
       : super(key: key);
 
+  @override
+  _UsercardState createState() => _UsercardState();
+}
+
+class _UsercardState extends State<UserCard> {
+  bool myVote = false;
+  bool myVoted = false;
+  List<User> _users = [];
+  int likes = 0;
+  int dislikes = 0;
+  int replies = 0;
+
   void deleteP(int id) async {
-    var statuscode = await PublicationController.deletePublication(id);
-    print(statuscode);
-  }
-
-  void addfav(int Pid, int Uid) async {
-    var statuscode = await PublicationController.fav(Pid, Uid);
-    print(statuscode);
-  }
-
-  void delfav(int Pid, int Uid) async {
-    var statuscode = await PublicationController.delfav(Pid, Uid);
+    var statuscode =
+        await PublicationController.deletePublication(id, globals.token);
     print(statuscode);
   }
 
   void deleteC(int id) async {
-    var statuscode = await CommentController.deleteComment(id);
+    var statuscode = await CommentController.deleteComment(id, globals.token);
     print(statuscode);
   }
 
   Future<int> like(int Pid, int Uid) async {
-    var status = await CommentController.like(Pid, Uid);
+    var status = await CommentController.like(Pid, Uid, globals.token);
     return status;
   }
 
   Future<int> dislike(int Pid, int Uid) async {
-    var status = await CommentController.dislike(Pid, Uid);
+    var status = await CommentController.dislike(Pid, Uid, globals.token);
     return status;
+  }
+
+  void getfav(int Pid, String action) async {
+    List<User> users = await PublicationController.getfav(Pid, action);
+    setState(() => _users = users);
+    if (action == 'like') {
+      for (var i = 0; i < _users.length; i++) {
+        (globals.id == _users[i].id)
+            ? setState(() => myVote = true)
+            : setState(() => myVote = false);
+      }
+    } else if (action == 'dislike') {
+      for (var i = 0; i < _users.length; i++) {
+        (globals.id == _users[i].id)
+            ? setState(() => myVoted = true)
+            : setState(() => myVoted = false);
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getfav(widget.commentId, 'like');
+    getfav(widget.commentId, 'dislike');
   }
 
   @override
@@ -80,9 +108,9 @@ class UserCard extends StatelessWidget {
       padding: EdgeInsets.all(10),
       child: Container(
           decoration: BoxDecoration(
-              color: principal ? Colors.yellow[200] : Colors.grey[200],
+              color: widget.principal ? Colors.yellow[200] : Colors.grey[200],
               border: Border.all(
-                color: principal ? Colors.yellow[300] : Colors.grey[300],
+                color: widget.principal ? Colors.yellow[300] : Colors.grey[300],
               ),
               borderRadius: BorderRadius.all(Radius.circular(5))),
           child: Column(children: <Widget>[
@@ -105,13 +133,13 @@ class UserCard extends StatelessWidget {
                                   children: <Widget>[
                                     Container(
                                         child: Text(
-                                      '@${author.username}',
+                                      '@${widget.author.username}',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold),
                                     )),
                                     Container(
                                         child: Text(
-                                      '${author.rank}',
+                                      '${widget.author.rank}',
                                       style: TextStyle(
                                           fontWeight: FontWeight.normal),
                                     )),
@@ -130,22 +158,26 @@ class UserCard extends StatelessWidget {
                           children: <Widget>[
                             Container(
                                 child: Text(
-                              (isPublication) ? 'Pregunta' : 'Comentario',
+                              (widget.isPublication)
+                                  ? 'Pregunta'
+                                  : 'Comentario',
                               style: TextStyle(fontWeight: FontWeight.normal),
                             )),
                             Container(
                                 child: Text(
-                              '${TimeAgo.timeAgoSinceDate(dop)}',
+                              '${TimeAgo.timeAgoSinceDate(widget.dop)}',
                               style: TextStyle(fontWeight: FontWeight.normal),
                             )),
                           ],
                         ))),
+
                 Expanded(
                     flex: 1,
                     //color: Colors.blue[200],
+                    //if (globals.id == widget.author.id){
                     child: PopupMenuButton<String>(onSelected: (value) {
                       if (value == 'Editar') {
-                        if (globals.id != author.id) {
+                        if (globals.id != widget.author.id) {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
@@ -163,13 +195,14 @@ class UserCard extends StatelessWidget {
                               );
                             },
                           );
-                        } else if (isPublication) {
+                        } else if (widget.isPublication) {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => MainView(
                                       renderIndex: 'home',
-                                      view: EditPublicationView(id: commentId),
+                                      view: EditPublicationView(
+                                          id: widget.commentId),
                                     )),
                           );
                         } else {
@@ -192,13 +225,14 @@ class UserCard extends StatelessWidget {
                           );
                         }
                       } else if (value == 'Borrar') {
-                        if (globals.id == author.id) {
-                          if (isPublication) {
-                            deleteP(commentId);
-                            notifyOnChange();
+                        if (globals.id == widget.author.id) {
+                          if (widget.isPublication) {
+                            deleteP(widget.commentId);
+                            widget.notifyOnChange();
+                            Navigator.pop(context);
                           } else {
-                            deleteC(commentId);
-                            notifyOnChange();
+                            deleteC(widget.commentId);
+                            widget.notifyOnChange();
                           }
                         } else {
                           showDialog(
@@ -218,35 +252,6 @@ class UserCard extends StatelessWidget {
                               );
                             },
                           );
-                        }
-                      } else if (value == 'Fav') {
-                        if (!isPublication) {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text('Acción no permitida'),
-                                content: Text(
-                                    'No puedes añadir a favoritas un comentario, añada a favoritas la publicación'),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text('OK'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        } else {
-                          if (color == Colors.black) {
-                            color = Colors.yellow;
-                            addfav(commentId, globals.id);
-                          } else {
-                            color = Colors.black;
-                            delfav(commentId, globals.id);
-                          }
                         }
                       }
                     }, itemBuilder: (BuildContext context) {
@@ -275,23 +280,11 @@ class UserCard extends StatelessWidget {
                             ],
                           ),
                         ),
-                        PopupMenuItem(
-                          value: 'Fav',
-                          child: Row(
-                            children: [
-                              Icon(Icons.star, color: color),
-                              Container(
-                                margin: EdgeInsets.only(left: 10),
-                                child: Text('Añadir a favoritos'),
-                              )
-                            ],
-                          ),
-                        ),
                       ];
-                    }))
+                    })) //})
               ]),
             ),
-            principal
+            widget.principal
                 ? Container()
                 : Container(
                     //color: Colors.blue[200],
@@ -310,7 +303,7 @@ class UserCard extends StatelessWidget {
                                               MainAxisAlignment.center,
                                           children: <Widget>[
                                             Text(
-                                              '$likes',
+                                              '${widget.likes}',
                                               textAlign: TextAlign.right,
                                               style: TextStyle(
                                                 fontSize: 20.0,
@@ -325,10 +318,12 @@ class UserCard extends StatelessWidget {
                                                   EdgeInsets.only(left: 10),
                                               child: GestureDetector(
                                                 onTap: () {
-                                                  like(commentId, globals.id);
-                                                  myVote = true;
-                                                  myVoted = false;
-                                                  notifyOnChange();
+                                                  like(widget.commentId,
+                                                      globals.id);
+                                                  setState(() => myVote = true);
+                                                  setState(
+                                                      () => myVoted = false);
+                                                  widget.notifyOnChange();
                                                 },
                                                 child: Icon(Icons.thumb_up,
                                                     color: (myVote)
@@ -352,12 +347,14 @@ class UserCard extends StatelessWidget {
                                               MainAxisAlignment.center,
                                           children: <Widget>[
                                             Text(
-                                              '$dislikes',
+                                              '${widget.dislikes * -1}',
                                               textAlign: TextAlign.right,
                                               style: TextStyle(
                                                 fontSize: 20.0,
                                                 fontWeight: FontWeight.bold,
-                                                //color: _myVote ? Colors.red[400] : Colors.black,
+                                                color: myVoted
+                                                    ? Colors.red[400]
+                                                    : Colors.black,
                                               ),
                                             ),
                                             Container(
@@ -365,11 +362,13 @@ class UserCard extends StatelessWidget {
                                                   EdgeInsets.only(left: 10),
                                               child: GestureDetector(
                                                 onTap: () {
-                                                  dislike(
-                                                      commentId, globals.id);
-                                                  myVote = false;
-                                                  myVoted = true;
-                                                  notifyOnChange();
+                                                  dislike(widget.commentId,
+                                                      globals.id);
+                                                  setState(
+                                                      () => myVote = false);
+                                                  setState(
+                                                      () => myVoted = true);
+                                                  widget.notifyOnChange();
                                                 },
                                                 child: Icon(Icons.thumb_down,
                                                     color: (myVoted)
@@ -393,7 +392,7 @@ class UserCard extends StatelessWidget {
                                               MainAxisAlignment.center,
                                           children: <Widget>[
                                             Text(
-                                              '$replies',
+                                              '${widget.replies}',
                                               textAlign: TextAlign.right,
                                               style: TextStyle(
                                                 fontSize: 20.0,
@@ -407,7 +406,7 @@ class UserCard extends StatelessWidget {
                                               child: GestureDetector(
                                                 onTap: () {
                                                   print(
-                                                      'Go to comment $commentId');
+                                                      'Go to comment $widget.commentId');
                                                   Navigator.push(
                                                     context, // TODO: pass id to PublicationView
                                                     MaterialPageRoute(
@@ -417,7 +416,8 @@ class UserCard extends StatelessWidget {
                                                                   'home',
                                                               view:
                                                                   PublicationView(
-                                                                id: commentId,
+                                                                id: widget
+                                                                    .commentId,
                                                                 isPublication:
                                                                     false,
                                                               ),

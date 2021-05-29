@@ -29,6 +29,7 @@ class _SignInState extends State<SignIn> {
   List<User> _users = [];
   String id;
   int idUser;
+  String token;
   void getALLuser() async {
     List<User> users = await UserController.getAllusers();
     if (!disposed) {
@@ -42,6 +43,21 @@ class _SignInState extends State<SignIn> {
     if (!disposed) {
       setState(() => _user = user);
     }
+  }
+
+  Future<void> postlogin(String email, String password) async {
+    Map<String, dynamic> response =
+        await UserController.postlogin(email, password);
+    if (!disposed) {
+      setState(() => token = response["token"]);
+      setState(() => idUser = int.parse(response["userId"]));
+    }
+    setState(() {
+      globals.id = idUser;
+      print("THIS IS ID ${globals.id}");
+      globals.token = token;
+      print("THIS IS TOKEN ${globals.token}");
+    });
   }
 
   String errorUserName() {
@@ -197,15 +213,19 @@ class _SignInState extends State<SignIn> {
                           errorsPass = false;
                         error = errorsUserName | errorsPass;
                       });
-                      if (!error) {
-                        globals.id = idUser;
-                        print(globals.id);
+                      //if (!error) {
+                      postlogin(
+                              usernameController.text, passwordController.text)
+                          .then((value) {
+                        //falta comprovar contraseña
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => MainView()),
                         );
-                      }
-                    })),
+                      });
+                    }
+                    //}
+                    )),
             Container(
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

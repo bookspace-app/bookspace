@@ -14,7 +14,11 @@ import 'package:bookspace/globals.dart' as globals;
 class PublicationView extends StatefulWidget {
   final int id;
   final bool isPublication;
-  PublicationView({Key key, this.id, this.isPublication}) : super(key: key);
+  final Function() notifyOnRefresh;
+
+  PublicationView(
+      {Key key, this.id, this.isPublication, @required this.notifyOnRefresh})
+      : super(key: key);
 
   @override
   _PublicationViewState createState() => _PublicationViewState();
@@ -122,6 +126,7 @@ class _PublicationViewState extends State<PublicationView> {
     if (refreshed) {
       Future.delayed(Duration(milliseconds: 500)).then((_) {
         refresh();
+        widget.notifyOnRefresh();
         setState(() {
           refreshed = false;
           return null;
@@ -183,9 +188,9 @@ class _PublicationViewState extends State<PublicationView> {
     }
 
     //for (var i = 0; i < loadedComments; i++) {
-      //print('${widget.isPublication}  ${_comments[i].parentId}');
-      //print((_comments[i].parentId == null && widget.isPublication));
-      //print((_comments[i].parentId > 0 && !(widget.isPublication)));
+    //print('${widget.isPublication}  ${_comments[i].parentId}');
+    //print((_comments[i].parentId == null && widget.isPublication));
+    //print((_comments[i].parentId > 0 && !(widget.isPublication)));
     //}
     // Return the view if the objects are loaded (are not null)
     return ((_publication != null || _comment != null) && _comments != null)
@@ -203,15 +208,12 @@ class _PublicationViewState extends State<PublicationView> {
                   notifyOnNewVote: refreshWrapper),
               // User card is the widget of the author
               UserCard(
-                commentId: (widget.isPublication) 
-                    ? _publication.id
-                    : _comment.id,
+                commentId:
+                    (widget.isPublication) ? _publication.id : _comment.id,
                 author: (widget.isPublication)
                     ? _publication.author
                     : _comment.author,
-                dop: (widget.isPublication) 
-                    ? _publication.dop 
-                    : _comment.dop,
+                dop: (widget.isPublication) ? _publication.dop : _comment.dop,
                 principal: true,
                 isPublication: widget.isPublication,
               ),
@@ -232,33 +234,31 @@ class _PublicationViewState extends State<PublicationView> {
               // This iterator renders the comments
               // to the principal contribution of the view
               for (var i = 0; i < loadedComments; i++)
-              // Check the level of recursion
-              (
-                (widget.isPublication && _comments[i].parentId == 0) ||
-                (!widget.isPublication && (widget.id == _comments[i].parentId))
-              ) ? Container(
-                  child: Column(children: <Widget>[
-                    ResponseCard(response: _comments[i]),
-                    // The corresponding author of the comment
-                    UserCard(
-                        commentId: _comments[i].id,
-                        parentId: (widget.isPublication)
-                            ? _publication.id
-                            : _comment.id,
-                        author: _comments[i].author,
-                        dop: _comments[i].dop,
-                        principal: false,
-                        isPublication: false,
-                        likes: _comments[i].likes,
-                        dislikes: _comments[i].dislikes,
-                        myVote: false,
-                        myVoted: false,
-                        replies: _comments[i].replies,
-                        notifyOnChange: refreshWrapper
-                      ),
-                    ]
-                  )
-                ): Container(),
+                // Check the level of recursion
+                ((widget.isPublication && _comments[i].parentId == 0) ||
+                        (!widget.isPublication &&
+                            (widget.id == _comments[i].parentId)))
+                    ? Container(
+                        child: Column(children: <Widget>[
+                        ResponseCard(response: _comments[i]),
+                        // The corresponding author of the comment
+                        UserCard(
+                            commentId: _comments[i].id,
+                            parentId: (widget.isPublication)
+                                ? _publication.id
+                                : _comment.id,
+                            author: _comments[i].author,
+                            dop: _comments[i].dop,
+                            principal: false,
+                            isPublication: false,
+                            likes: _comments[i].likes,
+                            dislikes: _comments[i].dislikes,
+                            myVote: false,
+                            myVoted: false,
+                            replies: _comments[i].replies,
+                            notifyOnChange: refreshWrapper),
+                      ]))
+                    : Container(),
               // If the number of loaded comments has
               // not achieved its limit, we can
               // use the loadMoreComments widget

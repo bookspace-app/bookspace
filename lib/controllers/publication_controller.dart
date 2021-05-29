@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:bookspace/config.dart';
 import 'package:bookspace/models/publication.dart';
+import 'package:bookspace/models/user.dart';
 import 'package:http/http.dart' as http;
 
 class PublicationController {
@@ -42,14 +43,18 @@ class PublicationController {
   }
 
   // Get ALL publications or get publications of a specific user (specify URI)
-  static Future<List<Publication>> getPublications([String URI]) async {
+  static Future<List<Publication>> getPublications([String URI, String genre]) async {
     List<Publication> publications = [];
     try {
       Uri uri = Uri.https(
           BACKEND_AUTHORITY,
           (URI == null)
-              ? "$API/publications"
-              : RegExp(r"(?<=.com).*$").stringMatch(URI).toString());
+              ? '$API/publications'
+              : RegExp(r'(?<=.com).*$').stringMatch(URI).toString(),
+          (genre == null)
+              ? null
+              : { 'sort' : genre }
+            );
 
       // Define headers
       Map<String, String> headers = {
@@ -83,13 +88,16 @@ class PublicationController {
   }
 
   // POST publications
-  static Future<int> createPublication(Publication publication) async {
+  static Future<Publication> createPublication(Publication publication, String token) async {
+    Publication publicationRet;
+    
     Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications");
 
     try {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'auth': token,
       };
 
       Map<String, dynamic> publicationMap = publication.toJson();
@@ -99,10 +107,9 @@ class PublicationController {
       http.Response response =
           await http.post(uri, headers: headers, body: body);
 
-      //print('Create publication response code: ${response.statusCode}: ${response.body}\n');
-
+      print('Create publication response code: ${response.statusCode}: ${response.body}\n');
       if (response.statusCode == 200) {
-        return int.parse(response.body);
+        return publicationRet = Publication.fromJson(json.decode(response.body));
       }
     } catch (e) {
       print('error caught: $e');
@@ -146,7 +153,7 @@ class PublicationController {
   }
 
   // Delete publication by id
-  static Future<int> deletePublication(int id) async {
+  static Future<int> deletePublication(int id, String token) async {
     Publication publication;
     try {
       Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications/$id");
@@ -155,6 +162,7 @@ class PublicationController {
       Map<String, String> headers = {
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
+        'auth': token,
       };
 
       // Make GET request
@@ -172,13 +180,14 @@ class PublicationController {
   }
 
   //likes
-  static Future<int> like(int Pid, int Uid) async {
+  static Future<int> like(int Pid, int Uid, String token) async {
     Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications/$Pid/like/$Uid");
 
     try {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'auth': token,
       };
 
       // Make POST request
@@ -196,13 +205,14 @@ class PublicationController {
   }
 
   //Delete de like
-  static Future<int> unlike(int Pid, int Uid) async {
+  static Future<int> unlike(int Pid, int Uid, String token) async {
     Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications/$Pid/like/$Uid");
 
     try {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'auth': token,
       };
 
       // Make POST request
@@ -220,7 +230,7 @@ class PublicationController {
   }
 
   //dislikes
-  static Future<int> dislike(int Pid, int Uid) async {
+  static Future<int> dislike(int Pid, int Uid, String token) async {
     Uri uri =
         Uri.https(BACKEND_AUTHORITY, "$API/publications/$Pid/dislike/$Uid");
 
@@ -228,6 +238,7 @@ class PublicationController {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'auth': token,
       };
 
       // Make POST request
@@ -245,13 +256,15 @@ class PublicationController {
   }
 
   //Delete de dislike
-  static Future<int> undislike(int Pid, int Uid) async {
-    Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications/$Pid/dislike/$Uid");
+  static Future<int> undislike(int Pid, int Uid, String token) async {
+    Uri uri =
+        Uri.https(BACKEND_AUTHORITY, "$API/publications/$Pid/dislike/$Uid");
 
     try {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'auth': token,
       };
 
       // Make POST request
@@ -269,13 +282,14 @@ class PublicationController {
   }
 
   //Post a favoritos
-  static Future<int> fav(int Pid, int Uid) async {
+  static Future<int> fav(int Pid, int Uid, String token) async {
     Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications/$Pid/fav/$Uid");
 
     try {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'auth': token,
       };
 
       // Make POST request
@@ -293,13 +307,14 @@ class PublicationController {
   }
 
   //Delete de favoritos
-  static Future<int> delfav(int Pid, int Uid) async {
+  static Future<int> delfav(int Pid, int Uid, String token) async {
     Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications/$Pid/fav/$Uid");
 
     try {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'auth': token,
       };
 
       // Make POST request
@@ -314,5 +329,36 @@ class PublicationController {
       print('error caught: $e');
     }
     return null;
+  }
+
+  //get liked/disliked/favourited users
+  static Future<List<User>> getfav(int Pid, String action) async {
+    List<User> users = [];
+    try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications/$Pid/$action");
+
+      // Define headers
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
+
+      // Make GET request
+      http.Response response = await http.get(uri, headers: headers);
+
+      // Request status and body
+      int statusCode = response.statusCode;
+      String requestBody = response.body;
+
+      /*print('Response status: $statusCode\n Response body: $requestBody\n');*/
+      if (statusCode == 200) {
+        json.decode(response.body).forEach((result) {
+          users.add(User.fromJson(result));
+        });
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return users;
   }
 }

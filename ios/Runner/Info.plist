@@ -50,4 +50,9 @@
   <key>NSMicrophoneUsageDescription</key>
   <string>Allow access to microphone</string>
 </dict>
+<key>NSAppTransportSecurity</key> <!-- Activar HTTP en IOS https://stackoverflow.com/questions/64197752/bad-state-insecure-http-is-not-allowed-by-platform/65578828 -->
+<dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+</dict>
 </plist>

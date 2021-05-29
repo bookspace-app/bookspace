@@ -13,6 +13,9 @@ import 'package:bookspace/globals.dart' as globals;
 import 'package:bookspace/ui/widgets/custom_input_box.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:textfield_tags/textfield_tags.dart';
+import 'package:smart_select/smart_select.dart';
+
+import '../../app_localizations.dart';
 
 class EditProfileView extends StatefulWidget {
   EditProfileView({Key key}) : super(key: key);
@@ -43,23 +46,9 @@ class _EditProfileViewState extends State<EditProfileView> {
   var _id;
 
   User _user;
-  List<String> categories = [""];
+  List<String> categories = [];
   String _path;
-
-  /*void addCategories(String cat) {
-    print(cat);
-    categories.add(cat);
-  }
-
-  void deleteCategories(String cat) {
-    bool trobat = false;
-    for (int i = 0; i < categories.length && !trobat; i++) {
-      if (categories[i] == cat) {
-        categories.removeAt(i);
-        trobat = true;
-      }
-    }
-  }*/
+  List<int> selectedGenres = [0];
 
   //GET USER
   void getUser() async {
@@ -82,6 +71,7 @@ class _EditProfileViewState extends State<EditProfileView> {
   void getCategories() async {
     List<String> cat = await UserController.getCategories(globals.id);
     categories = cat;
+    //categoriesToInt();
   }
 
   //UPDATE USER
@@ -90,8 +80,11 @@ class _EditProfileViewState extends State<EditProfileView> {
   }
 
   //UPDATE CATEGORIES
-  void updateCategories(List<String> categories, int id) {
-    UserController.updateCategories(categories, id);
+  void updateCategories() {
+    if (selectedGenres.length > 1) {
+      categoriesToString();
+    }
+    UserController.updateCategories(categories, _id);
   }
 
   bool disposed = false;
@@ -123,42 +116,52 @@ class _EditProfileViewState extends State<EditProfileView> {
           editTextProfile(emailController, 'Email'),
           titlePreEditText('Biografia'),
           editTextProfile(bioController, 'Description'),
-          titlePreEditText('Tags'),
+          titlePreEditText('Categorias'),
+          Container(
+            padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+            child: Row(children: [
+              Text(
+                "${AppLocalizations.of(context).translate("generoDesc")}",
+                style: TextStyle(fontSize: 14.0, color: Colors.grey),
+              ),
+            ]),
+          ),
 
           //EDIT TEXT CATEGORIES. No lo hago con el metodo "editTextProfile" porque es distinto a los demás
           Container(
-              //color: Colors.orange,
-              constraints: BoxConstraints.expand(height: 85, width: 100),
-              child: TextFieldTags(
-                  initialTags: categories,
-                  tagsStyler: TagsStyler(
-                      tagTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                      tagDecoration: BoxDecoration(
-                        color: Colors.blue[300],
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      tagCancelIcon: Icon(Icons.cancel,
-                          size: 18.0, color: Colors.blue[900]),
-                      tagPadding: const EdgeInsets.all(6.0)),
-                  textFieldStyler: TextFieldStyler(
-                      isDense: false,
-                      textFieldBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      textFieldFocusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.black,
-                        ),
-                      ),
-                      helperText: "",
-                      hintText: "put categories"),
-                  onTag: (tag) {
-                    //addCategories(tag);
-                  },
-                  onDelete: (tag) {
-                    //deleteCategories(tag);
-                  })),
+            padding: EdgeInsets.fromLTRB(15, 2, 15, 0),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey[700], width: 1),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(children: [
+              Expanded(
+                  child: SmartSelect<int>.multiple(
+                modalFilter: true,
+                modalTitle:
+                    "${AppLocalizations.of(context).translate("genero")}",
+                placeholder: 'Escoge el género literario que más se adecue',
+                modalFilterHint: "HEY",
+                modalHeaderStyle: S2ModalHeaderStyle(
+                  backgroundColor: globals.primary,
+                  textStyle: TextStyle(color: Colors.black),
+                  iconTheme: IconThemeData(color: Colors.black, opacity: 1),
+                  actionsIconTheme:
+                      IconThemeData(color: Colors.black, opacity: 1),
+                ),
+                value: selectedGenres,
+                choiceItems:
+                    globals.genres.map<S2Choice<int>>((S2Choice<int> x) {
+                  return S2Choice<int>(
+                    value: x.value,
+                    title: AppLocalizations.of(context).translate(x.title),
+                  );
+                }).toList(),
+                onChange: (state) =>
+                    setState(() => selectedGenres = state.value),
+              )),
+            ]),
+          ),
           //BUTTON SUBMIT
           Container(
               alignment: Alignment.bottomCenter,
@@ -173,7 +176,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   _password = passwordController.text;
                   _bio = bioController.text;
                   putUser(_username, _name, _email, _bio, _id);
-                  //updateCategories(categories, _id);
+                  updateCategories();
                   //updatePhoto(_path);
 
                   Navigator.push(
@@ -327,5 +330,21 @@ class _EditProfileViewState extends State<EditProfileView> {
       _imageFile = pickedFile;
     });
     _path = pickedFile.path;
+  }
+
+  void categoriesToString() {
+    categories = [];
+    for (int i = 0; i < selectedGenres.length - 1; i++) {
+      String title = globals.genres[selectedGenres[i + 1] - 1].title;
+      categories.add(title);
+    }
+  }
+
+  void categoriesToInt() {
+    for (int i = 0; i < categories.length; i++) {
+      //int aux = globals.genres[categories[i]]
+      int valor = globals.genres[i].value;
+      selectedGenres.add(valor);
+    }
   }
 }
