@@ -6,18 +6,16 @@ import 'package:http/http.dart' as http;
 
 class TagController {
   
-  //GET tags
+  //GET ALL tags
   static Future<List<Tag>> getAllTags() async {
     List<Tag> tags = [];
     try {
       Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/tags");
-
       // Define headers
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       };
-
       // Make GET request
       http.Response response = await http.get(uri, headers: headers);
 

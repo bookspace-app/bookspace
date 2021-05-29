@@ -21,8 +21,8 @@ class ConfigView extends StatefulWidget {
 class _ConfigViewState extends State<ConfigView> {
   int idUser;
 
-  void logout(int id) async {
-    UserController.logout(id);
+  Future<bool> logout(int id, String auth) async {
+    return UserController.logout(id, auth);
   }
 
   @override
@@ -72,9 +72,7 @@ class _ConfigViewState extends State<ConfigView> {
                   shape: new RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(5.0))),
               onPressed: () {
-                globals.id = idUser;
-                print(globals.id);
-                logout(globals.id);
+                logout(globals.id, globals.token);
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => SignIn()),

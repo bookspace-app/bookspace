@@ -15,7 +15,9 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: <Widget>[Expanded(child: PublicationsList(genre: _rendered))],
+      children: <Widget>[
+        Expanded(child: PublicationsList(Userid: null, genre: _rendered))
+      ],
     );
   }
 }

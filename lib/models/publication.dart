@@ -34,7 +34,7 @@ class Publication {
   DateTime dop; 
   int authorId;
   String category;
-  List<int> tags;
+  List<String> tags;
   List<String> mentions;
 
   // OUTPUT
@@ -44,6 +44,7 @@ class Publication {
   int views;
   int totalLikes;
   int comments;
+  int directComments;
   User author;
 
   // URIs
@@ -71,6 +72,7 @@ class Publication {
     this.views,
     this.totalLikes,
     this.comments,
+    this.directComments,
     this.author,
     this.likedByUri,
     this.dislikedByUri,
@@ -86,11 +88,13 @@ class Publication {
         content: json["content"],
         dop: DateTime.parse(json["dop"]),
         category: json["category"],
+        tags: json["tags"].cast<String>(),
         likes: json["likes"],
         dislikes: json["dislikes"],
         views: json["nviews"], // ESTO ESTA MAL EN EL BACK
         totalLikes: json["totalLikes"],
         comments: json["ncomments"],  // ESTO ESTA MAL EN EL BACK
+        directComments: json["ndirectComments"],
         author: User.fromJson(json["author"]),
         likedByUri: json["likedByUri"],
         dislikedByUri: json["dislikedByUri"],

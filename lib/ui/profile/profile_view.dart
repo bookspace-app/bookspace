@@ -1,3 +1,4 @@
+import 'package:bookspace/app_localizations.dart';
 import 'package:bookspace/controllers/publication_controller.dart';
 import 'package:bookspace/controllers/user_controller.dart';
 import 'package:bookspace/models/publication.dart';
@@ -23,9 +24,16 @@ class _ProfileViewState extends State<ProfileView> {
   User _user;
   List<Publication> _myPublications = [];
   Widget noUser = CircularProgressIndicator();
+  List<String> categories = [];
+
+  void getCategories() async {
+    List<String> cat = await UserController.getCategories(globals.id);
+    categories = cat;
+  }
 
   void getUser(int id) async {
-    User user = await UserController.getUser(id);
+    User user = await UserController.getUser(globals.id);
+    print(globals.id);
     if (!disposed) {
       setState(() => _user = user);
       if (_user != null)
@@ -78,6 +86,7 @@ class _ProfileViewState extends State<ProfileView> {
     } else if (widget.id != null && widget.username == null) {
       getUser(widget.id);
     }
+    getCategories();
   }
 
   bool disposed = false;
@@ -85,6 +94,15 @@ class _ProfileViewState extends State<ProfileView> {
   void dispose() {
     disposed = true;
     super.dispose();
+  }
+
+  void refresh() async {
+    Future.delayed(Duration(milliseconds: 1500)).then((_) async {
+      List<Publication> myPublications =
+          await PublicationController.getPublications(_user.myPublicationsUri);
+
+      setState(() => _myPublications = myPublications);
+    });
   }
 
   @override
@@ -105,13 +123,21 @@ class _ProfileViewState extends State<ProfileView> {
                             padding: EdgeInsets.fromLTRB(15, 15, 10, 2),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20),
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage("http://storage.googleapis.com/bookspace-app.appspot.com/1.jpg"),
+                                radius: 75,
+                              ),
+                            ),
+                            /*child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
                               child: Image.asset(
                                 './assets/images/No_pic.png', //TO-DO if userpic == null show No_pic else userpic
                                 height: 160,
                                 width: 160,
                                 fit: BoxFit.fill,
                               ),
-                            )),
+                            )*/
+                        ),
                       ]),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -136,17 +162,18 @@ class _ProfileViewState extends State<ProfileView> {
                             ),
                           )),
                       Container(
-                          padding: EdgeInsets.fromLTRB(5, 10, 5, 0),
-                          //color: Colors.orange,
-                          //width: 185,
-                          height:
-                              100, //TO-DO Reducir tamaño maximo de la descripcion
-                          child: Text("${_user.description}",
-                              //"Soy vividor, soñador, amante de las novelas policíacas y el dramatismo.",
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 14.0,
-                              ))),
+                        padding: EdgeInsets.fromLTRB(5, 10, 0, 0),
+                        // color: Colors.orange,
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        height:
+                            100, //TO-DO Reducir tamaño maximo de la descripcion
+                        child: Text("${_user.description}",
+                            //"Soy vividor, soñador, amante de las novelas policíacas y el dramatismo.",
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 14.0,
+                            )),
+                      ),
                       Container(
                           padding: EdgeInsets.fromLTRB(5, 20, 5,
                               0), //TO-DO Fix the container to a position no matter description length
@@ -177,25 +204,51 @@ class _ProfileViewState extends State<ProfileView> {
                     //color: Colors.orange,
                     padding: EdgeInsets.fromLTRB(15, 5, 10, 0),
                     child: Text(
-                      "Tags favoritos",
+                      "Categorias Favoritas",
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 18.0),
+                      fontWeight: FontWeight.bold, fontSize: 18.0),
                     ),
                   ),
                 ],
               ),
-              Row(
+              /*Wrap(
+                alignment: WrapAlignment.spaceBetween,
+                direction: Axis.horizontal,
                 children: [
+                  for (var i = 0; i < categories.length; i++)
+                  Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 0), 
+                    child: Container (
+                      padding: EdgeInsets.fromLTRB(2, 0, 2, 0),
+                      //color: globals.gray,
+                      decoration: BoxDecoration(color: globals.gray ,border: Border.all(color: globals.gray), borderRadius: BorderRadius.all(Radius.circular(5)) ), 
+                      child: Text(
+                        " ${AppLocalizations.of(context).translate("categories[i]")} ",
+                        style: TextStyle(
+                          backgroundColor: globals.gray,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                  /*
+                  for (var xen = 0; xen < categories.length; xen++)
                   Container(
                     //color: Colors.orange,
-                    padding: EdgeInsets.fromLTRB(15, 5, 10,
-                        0), //Para cada tag recibida de la api un campo de texto con fondo gris y letras blancas, padding entre ellos
+                    padding: EdgeInsets.fromLTRB(15, 5, 10,0), //Para cada tag recibida de la api un campo de texto con fondo gris y letras blancas, padding entre ellos
                     child: Text(
-                      "Tag box placeholder",
+                      categories[xen],
+                      style: TextStyle(
+                        backgroundColor: globals.gray,
+                        color: Colors.white,
+                        fontSize: 10.0,
+                      ),
                     ),
-                  ),
+                    //child: categoriasText(),
+                  ),*/
                 ],
-              ),
+              ),*/
             ],
           ),
         ),
@@ -204,29 +257,34 @@ class _ProfileViewState extends State<ProfileView> {
             child: Text(
               'Mis publicaciones',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
-            )),
+            )
+        ),
         for (var index = 0; index < _myPublications.length; index++)
           Column(
-              //TO-DO Add left padding (15) & right padding (?) to publication cards
-              children: <Widget>[
-                Container(height: (index == 0) ? 10 : 0),
-                InkWell(
-                  child: PublicationCard(publication: _myPublications[index]),
-                  onTap: () {
-                    Navigator.push(
-                      context, // TODO: pass id to PublicationView
-                      MaterialPageRoute(
-                          builder: (context) => MainView(
-                                renderIndex: 'profile',
-                                view: PublicationView(
-                                    id: _myPublications[index].id,
-                                    isPublication: true),
-                              )),
-                    );
-                  }, // on tap llevar a la view de la publicacion
-                ),
-                Divider()
-              ])
+            //TO-DO Add left padding (15) & right padding (?) to publication cards
+            children: <Widget>[
+              Container(height: (index == 0) ? 10 : 0),
+              InkWell(
+                child: PublicationCard(publication: _myPublications[index]),
+                onTap: () {
+                  Navigator.push(
+                    context, // TODO: pass id to PublicationView
+                    MaterialPageRoute(
+                      builder: (context) => MainView(
+                        renderIndex: 'profile',
+                        view: PublicationView(
+                            id: _myPublications[index].id,
+                            isPublication: true,
+                            notifyOnRefresh: refresh,
+                        ),
+                      )
+                    ),
+                  );
+                }, // on tap llevar a la view de la publicacion
+              ),
+              Divider()
+            ]
+          )
       ]);
       /*Container(
        child: Text('hello ${_user.username}'),
@@ -234,5 +292,31 @@ class _ProfileViewState extends State<ProfileView> {
     } else {
       return Container(child: Center(child: noUser));
     }
+  }
+
+
+  Widget categoriasText() {
+    String aux = "";
+
+    if (categories.length == 0) return (Text(""));
+
+    for (int i = 0; i < categories.length; i++) {
+      if (i == 0) {
+        print("ESTO ES CAT ${categories[0]}");
+        aux = '${AppLocalizations.of(context).translate("categories[0]")}';
+      } 
+      else {
+        aux += ", " + '${AppLocalizations.of(context).translate("categories[i]")}';
+      }
+      return Text(
+        aux,
+        style: TextStyle(
+          backgroundColor: globals.gray,
+          color: Colors.white,
+          fontSize: 10.0,
+        ),
+      );
+    }
+    return (Text(""));
   }
 }

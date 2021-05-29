@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:bookspace/globals.dart';
+import 'package:bookspace/models/publication.dart';
 import 'package:bookspace/models/tag.dart';
 import 'package:intl/intl.dart';
 import 'package:bookspace/config.dart';
@@ -138,7 +140,7 @@ class UserController {
       int statusCode = response.statusCode;
       String requestBody = response.body;
 
-      /*print('Response status: $statusCode\n Response body: $requestBody\n');*/
+      print('Response status: $statusCode\n Response body: $requestBody\n');
       if (statusCode == 200) {
         user = User.fromJson(json.decode(response.body));
       }
@@ -222,6 +224,7 @@ class UserController {
     }
     return false;
   }
+
   // GET favorite categories by ID
   static Future<List<String>> getCategories(int id) async {
     List<String> categories;
@@ -243,11 +246,13 @@ class UserController {
 
       print('Response status: $statusCode\n Response body: $requestBody\n');
       if (statusCode == 200) {
-        categories = json.decode(response.body);
+        var tagsJson = jsonDecode(response.body);
+        print(tagsJson);
+        categories = tagsJson != null ? List.from(tagsJson) : null;
+        print(categories);
+        /*Map map = jsonDecode(response.body);
+        categories = map["favCategories"];*/
       }
-      json.decode(response.body).forEach((result) {
-        categories.add(result);
-      });
     } catch (e) {
       print('error caught: $e');
     }
@@ -256,9 +261,9 @@ class UserController {
 
   //UPDATE USER CATEGORIES
   static Future<bool> updateCategories(List<String> cat, int id) async {
-    List<String> cat;
+    List<String> category;
     try {
-      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id/categories");
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id");
 
       //define headers
       Map<String, String> headers = {
@@ -269,7 +274,7 @@ class UserController {
 
       //Define body
       Map<String, List<String>> body = {
-        'categories': cat,
+        'favCategories': cat,
       };
 
       // Make PUT request
@@ -283,7 +288,7 @@ class UserController {
       print('Response status: $statusCode\n Response body: $requestBody\n');
 
       if (statusCode == 201) {
-        cat = json.decode(response.body);
+        category = json.decode(response.body);
       }
     } catch (e) {
       print('error caught: $e');
@@ -291,8 +296,99 @@ class UserController {
     return true;
   }
 
+  //login sesion
+  static Future<Map<String, dynamic>> postlogin(
+      String username, String password) async {
+    try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/login");
+
+      // Define headers
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
+
+      //Define body
+      Map<String, String> body = {
+        'email': username,
+        'password': password,
+      };
+
+      // Make POST request
+      http.Response response =
+          await http.post(uri, headers: headers, body: jsonEncode(body));
+
+      // Request status and body
+      int statusCode = response.statusCode;
+      Map<String, dynamic> requestBody = jsonDecode(response.body) as Map;
+
+      print('Response status: $statusCode\n Response body: $requestBody\n');
+      if (statusCode == 200) {
+        return requestBody;
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return null;
+  }
+
   //DELETE USER KEY (LOGOUT)
-  static Future<bool> logout(int id) async {
-    return true;
+  static Future<bool> logout(int id, String token) async {
+    try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id/logout");
+
+      // Define headers
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'auth': token,
+      };
+
+      // Make POST request
+      http.Response response = await http.post(uri, headers: headers);
+
+      // Request status and body
+      int statusCode = response.statusCode;
+      String requestBody = response.body;
+
+      print('Response status: $statusCode\n Response body: $requestBody\n');
+      if (statusCode == 200) {
+        return true;
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return false;
+  }
+
+  //get user favorite publications
+  static Future<List<Publication>> getPublications(int id) async {
+    List<Publication> publications = [];
+    try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id/favPublications");
+
+      // Define headers
+      Map<String, String> headers = {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+      };
+
+      // Make GET request
+      http.Response response = await http.get(uri, headers: headers);
+
+      // Request status and body
+      int statusCode = response.statusCode;
+      String requestBody = response.body;
+
+      //print('Response status: $statusCode\n Response body: $requestBody\n');
+      if (statusCode == 200) {
+        json.decode(utf8.decode(response.bodyBytes)).forEach((result) {
+          publications.add(Publication.fromJson(result));
+        });
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return publications;
   }
 }

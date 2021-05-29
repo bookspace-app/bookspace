@@ -38,7 +38,21 @@ dictionary = {
         'ca': 'Edita Perfil',
         'es': 'Edita Perfil'
     },
-
+    'search': {
+        'en': 'Search',
+        'ca': 'Busca',
+        'es': 'Búsqueda'
+    },
+    'configuration': {
+        'en': 'Configuration',
+        'ca': 'Configuració',
+        'es': 'Configuración'
+    },
+    'favPubs': {
+        'en': 'Favorites',
+        'ca': 'Favorits',
+        'es': 'Favoritos'
+    },
 
     #CREATEPUBLICATION TRANSLATIONS
 
@@ -50,7 +64,7 @@ dictionary = {
     'noGenre': {
         'en': 'You have to select at least 1 genre',
         'ca': 'Ha de seleccionar al menys un gènere',
-        'es': 'Tienes que seleccioanar al menos un género'
+        'es': 'Tienes que seleccionar al menos un género'
     },
     'noTitle': {
         'en': 'You have to write a title for the publication',
@@ -195,62 +209,67 @@ dictionary = {
 
 
     #GENRES TRANSLATIONS
-    'Accion': {
+    'action': {
         'en': 'Action',
         'ca': 'Acció',
         'es': 'Acción'
     },
-    'Aventura': {
+    'adventure': {
         'en': 'Adventure',
         'ca': 'Aventura',
         'es': 'Aventura'
     },
-    'Literaria': {
+    'literary': {
         'en': 'Literary',
         'ca': 'Literària',
         'es': 'Literaria'
     },
-    'Contemporanea': {
+    'contemporary': {
         'en': 'Contemporary',
         'ca': 'Contemporània',
         'es': 'Contemporánea'
     },
-    'Negra': {
+    'black': {
         'en': 'Thriller',
         'ca': 'Novel·la negra',
         'es': 'Novela negra'
     },
-    'Historica': {
+    'historic': {
         'en': 'Historical',
         'ca': 'Historica',
         'es': 'Histórica'
     },
-    'Romantica': {
+    'horror': {
+        'en': 'Horror',
+        'ca': 'Horror',
+        'es': 'Horror'
+    },  
+    'romantic': {
         'en': 'Romantic',
         'ca': 'Romantica',
         'es': 'Romántica'
     },
-    'Erotica': {
+    'erotic': {
         'en': 'Erotica',
         'ca': 'Eròtica',
         'es': 'Erótica'
     },
-    'Poesia': {
+    'poetry': {
         'en': 'Poetry',
         'ca': 'Poesia',
         'es': 'Poesía'
     }, 
-    'Teatro': {
+    'theater': {
         'en': 'Theater',
         'ca': 'Teatre',
         'es': 'Teatro'
     },  
-    'Terror': {
+    'terror': {
         'en': 'Terror',
         'ca': 'Terror',
         'es': 'Terror'
     },  
-    'Comic': {
+    'comic': {
         'en': 'Comic',
         'ca': 'Còmic',
         'es': 'Cómic'
@@ -265,110 +284,131 @@ dictionary = {
         'ca': 'Ciència ficció',
         'es': 'Ciencia ficción'
     }, 
-    'Fantasia': {
+    'fantasy': {
         'en': 'Fantasy',
         'ca': 'Fantasia',
         'es': 'Fantasía'
     },
-    'Infantil': {
+    'children': {
         'en': 'Childish',
         'ca': 'Infantil',
         'es': 'Infantil'
     },
-    'Economia': {
+    'economy': {
         'en': 'Economy',
         'ca': 'Economia',
         'es': 'Economía'
     },
-    'Cocina': {
+    'kitchen': {
         'en': 'Cook',
         'ca': 'Cuina',
         'es': 'Cocina'
     },
-    'Comedia': {
+    'comedy': {
         'en': 'Comedy',
         'ca': 'Comèdia',
         'es': 'Comedia'
     },
-    'Documental': {
+    'documentary': {
         'en': 'Documentary',
         'ca': 'Documental',
         'es': 'Documental'
     },
-    'Drama': {
+    'drama': {
         'en': 'Drama',
         'ca': 'Drama',
         'es': 'Drama'
     },
-    'Suspense': {
+    'suspense': {
         'en': 'Suspense',
         'ca': 'Suspens',
         'es': 'Suspense'
     },
-    'Juvenil': {
+    'teen': {
         'en': 'Youth',
         'ca': 'Juvenil',
         'es': 'Juvenil'
     },
-    'Adulto': {
+    'adult': {
         'en': 'Adult',
         'ca': 'Adult',
         'es': 'Adulto'
     },
-    'Belico': {
+    'war': {
         'en': 'Warlike',
         'ca': 'Bèl·lic',
         'es': 'Bélico'
     },
-    'Crimen': {
+    'crime': {
         'en': 'Crime',
         'ca': 'Crim',
         'es': 'Crimen'
     },
-    'Deporte': {
+    'sport': {
         'en': 'Sport',
         'ca': 'Esport',
         'es': 'Deporte'
     },
-    'Historia': {
+    'history': {
         'en': 'History',
         'ca': 'Història',
         'es': 'Historia'
     },
-    'Biografia': {
+    'biography': {
         'en': 'Biography',
         'ca': 'Biografia',
         'es': 'Biografía'
     },
-    'Policiaco': {
+    'cops': {
         'en': 'Crime novel',
         'ca': 'Policíac',
         'es': 'Policiaco'
     },
-    'Familiar': {
+    'family': {
         'en': 'Family',
         'ca': 'Familiar',
         'es': 'Familiar'
     },
-    'Western': {
+    'western': {
         'en': 'Western',
         'ca': 'Western',
         'es': 'Western'
     },
-    'Religion': {
+    'religion': {
         'en': 'Religion',
         'ca': 'Religió',
         'es': 'Religión'
     },
-    'Futurismo': {
+    'futurism': {
         'en': 'Futurism',
         'ca': 'Futurisme',
         'es': 'Futurismo'
     },
-    'Otro': {
+    'other': {
         'en': 'Others',
         'ca': 'Altres',
         'es': 'Otros'
+    },
+    'all': {
+        'en': 'All',
+        'ca': 'Tots',
+        'es': 'Todos'
+    },
+    'filter': {
+        'en': 'Filter by category',
+        'ca': 'Filtrar per categoria',
+        'es': 'Filtrar por categoria'
+    },
+
+    'publications': {
+        'en': 'Publications',
+        'ca': 'Publicacions',
+        'es': 'Publicaciones'
+    },
+    'users': {
+        'en': 'Users',
+        'ca': 'Usuaris',
+        'es': 'Usuarios'
     },
 
 }

@@ -5,6 +5,9 @@ User userFromJson(String str) => User.fromJson(json.decode(str));
 
 String userToJson(User data) => json.encode(data.toJson());
 
+/*List<String> fromJsonCategories(String str) =>
+    fromJsonCategories(json.decode(str));*/
+
 enum Rank { WORKER, SOLDIER, HAREM, QUEEN }
 
 extension RankExtension on Rank {
