@@ -26,6 +26,8 @@ class _ProfileViewState extends State<ProfileView> {
   Widget noUser = CircularProgressIndicator();
   List<String> categories = [];
   String _path;
+  bool trobatFirebase = false;
+  var img;
 
   void getCategories() async {
     List<String> cat = await UserController.getCategories(globals.id);
@@ -35,7 +37,12 @@ class _ProfileViewState extends State<ProfileView> {
   void getProfilePic() async {
     UserController.getProfilePic(globals.id).then((photoPath) {
       setState(() {
-        _path = photoPath;
+        if (photoPath.endsWith('/')) {
+          trobatFirebase = false;
+        } else {
+          img = NetworkImage(photoPath);
+          trobatFirebase = true;
+        }
       });
     });
   }
@@ -96,7 +103,7 @@ class _ProfileViewState extends State<ProfileView> {
       getUser(widget.id);
     }
     getCategories();
-    //getProfilePic();
+    getProfilePic();
   }
 
   bool disposed = false;
@@ -134,10 +141,10 @@ class _ProfileViewState extends State<ProfileView> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
                             child: CircleAvatar(
-                              backgroundImage: NetworkImage(
-                                  "http://storage.googleapis.com/bookspace-app.appspot.com/1.jpg"),
-                              radius: 75,
-                            ),
+                                radius: 75,
+                                backgroundImage: !trobatFirebase
+                                    ? AssetImage('assets/images/No_pic.png')
+                                    : img),
                           ),
                           /*child: ClipRRect(
                               borderRadius: BorderRadius.circular(20),

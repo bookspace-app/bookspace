@@ -9,6 +9,7 @@ import 'package:bookspace/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:async/async.dart';
+import 'package:http_parser/http_parser.dart';
 
 class UserController {
   // GET user by ID
@@ -403,20 +404,58 @@ class UserController {
   static Future<String> postProfilePic(File photo, int id, String token) async {
     Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id/profilePic");
 
-    var stream = new http.ByteStream(DelegatingStream.typed(photo.openRead()));
+    /*var stream = http.ByteStream(DelegatingStream.typed(photo.openRead()));
     var length = await photo.length();
 
-    var request = new http.MultipartRequest("POST", uri);
-    var multipartFile = new http.MultipartFile('file', stream, length,
+    var request = http.MultipartRequest('POST', uri);
+    var multipartFile = http.MultipartFile('picture', stream, length,
         filename: basename(photo.path));
-    //contentType: new MediaType('image', 'png'));
 
     request.files.add(multipartFile);
     var response = await request.send();
     print(response.statusCode);
     response.stream.transform(utf8.decoder).listen((value) {
       print(value);
+    });*/
+
+    /*var request = http.MultipartRequest('POST', uri);
+    var pic = await http.MultipartFile.fromPath("image", photo.path,
+          contentType: new MediaType(
+            'image',
+            'jpg',
+          ));
+      request.files.add(pic);
+      http.StreamedResponse response = await request.send();
+      final finalResp = await http.Response.fromStream(response);*/
+
+    String filename = basename(photo.path);
+
+    var request = http.MultipartRequest('POST', uri);
+    var pic = await http.MultipartFile.fromPath("image", photo.path,
+        contentType: new MediaType(
+          'image',
+          'jpg',
+        ));
+    request.files.add(pic);
+    var res = await request.send();
+    print(res.statusCode);
+    final finalResp = await http.Response.fromStream(res);
+    print(finalResp);
+    res.stream.transform(utf8.decoder).listen((value) {
+      print(value);
     });
+
+    /*String filename = basename(photo.path);
+    var length = await photo.length();
+
+    var request = http.MultipartRequest('POST', uri);
+    request.files.add(http.MultipartFile(
+        'file', File(filename).readAsBytes().asStream(), length,
+        filename: filename.split("/").last));
+    var res = await request.send();
+    res.stream.transform(utf8.decoder).listen((value) {
+      print(value);
+    });*/
   }
 
   // GET profile PHOTO
