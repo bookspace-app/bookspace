@@ -27,7 +27,7 @@ class _SignInState extends State<SignIn> {
 
   User _user;
   List<User> _users = [];
-  String id;
+  String pas;
   int idUser;
   String token;
   void getALLuser() async {
@@ -63,8 +63,8 @@ class _SignInState extends State<SignIn> {
   String errorUserName() {
     if (usernameController.text.isEmpty) return "Rellena este campo";
     for (var i = 0; i < _users.length; i++) {
-      if (usernameController.text == _users[i].username) {
-        id = _users[i].password;
+      if (usernameController.text == _users[i].email) {
+        pas = _users[i].password;
         idUser = _users[i].id;
         return null;
       }
@@ -75,7 +75,7 @@ class _SignInState extends State<SignIn> {
   String errorPass() {
     if (passwordController.text.isEmpty) return "Rellena este campo";
     //user.password check
-    if (passwordController.text != id) return "Contraseña incorrecta";
+    if (passwordController.text != pas) return "Contraseña incorrecta";
     return null;
   }
 
@@ -207,25 +207,24 @@ class _SignInState extends State<SignIn> {
                           errorsUserName = true;
                         else
                           errorsUserName = false;
-                        if (errorPass() != null)
+                        /*if (errorPass() != null)
                           errorsPass = true;
                         else
-                          errorsPass = false;
+                          errorsPass = false;*/
                         error = errorsUserName | errorsPass;
                       });
-                      //if (!error) {
-                      postlogin(
-                              usernameController.text, passwordController.text)
-                          .then((value) {
-                        //falta comprovar contraseña
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => MainView()),
-                        );
-                      });
-                    }
-                    //}
-                    )),
+                      if (!error) {
+                        postlogin(usernameController.text,
+                                passwordController.text)
+                            .then((value) {
+                          //falta comprovar contraseña
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => MainView()),
+                          );
+                        });
+                      }
+                    })),
             Container(
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

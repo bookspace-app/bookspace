@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:bookspace/globals.dart';
 import 'package:bookspace/models/publication.dart';
 import 'package:bookspace/models/tag.dart';
@@ -6,6 +7,8 @@ import 'package:intl/intl.dart';
 import 'package:bookspace/config.dart';
 import 'package:bookspace/models/user.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
+import 'package:async/async.dart';
 
 class UserController {
   // GET user by ID
@@ -152,7 +155,7 @@ class UserController {
 
   //UPDATE USER
   static Future<bool> updateUser(String username, String name, String email,
-      String descripcion, int id) async {
+      String descripcion, int id, String token) async {
     User user;
     try {
       Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id");
@@ -162,6 +165,7 @@ class UserController {
         //"Authorization": "JWT $authToken",
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'auth': token,
       };
 
       //Define body
@@ -189,7 +193,8 @@ class UserController {
   }
 
   //UPDATE USER DESCRIPTION
-  static Future<bool> updateDesc(String descripcion, int id) async {
+  static Future<bool> updateDesc(
+      String descripcion, int id, String token) async {
     User user;
     try {
       Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id");
@@ -199,6 +204,7 @@ class UserController {
         //"Authorization": "JWT $authToken",
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'auth': token,
       };
 
       //Define body
@@ -260,7 +266,8 @@ class UserController {
   }
 
   //UPDATE USER CATEGORIES
-  static Future<bool> updateCategories(List<String> cat, int id) async {
+  static Future<bool> updateCategories(
+      List<String> cat, int id, String token) async {
     List<String> category;
     try {
       Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id");
@@ -270,6 +277,7 @@ class UserController {
         //"Authorization": "JWT $authToken",
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'auth': token,
       };
 
       //Define body
@@ -390,5 +398,54 @@ class UserController {
       print('error caught: $e');
     }
     return publications;
+  }
+
+  static Future<String> postProfilePic(File photo, int id, String token) async {
+    Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id/profilePic");
+
+    var stream = new http.ByteStream(DelegatingStream.typed(photo.openRead()));
+    var length = await photo.length();
+
+    var request = new http.MultipartRequest("POST", uri);
+    var multipartFile = new http.MultipartFile('file', stream, length,
+        filename: basename(photo.path));
+    //contentType: new MediaType('image', 'png'));
+
+    request.files.add(multipartFile);
+    var response = await request.send();
+    print(response.statusCode);
+    response.stream.transform(utf8.decoder).listen((value) {
+      print(value);
+    });
+  }
+
+  // GET profile PHOTO
+  static Future<String> getProfilePic(int id) async {
+    String path;
+    try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id/profilePicPath");
+
+      // Define headers
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
+
+      // Make GET request
+      http.Response response = await http.get(uri, headers: headers);
+
+      // Request status and body
+      int statusCode = response.statusCode;
+      String requestBody = response.body;
+
+      print('Response status: $statusCode\n Response body: $requestBody\n');
+      if (statusCode == 200) {
+        path = response.body;
+        print(path);
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return path;
   }
 }

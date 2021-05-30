@@ -28,11 +28,11 @@ class _SignUp2State extends State<SignUp2> {
   List<String> categories;
 
   void updateCategories(List<String> categories, int id) {
-    UserController.updateCategories(categories, id);
+    UserController.updateCategories(categories, id, globals.token);
   }
 
   void updateDesc(String descp, int id) async {
-    UserController.updateDesc(descp, id);
+    UserController.updateDesc(descp, id, globals.token);
   }
 
   Future getImageCamera() async {
