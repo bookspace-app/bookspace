@@ -404,7 +404,7 @@ class UserController {
   static Future<String> postProfilePic(File photo, int id, String token) async {
     Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id/profilePic");
 
-    /*var stream = http.ByteStream(DelegatingStream.typed(photo.openRead()));
+    var stream = http.ByteStream(DelegatingStream.typed(photo.openRead()));
     var length = await photo.length();
 
     var request = http.MultipartRequest('POST', uri);
@@ -416,19 +416,9 @@ class UserController {
     print(response.statusCode);
     response.stream.transform(utf8.decoder).listen((value) {
       print(value);
-    });*/
+    });
 
-    /*var request = http.MultipartRequest('POST', uri);
-    var pic = await http.MultipartFile.fromPath("image", photo.path,
-          contentType: new MediaType(
-            'image',
-            'jpg',
-          ));
-      request.files.add(pic);
-      http.StreamedResponse response = await request.send();
-      final finalResp = await http.Response.fromStream(response);*/
-
-    String filename = basename(photo.path);
+    /*String filename = basename(photo.path);
 
     var request = http.MultipartRequest('POST', uri);
     var pic = await http.MultipartFile.fromPath("image", photo.path,
@@ -439,11 +429,9 @@ class UserController {
     request.files.add(pic);
     var res = await request.send();
     print(res.statusCode);
-    final finalResp = await http.Response.fromStream(res);
-    print(finalResp);
     res.stream.transform(utf8.decoder).listen((value) {
       print(value);
-    });
+    });*/
 
     /*String filename = basename(photo.path);
     var length = await photo.length();
