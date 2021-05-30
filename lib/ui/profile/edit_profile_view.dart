@@ -75,8 +75,13 @@ class _EditProfileViewState extends State<EditProfileView> {
     String photoPath = await UserController.getProfilePic(globals.id);
     setState(() {
       img = NetworkImage(photoPath);
-      trobatFirebase = true;
-      fetPhotoCamera = true;
+      if (photoPath.endsWith('/')) {
+        trobatFirebase = false;
+        fetPhotoCamera = false;
+      } else {
+        trobatFirebase = true;
+        fetPhotoCamera = true;
+      }
     });
   }
 
