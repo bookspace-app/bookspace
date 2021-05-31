@@ -25,10 +25,26 @@ class _ProfileViewState extends State<ProfileView> {
   List<Publication> _myPublications = [];
   Widget noUser = CircularProgressIndicator();
   List<String> categories = [];
+  String _path;
+  bool trobatFirebase = false;
+  var img;
 
   void getCategories() async {
     List<String> cat = await UserController.getCategories(globals.id);
     categories = cat;
+  }
+
+  void getProfilePic() async {
+    UserController.getProfilePic(globals.id).then((photoPath) {
+      setState(() {
+        if (photoPath.endsWith('/')) {
+          trobatFirebase = false;
+        } else {
+          img = NetworkImage(photoPath);
+          trobatFirebase = true;
+        }
+      });
+    });
   }
 
   void getUser(int id) async {
@@ -87,6 +103,7 @@ class _ProfileViewState extends State<ProfileView> {
       getUser(widget.id);
     }
     getCategories();
+    getProfilePic();
   }
 
   bool disposed = false;
@@ -120,22 +137,26 @@ class _ProfileViewState extends State<ProfileView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Container(
-                            padding: EdgeInsets.fromLTRB(15, 15, 10, 2),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: CircleAvatar(
-                                backgroundImage: NetworkImage("http://storage.googleapis.com/bookspace-app.appspot.com/1.jpg"),
+                          padding: EdgeInsets.fromLTRB(15, 15, 10, 2),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: CircleAvatar(
                                 radius: 75,
-                              ),
-                            ),
-                            /*child: ClipRRect(
+                                backgroundImage: !trobatFirebase
+                                    ? AssetImage('assets/images/No_pic.png')
+                                    : img),
+                          ),
+                          /*child: ClipRRect(
                               borderRadius: BorderRadius.circular(20),
-                              child: Image.asset(
-                                './assets/images/No_pic.png', //TO-DO if userpic == null show No_pic else userpic
-                                height: 160,
-                                width: 160,
-                                fit: BoxFit.fill,
-                              ),
+                              child: child: _path == null
+                                  ? Image.asset('./assets/images/No_pic.png',
+                                      height: 160, width: 160, fit: BoxFit.fill)
+                                  : Image.file(
+                                      File(_path),
+                                      height: 150,
+                                      width: 150,
+                                      fit: BoxFit.fill,
+                                    ),
                             )*/
                         ),
                       ]),
@@ -206,7 +227,7 @@ class _ProfileViewState extends State<ProfileView> {
                     child: Text(
                       "Categorias Favoritas",
                       style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 18.0),
+                          fontWeight: FontWeight.bold, fontSize: 18.0),
                     ),
                   ),
                 ],
@@ -257,34 +278,31 @@ class _ProfileViewState extends State<ProfileView> {
             child: Text(
               'Mis publicaciones',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
-            )
-        ),
+            )),
         for (var index = 0; index < _myPublications.length; index++)
           Column(
-            //TO-DO Add left padding (15) & right padding (?) to publication cards
-            children: <Widget>[
-              Container(height: (index == 0) ? 10 : 0),
-              InkWell(
-                child: PublicationCard(publication: _myPublications[index]),
-                onTap: () {
-                  Navigator.push(
-                    context, // TODO: pass id to PublicationView
-                    MaterialPageRoute(
-                      builder: (context) => MainView(
-                        renderIndex: 'profile',
-                        view: PublicationView(
-                            id: _myPublications[index].id,
-                            isPublication: true,
-                            notifyOnRefresh: refresh,
-                        ),
-                      )
-                    ),
-                  );
-                }, // on tap llevar a la view de la publicacion
-              ),
-              Divider()
-            ]
-          )
+              //TO-DO Add left padding (15) & right padding (?) to publication cards
+              children: <Widget>[
+                Container(height: (index == 0) ? 10 : 0),
+                InkWell(
+                  child: PublicationCard(publication: _myPublications[index]),
+                  onTap: () {
+                    Navigator.push(
+                      context, // TODO: pass id to PublicationView
+                      MaterialPageRoute(
+                          builder: (context) => MainView(
+                                renderIndex: 'profile',
+                                view: PublicationView(
+                                  id: _myPublications[index].id,
+                                  isPublication: true,
+                                  notifyOnRefresh: refresh,
+                                ),
+                              )),
+                    );
+                  }, // on tap llevar a la view de la publicacion
+                ),
+                Divider()
+              ])
       ]);
       /*Container(
        child: Text('hello ${_user.username}'),
@@ -293,7 +311,6 @@ class _ProfileViewState extends State<ProfileView> {
       return Container(child: Center(child: noUser));
     }
   }
-
 
   Widget categoriasText() {
     String aux = "";
@@ -304,9 +321,9 @@ class _ProfileViewState extends State<ProfileView> {
       if (i == 0) {
         print("ESTO ES CAT ${categories[0]}");
         aux = '${AppLocalizations.of(context).translate("categories[0]")}';
-      } 
-      else {
-        aux += ", " + '${AppLocalizations.of(context).translate("categories[i]")}';
+      } else {
+        aux +=
+            ", " + '${AppLocalizations.of(context).translate("categories[i]")}';
       }
       return Text(
         aux,

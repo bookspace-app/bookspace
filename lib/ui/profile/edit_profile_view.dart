@@ -49,6 +49,10 @@ class _EditProfileViewState extends State<EditProfileView> {
   List<String> categories = [];
   String _path;
   List<int> selectedGenres = [0];
+  String absolutePath;
+  bool trobatFirebase = false;
+  bool fetPhotoCamera = false;
+  var img;
 
   //GET USER
   void getUser() async {
@@ -67,6 +71,20 @@ class _EditProfileViewState extends State<EditProfileView> {
     _id = _user.id;
   }
 
+  void getProfilePic() async {
+    String photoPath = await UserController.getProfilePic(globals.id);
+    setState(() {
+      img = NetworkImage(photoPath);
+      if (photoPath.endsWith('/')) {
+        trobatFirebase = false;
+        fetPhotoCamera = false;
+      } else {
+        trobatFirebase = true;
+        fetPhotoCamera = true;
+      }
+    });
+  }
+
   //GET CATEGORIES
   void getCategories() async {
     List<String> cat = await UserController.getCategories(globals.id);
@@ -76,7 +94,8 @@ class _EditProfileViewState extends State<EditProfileView> {
 
   //UPDATE USER
   void putUser(String username, name, email, descrition, int id) async {
-    UserController.updateUser(username, name, email, descrition, id);
+    UserController.updateUser(
+        username, name, email, descrition, id, globals.token);
   }
 
   //UPDATE CATEGORIES
@@ -84,7 +103,14 @@ class _EditProfileViewState extends State<EditProfileView> {
     if (selectedGenres.length > 1) {
       categoriesToString();
     }
-    UserController.updateCategories(categories, _id);
+    UserController.updateCategories(categories, _id, globals.token);
+  }
+
+  //POST PROFILE PICTURE
+  void updatePhoto(String path) async {
+    File pic = File(_imageFile.path);
+    absolutePath =
+        await UserController.postProfilePic(pic, globals.id, globals.token);
   }
 
   bool disposed = false;
@@ -96,9 +122,10 @@ class _EditProfileViewState extends State<EditProfileView> {
 
   @override
   void initState() {
-    super.initState();
     getUser();
     getCategories();
+    getProfilePic();
+    super.initState();
   }
 
   @override
@@ -177,7 +204,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   _bio = bioController.text;
                   putUser(_username, _name, _email, _bio, _id);
                   updateCategories();
-                  //updatePhoto(_path);
+                  updatePhoto(_path);
 
                   Navigator.push(
                     context,
@@ -210,12 +237,14 @@ class _EditProfileViewState extends State<EditProfileView> {
       child: Stack(
         children: [
           CircleAvatar(
-            radius: 80,
-            backgroundImage: _imageFile == null
-                ? AssetImage('assets/images/No_pic.png')
-                : FileImage(File(_imageFile.path)),
-            //AssetImage(_user.profilePicUri),
-          ),
+              radius: 80,
+              backgroundImage: !fetPhotoCamera
+                  ? AssetImage('assets/images/No_pic.png')
+                  : !trobatFirebase
+                      ? FileImage(File(_imageFile.path))
+                      : img
+              //AssetImage(_user.profilePicUri),
+              ),
           Positioned(
               bottom: 20,
               right: 20,
@@ -328,6 +357,8 @@ class _EditProfileViewState extends State<EditProfileView> {
     final pickedFile = await _picker.getImage(source: source);
     setState(() {
       _imageFile = pickedFile;
+      fetPhotoCamera = true;
+      trobatFirebase = false;
     });
     _path = pickedFile.path;
   }
