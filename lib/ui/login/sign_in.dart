@@ -192,7 +192,7 @@ class _SignInState extends State<SignIn> {
                 splashColor: Colors.grey.withOpacity(0.3),
                 highlightColor: Colors.grey.withOpacity(0.3),
                 onTap: () {
-                  _launchURL();
+                  //_launchURL();
                   //loginGoogle();
                 },
                 child: Container(
