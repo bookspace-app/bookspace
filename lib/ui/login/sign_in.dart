@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:bookspace/globals.dart' as globals;
+import 'package:url_launcher/url_launcher.dart';
 
 class SignIn extends StatefulWidget {
   SignIn({Key key}) : super(key: key);
@@ -58,6 +59,30 @@ class _SignInState extends State<SignIn> {
       globals.token = token;
       print("THIS IS TOKEN ${globals.token}");
     });
+  }
+
+  Future<void> loginGoogle() async {
+    Map<String, dynamic> response = await UserController.loginGoogle();
+    if (!disposed) {
+      setState(() => token = response["token"]);
+      setState(() => idUser = int.parse(response["userId"]));
+    }
+    setState(() {
+      globals.id = idUser;
+      print("THIS IS ID ${globals.id}");
+      globals.token = token;
+      print("THIS IS TOKEN ${globals.token}");
+    });
+  }
+
+  _launchURL() async {
+    const url =
+        'https://bookspace-app.herokuapp.com/oauth2/authorization/google';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   String errorUserName() {
@@ -167,7 +192,8 @@ class _SignInState extends State<SignIn> {
                 splashColor: Colors.grey.withOpacity(0.3),
                 highlightColor: Colors.grey.withOpacity(0.3),
                 onTap: () {
-                  print('Inkwell');
+                  _launchURL();
+                  //loginGoogle();
                 },
                 child: Container(
                     decoration: BoxDecoration(

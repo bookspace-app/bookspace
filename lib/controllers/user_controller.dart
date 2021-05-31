@@ -324,8 +324,7 @@ class UserController {
       };
 
       // Make POST request
-      http.Response response =
-          await http.post(uri, headers: headers, body: jsonEncode(body));
+      http.Response response = await http.post(uri);
 
       // Request status and body
       int statusCode = response.statusCode;
@@ -404,7 +403,41 @@ class UserController {
   static Future<String> postProfilePic(File photo, int id, String token) async {
     Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id/profilePic");
 
-    var stream = http.ByteStream(DelegatingStream.typed(photo.openRead()));
+    /*try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users");
+
+      // Define headers
+      Map<String, String> headers = {
+        'Content-Type': 'multipart/form-data',
+        'Accept': 'application/json',
+      };
+
+      //Define body
+      Map<String, String> body = {
+        'username': username,
+        'name': name,
+        'email': email,
+        'password': pass,
+        'dob': dob,
+      };
+
+      // Make POST request
+      http.Response response =
+          await http.post(uri, headers: headers, body: jsonEncode(body));
+
+      // Request status and body
+      int statusCode = response.statusCode;
+      String requestBody = response.body;
+
+      print('Response status: $statusCode\n Response body: $requestBody\n');
+      if (statusCode == 200) {
+        user = User.fromJson(json.decode(response.body));
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }*/
+
+    /*var stream = http.ByteStream(DelegatingStream.typed(photo.openRead()));
     var length = await photo.length();
 
     var request = http.MultipartRequest('POST', uri);
@@ -416,7 +449,7 @@ class UserController {
     print(response.statusCode);
     response.stream.transform(utf8.decoder).listen((value) {
       print(value);
-    });
+    });*/
 
     /*String filename = basename(photo.path);
 
@@ -474,5 +507,26 @@ class UserController {
       print('error caught: $e');
     }
     return path;
+  }
+
+  static Future<Map<String, dynamic>> loginGoogle() async {
+    try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "oauth2/authorization/google");
+
+      // Make POST request
+      http.Response response = await http.post(uri);
+
+      // Request status and body
+      int statusCode = response.statusCode;
+      Map<String, dynamic> requestBody = jsonDecode(response.body) as Map;
+
+      print('Response status: $statusCode\n Response body: $requestBody\n');
+      if (statusCode == 200) {
+        return requestBody;
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return null;
   }
 }
