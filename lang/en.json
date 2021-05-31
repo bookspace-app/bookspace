@@ -77,5 +77,14 @@
     "all": "All",
     "filter": "Filter by category",
     "publications": "Publications",
-    "users": "Users"
+    "users": "Users",
+    "save": "Save",
+    "username": "Username",
+    "name": "Name",
+    "favgenres": "Favorite genres",
+    "choosepic": "Choose a profile pic",
+    "camera": "Camera",
+    "gallery": "Gallery",
+    "joined": "Joined",
+    "mypubls": "My posts"
 }

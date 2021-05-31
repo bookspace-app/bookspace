@@ -77,5 +77,14 @@
     "all": "Todos",
     "filter": "Filtrar por categoria",
     "publications": "Publicaciones",
-    "users": "Usuarios"
+    "users": "Usuarios",
+    "save": "Guardar",
+    "username": "Nombre de usuario",
+    "name": "Nombre",
+    "favgenres": "Géneros favoritos",
+    "choosepic": "Escoge una foto de perfil",
+    "camera": "Cámara",
+    "gallery": "Galería",
+    "joined": "Se unió el dia",
+    "mypubls": "Mis publicaciones"
 }

@@ -411,6 +411,57 @@ dictionary = {
         'es': 'Usuarios'
     },
 
+    #EDITPROFILE TRANSLATIONS
+    'save': {
+        'en': 'Save',
+        'ca': 'Desar',
+        'es': 'Guardar'
+    },
+    'username': {
+        'en': 'Username',
+        'ca': "Nom d'usuari",
+        'es': 'Nombre de usuario'
+    },
+    'name': {
+        'en': 'Name',
+        'ca': "Nom",
+        'es': 'Nombre'
+    },
+    'favgenres': {
+        'en': 'Favorite genres',
+        'ca': "Gèneres preferits",
+        'es': 'Géneros favoritos'
+    },
+    'choosepic': {
+        'en': 'Choose a profile pic',
+        'ca': "Tria una imatge de perfil",
+        'es': 'Escoge una foto de perfil'
+    },
+    'camera': {
+        'en': 'Camera',
+        'ca': "Caméra",
+        'es': 'Cámara'
+    },
+    'gallery': {
+        'en': 'Gallery',
+        'ca': "Galeria",
+        'es': 'Galería'
+    },
+
+
+    #VIEWPROFILE  TRANSLATIONS
+
+    'joined': {
+        'en': 'Joined',
+        'ca': "Es va unir el dia",
+        'es': 'Se unió el dia'
+    },
+    'mypubls': {
+        'en': 'My posts',
+        'ca': "Es va unir el dia",
+        'es': 'Mis publicaciones'
+    },
+
 }
 
 for lang in locales:

@@ -31,7 +31,7 @@ class _ProfileViewState extends State<ProfileView> {
 
   void getCategories() async {
     List<String> cat = await UserController.getCategories(globals.id);
-    categories = cat;
+    setState(() {categories = cat;});
   }
 
   void getProfilePic() async {
@@ -210,7 +210,7 @@ class _ProfileViewState extends State<ProfileView> {
                                         fontWeight: FontWeight.bold)),
                                 new TextSpan(
                                     text: " · " +
-                                        "Se unió al día\n" +
+                                        "${AppLocalizations.of(context).translate("joined")}\n" +
                                         "${DateFormat.yMMMMd().format(_user.dor)}"),
                               ],
                             ),
@@ -223,60 +223,49 @@ class _ProfileViewState extends State<ProfileView> {
                 children: [
                   Container(
                     //color: Colors.orange,
-                    padding: EdgeInsets.fromLTRB(15, 5, 10, 0),
+                    padding: EdgeInsets.fromLTRB(15, 5, 10, 5),
                     child: Text(
-                      "Categorias Favoritas",
+                      "${AppLocalizations.of(context).translate("favgenres")}",
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 18.0),
                     ),
                   ),
                 ],
               ),
-              /*Wrap(
-                alignment: WrapAlignment.spaceBetween,
-                direction: Axis.horizontal,
-                children: [
-                  for (var i = 0; i < categories.length; i++)
-                  Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 0), 
-                    child: Container (
-                      padding: EdgeInsets.fromLTRB(2, 0, 2, 0),
-                      //color: globals.gray,
-                      decoration: BoxDecoration(color: globals.gray ,border: Border.all(color: globals.gray), borderRadius: BorderRadius.all(Radius.circular(5)) ), 
-                      child: Text(
-                        " ${AppLocalizations.of(context).translate("categories[i]")} ",
-                        style: TextStyle(
-                          backgroundColor: globals.gray,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15.0,
+              Container(
+                padding: EdgeInsets.fromLTRB(15, 0, 0, 5),
+                alignment: Alignment.centerLeft,
+                child: Wrap(
+                  alignment: WrapAlignment.spaceBetween,
+                  direction: Axis.horizontal,
+                  children: [
+                    for (var i = 0; i < categories.length; i++)
+                    Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 0), 
+                      child: Container (
+                        padding: EdgeInsets.fromLTRB(2, 0, 2, 0),
+                        //color: globals.gray,
+                        decoration: BoxDecoration(color: globals.gray ,border: Border.all(color: globals.gray), borderRadius: BorderRadius.all(Radius.circular(5)) ), 
+                        child: Text(
+                          " ${AppLocalizations.of(context).translate(categories[i])} ",
+                          style: TextStyle(
+                            backgroundColor: globals.gray,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15.0,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  /*
-                  for (var xen = 0; xen < categories.length; xen++)
-                  Container(
-                    //color: Colors.orange,
-                    padding: EdgeInsets.fromLTRB(15, 5, 10,0), //Para cada tag recibida de la api un campo de texto con fondo gris y letras blancas, padding entre ellos
-                    child: Text(
-                      categories[xen],
-                      style: TextStyle(
-                        backgroundColor: globals.gray,
-                        color: Colors.white,
-                        fontSize: 10.0,
-                      ),
-                    ),
-                    //child: categoriasText(),
-                  ),*/
-                ],
-              ),*/
+                  ],
+                ),
+              )
             ],
           ),
         ),
         Container(
             padding: EdgeInsets.fromLTRB(15, 10, 0, 0),
             child: Text(
-              'Mis publicaciones',
+              '${AppLocalizations.of(context).translate("mypubls")}',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
             )),
         for (var index = 0; index < _myPublications.length; index++)
@@ -310,30 +299,5 @@ class _ProfileViewState extends State<ProfileView> {
     } else {
       return Container(child: Center(child: noUser));
     }
-  }
-
-  Widget categoriasText() {
-    String aux = "";
-
-    if (categories.length == 0) return (Text(""));
-
-    for (int i = 0; i < categories.length; i++) {
-      if (i == 0) {
-        print("ESTO ES CAT ${categories[0]}");
-        aux = '${AppLocalizations.of(context).translate("categories[0]")}';
-      } else {
-        aux +=
-            ", " + '${AppLocalizations.of(context).translate("categories[i]")}';
-      }
-      return Text(
-        aux,
-        style: TextStyle(
-          backgroundColor: globals.gray,
-          color: Colors.white,
-          fontSize: 10.0,
-        ),
-      );
-    }
-    return (Text(""));
   }
 }

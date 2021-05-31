@@ -6,6 +6,11 @@ Color primary = getMaterial(0xFFFAC640);
 Color secondary = getMaterial(0xFF314211);
 Color tertiary = getMaterial(0xFF313211);
 Color gray = getMaterial(0xFFD9D9D9);
+
+Color day_1 = getMaterial(0xFFFAC640);
+Color day_2 = getMaterial(0xFF314211);
+Color day_3 = getMaterial(0xFF313211);
+
 int id = 1;
 String token;
 double bottomBarHeight = 60.0;

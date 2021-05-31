@@ -135,46 +135,34 @@ class _EditProfileViewState extends State<EditProfileView> {
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 40),
         children: [
           imageProfile(),
-          titlePreEditText('Nombre'),
-          editTextProfile(nameController, 'Nombre'),
-          titlePreEditText('Nombre de Usuario'),
-          editTextProfile(usernameController, 'Nombre de Usuario'),
+          titlePreEditText('${AppLocalizations.of(context).translate("name")}'),
+          editTextProfile(nameController, '${AppLocalizations.of(context).translate("name")}'),
+          titlePreEditText('${AppLocalizations.of(context).translate("username")}'),
+          editTextProfile(usernameController, '${AppLocalizations.of(context).translate("username")}'),
           titlePreEditText('Email'),
           editTextProfile(emailController, 'Email'),
-          titlePreEditText('Biografia'),
-          editTextProfile(bioController, 'Description'),
-          titlePreEditText('Categorias'),
-          Container(
-            padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-            child: Row(children: [
-              Text(
-                "${AppLocalizations.of(context).translate("generoDesc")}",
-                style: TextStyle(fontSize: 14.0, color: Colors.grey),
-              ),
-            ]),
-          ),
+          titlePreEditText('${AppLocalizations.of(context).translate("descripcion")}'),
+          editTextProfile(bioController, '${AppLocalizations.of(context).translate("descripcion")}'),
+          titlePreEditText('${AppLocalizations.of(context).translate("favgenres")}'),
 
           //EDIT TEXT CATEGORIES. No lo hago con el metodo "editTextProfile" porque es distinto a los demás
           Container(
             padding: EdgeInsets.fromLTRB(15, 2, 15, 0),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey[700], width: 1),
-              borderRadius: BorderRadius.circular(10),
-            ),
+
             child: Row(children: [
               Expanded(
-                  child: SmartSelect<int>.multiple(
+                child: SmartSelect<int>.multiple(
+                  title: "",
                 modalFilter: true,
                 modalTitle:
                     "${AppLocalizations.of(context).translate("genero")}",
-                placeholder: 'Escoge el género literario que más se adecue',
-                modalFilterHint: "HEY",
+                placeholder: '',
                 modalHeaderStyle: S2ModalHeaderStyle(
                   backgroundColor: globals.primary,
                   textStyle: TextStyle(color: Colors.black),
                   iconTheme: IconThemeData(color: Colors.black, opacity: 1),
-                  actionsIconTheme:
-                      IconThemeData(color: Colors.black, opacity: 1),
+                  actionsIconTheme: IconThemeData(color: Colors.black, opacity: 1),
+                  centerTitle: true,
                 ),
                 value: selectedGenres,
                 choiceItems:
@@ -216,11 +204,11 @@ class _EditProfileViewState extends State<EditProfileView> {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                    primary: Colors.grey,
-                    onPrimary: Colors.black,
+                    primary: Color.fromRGBO(250, 198, 65, 1),
+                    onPrimary: Color.fromRGBO(250, 198, 65, 1),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5.0))),
-                child: Text('Submit',
+                child: Text('${AppLocalizations.of(context).translate("save")}',
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.black,
@@ -273,7 +261,7 @@ class _EditProfileViewState extends State<EditProfileView> {
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
           children: [
-            Text('Escoge una foto de perfil',
+            Text('${AppLocalizations.of(context).translate("choosepic")}',
                 style: TextStyle(
                   fontSize: 20,
                 )),
@@ -289,7 +277,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                       //savePhoto();
                     },
                     icon: Icon(Icons.camera_alt),
-                    label: Text('Cámera')),
+                    label: Text('${AppLocalizations.of(context).translate("camera")}', style: TextStyle(color: Colors.black)
+                  ),
+                ),
                 SizedBox(
                   width: 20,
                 ),
@@ -299,7 +289,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                       //savePhoto();
                     },
                     icon: Icon(Icons.image),
-                    label: Text('Galeria'))
+                    label: Text('${AppLocalizations.of(context).translate("gallery")}', style: TextStyle(color: Colors.black))
+                )
               ],
             )
           ],
@@ -315,7 +306,8 @@ class _EditProfileViewState extends State<EditProfileView> {
           style: TextStyle(
               fontSize: 15,
               //color: Color(0xff0962ff),
-              fontWeight: FontWeight.bold),
+              //fontWeight: FontWeight.bold
+            ),
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey),
@@ -347,7 +339,8 @@ class _EditProfileViewState extends State<EditProfileView> {
       child: Text(
         title,
         style: TextStyle(
-          fontSize: 15,
+          fontSize: 16,
+          fontWeight: FontWeight.bold
         ),
       ),
     );
