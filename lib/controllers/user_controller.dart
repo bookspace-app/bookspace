@@ -305,7 +305,7 @@ class UserController {
 
   //login sesion
   static Future<Map<String, dynamic>> postlogin(
-      String username, String password) async {
+      String email, String password) async {
     try {
       Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/login");
 
@@ -317,12 +317,13 @@ class UserController {
 
       //Define body
       Map<String, String> body = {
-        'email': username,
+        'email': email,
         'password': password,
       };
 
       // Make POST request
-      http.Response response = await http.post(uri);
+      http.Response response =
+          await http.post(uri, headers: headers, body: jsonEncode(body));
 
       // Request status and body
       int statusCode = response.statusCode;
