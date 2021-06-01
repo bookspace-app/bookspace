@@ -76,7 +76,8 @@ class _EditProfileViewState extends State<EditProfileView> {
 
   //UPDATE USER
   void putUser(String username, name, email, descrition, int id) async {
-    UserController.updateUser(username, name, email, descrition, id);
+    UserController.updateUser(
+        username, name, email, descrition, id, globals.token);
   }
 
   //UPDATE CATEGORIES
