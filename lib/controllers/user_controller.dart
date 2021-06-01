@@ -194,8 +194,7 @@ class UserController {
   }
 
   //UPDATE USER DESCRIPTION
-  static Future<bool> updateDesc(
-      String descripcion, int id) async {
+  static Future<bool> updateDesc(String descripcion, int id) async {
     User user;
     try {
       Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id");
@@ -255,7 +254,7 @@ class UserController {
       if (statusCode == 200) {
         var tagsJson = jsonDecode(response.body);
         categories = tagsJson != null ? List.from(tagsJson) : null;
-        
+
         /*Map map = jsonDecode(response.body);
         categories = map["favCategories"];*/
       }
@@ -527,5 +526,35 @@ class UserController {
       print('error caught: $e');
     }
     return null;
+  }
+
+  //Reportar publicacion
+  static Future<int> report(int Uid, int Pid, String token) async {
+    try {
+      Uri uri = Uri.https(
+          BACKEND_AUTHORITY, "$API/users/$Uid/reportPublication/$Pid");
+
+      // Define headers
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'auth': token,
+      };
+
+      // Make POST request
+      http.Response response = await http.post(uri, headers: headers);
+
+      // Request status and body
+      int statusCode = response.statusCode;
+      String requestBody = response.body;
+
+      print('Response status: $statusCode\n Response body: $requestBody\n');
+      if (statusCode == 200) {
+        return statusCode;
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return -1;
   }
 }
