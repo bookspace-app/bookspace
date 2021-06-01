@@ -51,7 +51,7 @@ class _ActivityViewState extends State<ActivityView> {
   Widget build(BuildContext context) {
     if (_mentions != null) {
       return Container(
-        color: Color.fromRGBO(243, 247, 250, 1),
+        color: globals.theme_1,//Color.fromRGBO(243, 247, 250, 1),
         child: ListView(
           children: List.generate(_mentions.length, (index) {
           return Column(children: <Widget>[

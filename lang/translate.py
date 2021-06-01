@@ -462,6 +462,7 @@ dictionary = {
         'es': 'Mis publicaciones'
     },
 
+
     #CONFIGURATION  TRANSLATIONS
 
     'logout': {
@@ -489,6 +490,128 @@ dictionary = {
         'ca': "Cambiar el tema",
         'es': 'Cambiar tema'
     },   
+
+    #LOGIN  TRANSLATIONS
+    'password': {
+        'en': 'Password',
+        'ca': "Contrasenya",
+        'es': 'Contraseña'
+    },   
+    'login': {
+        'en': 'Log in',
+        'ca': "Iniciar sessió",
+        'es': 'Iniciar sesión'
+    },
+    'loginwith': {
+        'en': 'Log in with',
+        'ca': "Iniciar sessió amb",
+        'es': 'Iniciar sesión con'
+    },
+    'forgotpass': {
+        'en': 'Forgot your password?',
+        'ca': "Has oblidat la teva contrasenya?",
+        'es': '¿Olvidaste tu contraseña?'
+    },
+    'signup': {
+        'en': 'Sign up',
+        'ca': "Registrar-se",
+        'es': 'Registrarse'
+    },
+    'wrongpass': {
+        'en': 'Wrong password',
+        'ca': "Contrasenya incorrecta",
+        'es': 'Contraseña incorrecta'
+    },
+    'wronguser': {
+        'en': 'User does not exist, please register first',
+        'ca': "No existeix l'usuari, si us plau, registrat primer",
+        'es': 'No existe el usuario, por favor regístrese primero'
+    },
+
+    #SIGNUP  TRANSLATIONS       
+    'wrongformatdate': {
+        'en': 'Invalid date format',
+        'ca': "La data té un format invàlid",
+        'es': 'La fecha tiene un formato inválido'
+    }, 
+    'register': {
+        'en': 'Sign up',
+        'ca': "Registre",
+        'es': 'Registro'
+    },  
+    'surname': {
+        'en': 'Surame',
+        'ca': "Cognom",
+        'es': 'Apellido'
+    },
+    'repeatpass': {
+        'en': 'Repeat password',
+        'ca': "Repeteix la contrasenya",
+        'es': 'Repite la contraseña'
+    },
+    'next': {
+        'en': 'Next',
+        'ca': "Següent",
+        'es': 'Siguiente'
+    },
+    'errasepic': {
+        'en': 'Delete Photo',
+        'ca': "Eliminar Foto",
+        'es': 'Eliminar Foto'
+    },
+    'profilepic': {
+        'en': 'Profile pic',
+        'ca': "Foto de perfil",
+        'es': 'Foto de perfil'
+    },
+    'userdescdesc': {
+        'en': 'Tell us who you are and what you like',
+        'ca': "Explica'ns qui ets i que t'agrada",
+        'es': 'Explicanos quién eres y que te gusta'
+    },               
+    'favgenresdesc': {
+        'en': 'Write yout favorite genres',
+        'ca': "Escriu els temes que més t'interessen",
+        'es': 'Escribe los temas que más te interesan'
+    },
+    'completeregister': {
+        'en': 'Complete register',
+        'ca': "Completar registre",
+        'es': 'Completar registro'
+    },    
+
+    #RESETPASS  TRANSLATIONS       
+    'resetdesc': {
+        'en': 'Enter your email address. You will receive an email shortly to reset your password.',
+        'ca': "Introdueix la teva adreça electrònica. En breus rebràs un correu per restablir la nova contrasenya.",
+        'es': 'Introduce tu dirección electrónica. En breves recibirás un correo para restablecer la nueva contraseña.'
+    },
+    'resetemaildesc': {
+        'en': 'Enter your email address',
+        'ca': "Introdrueix la teva adreça electrònica",
+        'es': 'Introduce tu dirección electrónica'
+    },      
+    'ty': {
+        'en': 'Thanks',
+        'ca': "Gràcies",
+        'es': 'Gracias'
+    },
+    'resetconfirm1': {
+        'en': 'An email has been sent to the email address',
+        'ca': "S'ha enviat un correu a l'adreça electrònica",
+        'es': 'Se ha enviado un correo a la dirección electrónica'
+    }, 
+    'resetconfirm2': {
+        'en': 'to reset password',
+        'ca': "per reestablir la seva contrasenya",
+        'es': 'para restablecer la contraseña'
+    },
+    'send': {
+        'en': 'Send',
+        'ca': "Envia",
+        'es': 'Envía'
+    },     
+
 
 }
 

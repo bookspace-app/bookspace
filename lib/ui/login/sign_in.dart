@@ -1,3 +1,4 @@
+import 'package:bookspace/app_localizations.dart';
 import 'package:bookspace/controllers/user_controller.dart';
 import 'package:bookspace/models/user.dart';
 import 'package:bookspace/ui/login/reset_pass.dart';
@@ -86,7 +87,7 @@ class _SignInState extends State<SignIn> {
   }
 
   String errorUserName() {
-    if (usernameController.text.isEmpty) return "Rellena este campo";
+    if (usernameController.text.isEmpty) return "${AppLocalizations.of(context).translate("emptyField")}";
     for (var i = 0; i < _users.length; i++) {
       if (usernameController.text == _users[i].email) {
         pas = _users[i].password;
@@ -94,13 +95,13 @@ class _SignInState extends State<SignIn> {
         return null;
       }
     }
-    return "No existe usuario, por favor regístrese primero";
+    return "${AppLocalizations.of(context).translate("wronguser")}";
   }
 
   String errorPass() {
-    if (passwordController.text.isEmpty) return "Rellena este campo";
+    if (passwordController.text.isEmpty) return "${AppLocalizations.of(context).translate("emptyField")}";
     //user.password check
-    if (passwordController.text != pas) return "Contraseña incorrecta";
+    if (passwordController.text != pas) return "${AppLocalizations.of(context).translate("wrongpass")}";
     return null;
   }
 
@@ -148,10 +149,10 @@ class _SignInState extends State<SignIn> {
                 },
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
-                    labelText: 'Nombre de Usuario',
+                    labelText: 'Email',
                     fillColor: Colors.white,
                     border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.person),
+                    prefixIcon: Icon(Icons.email),
                     errorText: error ? errorUserName() : null,
                     suffixIcon: IconButton(
                         icon: Icon(Icons.clear),
@@ -172,7 +173,7 @@ class _SignInState extends State<SignIn> {
                   },
                   obscureText: isPasswordHiden,
                   decoration: InputDecoration(
-                      labelText: 'Contraseña',
+                      labelText: '${AppLocalizations.of(context).translate("password")}',
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.lock),
                       errorText: error ? errorPass() : null,
@@ -204,7 +205,7 @@ class _SignInState extends State<SignIn> {
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Iniciar sesión con'),
+                          Text('${AppLocalizations.of(context).translate("loginwith")}'),
                           Container(
                             constraints: BoxConstraints.expand(
                                 height: 40.0, width: 60.0),
@@ -218,7 +219,7 @@ class _SignInState extends State<SignIn> {
             Container(
                 height: 40,
                 child: ElevatedButton(
-                    child: Text('Iniciar Sesión',
+                    child: Text('${AppLocalizations.of(context).translate("login")}',
                         style: TextStyle(
                           color: Colors.black, /*fontFamily: "Schyler"*/
                         )),
@@ -257,7 +258,7 @@ class _SignInState extends State<SignIn> {
                     children: [
                   TextButton(
                       child: Text(
-                        '¿Olvidaste tu contraseña?',
+                        '${AppLocalizations.of(context).translate("forgotpass")}',
                         style: TextStyle(color: Colors.black),
                       ),
                       onPressed: () {
@@ -268,7 +269,7 @@ class _SignInState extends State<SignIn> {
                       }),
                   TextButton(
                       child: Text(
-                        'Registrarse',
+                        '${AppLocalizations.of(context).translate("signup")}',
                         style: TextStyle(color: Colors.black),
                       ),
                       onPressed: () {

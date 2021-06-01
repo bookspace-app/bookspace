@@ -46,6 +46,7 @@ class MentionCard extends StatelessWidget {
               style: TextStyle(
                 fontWeight: atTitle? FontWeight.bold: FontWeight.normal,
                 fontSize: atTitle? 20: 16,
+                color: globals.theme ? Colors.black : Colors.white,
               )
             )
           ],
@@ -56,9 +57,9 @@ class MentionCard extends StatelessWidget {
     return Container(
       child: Container(
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: globals.theme_1,
             border: Border.all(
-              color: Colors.white,//Colors.grey[400],
+              color: globals.theme ? Colors.white : Colors.black,//Colors.grey[400],
             ),
             borderRadius: BorderRadius.all(Radius.circular(5))
           ),
@@ -87,7 +88,8 @@ class MentionCard extends StatelessWidget {
                                   child: Text(
                                     '@${mention.author.name}',
                                     style: TextStyle(
-                                      fontWeight: FontWeight.bold
+                                      fontWeight: FontWeight.bold,
+                                      color: globals.theme ? Colors.black : Colors.white,
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   )
@@ -96,7 +98,8 @@ class MentionCard extends StatelessWidget {
                                   child: Text(
                                     '${mention.author.rank}',
                                     style: TextStyle(
-                                      fontWeight: FontWeight.normal
+                                      fontWeight: FontWeight.normal,
+                                      color: globals.theme ? Colors.black : Colors.white,
                                     ),
                                   )
                                 ),
@@ -120,7 +123,8 @@ class MentionCard extends StatelessWidget {
                                 child: Text(
                                   '${mention.type}',
                                   style: TextStyle(
-                                    fontWeight: FontWeight.normal
+                                    fontWeight: FontWeight.normal,
+                                      color: globals.theme ? Colors.black : Colors.white,
                                   ),
                                 )
                               ),
@@ -128,7 +132,8 @@ class MentionCard extends StatelessWidget {
                                 child: Text(
                                   '${TimeAgo.timeAgoSinceDate(mention.dop)}',
                                   style: TextStyle(
-                                    fontWeight: FontWeight.normal
+                                    fontWeight: FontWeight.normal,
+                                    color: globals.theme ? Colors.black : Colors.white,
                                   ),
                                 )
                               ),

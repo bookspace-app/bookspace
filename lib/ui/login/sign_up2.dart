@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:bookspace/app_localizations.dart';
 import 'package:bookspace/ui/login/sign_in.dart';
 import 'package:bookspace/ui/login/sign_up.dart';
 import 'package:bookspace/controllers/user_controller.dart';
@@ -67,14 +68,14 @@ class _SignUp2State extends State<SignUp2> {
                 children: <Widget>[
                   new ListTile(
                       leading: new Icon(Icons.photo_library),
-                      title: new Text('Galería'),
+                      title: new Text('${AppLocalizations.of(context).translate("gallery")}'),
                       onTap: () {
                         getImageGallery();
                         Navigator.of(context).pop();
                       }),
                   new ListTile(
                     leading: new Icon(Icons.photo_camera),
-                    title: new Text('Cámara'),
+                    title: new Text('${AppLocalizations.of(context).translate("camera")}'),
                     onTap: () {
                       getImageCamera();
                       Navigator.of(context).pop();
@@ -82,7 +83,7 @@ class _SignUp2State extends State<SignUp2> {
                   ),
                   new ListTile(
                     leading: new Icon(Icons.clear),
-                    title: new Text('Eliminar Foto'),
+                    title: new Text('${AppLocalizations.of(context).translate("errasepic")}'),
                     onTap: () {
                       erraseImage();
                       Navigator.of(context).pop();
@@ -119,7 +120,7 @@ class _SignUp2State extends State<SignUp2> {
                   CrossAxisAlignment.center, //Center Row contents vertically,
               children: <Widget>[
                 Text(
-                  "Foto de Perfil", //to-do TRADUCIONES
+                  "${AppLocalizations.of(context).translate("profilepic")}", //to-do TRADUCIONES
                   style: TextStyle(
                       color: Colors.black, //to-do Cambiar color letras
                       fontSize: 14),
@@ -182,7 +183,7 @@ class _SignUp2State extends State<SignUp2> {
                   CrossAxisAlignment.center, //Center Row contents vertically,
               children: <Widget>[
                 Text(
-                  "Descripción:", //to-do TRADUCIONES
+                  "${AppLocalizations.of(context).translate("descripcion")}:", //to-do TRADUCIONES
                   style: TextStyle(
                       color: Colors.black, //to-do Cambiar color letras
                       fontSize: 14),
@@ -210,7 +211,7 @@ class _SignUp2State extends State<SignUp2> {
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(),
                                 hintText:
-                                    "Explicanos quién eres y que te gusta",
+                                    "${AppLocalizations.of(context).translate("userdescdesc")}",
                                 counterText:
                                     '${descController.text.length}' + '/500'))),
                   ])),
@@ -222,7 +223,7 @@ class _SignUp2State extends State<SignUp2> {
                   CrossAxisAlignment.center, //Center Row contents vertically,
               children: <Widget>[
                 Text(
-                  "Categorias favoritas:", //to-do TRADUCIONES
+                  "${AppLocalizations.of(context).translate("favgenres")}:", //to-do TRADUCIONES
                   style: TextStyle(
                       color: Colors.black, //to-do Cambiar color letras
                       fontSize: 14),
@@ -246,7 +247,7 @@ class _SignUp2State extends State<SignUp2> {
                   textFieldStyler: TextFieldStyler(
                       isDense: false,
                       helperText: "",
-                      hintText: 'Escribe los temas que más te interesan'),
+                      hintText: '${AppLocalizations.of(context).translate("favgenresdesc")}'),
                   onTag: (tag) {
                     //categories.add(tag);
                   },
@@ -274,7 +275,7 @@ class _SignUp2State extends State<SignUp2> {
                     child: RaisedButton(
                         textColor: Colors.white,
                         color: Colors.blue,
-                        child: Text('Completar registro'),
+                        child: Text('${AppLocalizations.of(context).translate("completeregister")}'),
                         onPressed: () {
                           print(widget.id);
                           updateDesc(descController.text, widget.id);

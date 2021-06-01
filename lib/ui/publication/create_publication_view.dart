@@ -224,7 +224,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                           maxLines: 4,
                           inputFormatters: [
                             new LengthLimitingTextInputFormatter(2000),
-                          ], //TO-DO Define length of publication's description
+                          ], 
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.white,

@@ -95,9 +95,9 @@ class _SignUpState extends State<SignUp> {
   //Error Check
   String errorDob_d() {
     if (dayController.text.isEmpty) {
-      return "Empty Field";
+      return "${AppLocalizations.of(context).translate("emptyField")}";
     } else if (dayController.text.length > 2) {
-      return "wrong format";
+      return "${AppLocalizations.of(context).translate("wrongformatdate")}";
     } else {
       return null;
     }
@@ -105,9 +105,9 @@ class _SignUpState extends State<SignUp> {
 
   String errorDob_m() {
     if (monthController.text.isEmpty) {
-      return "Empty Field";
+      return "${AppLocalizations.of(context).translate("emptyField")}";
     } else if (monthController.text.length > 2) {
-      return "wrong format";
+      return "${AppLocalizations.of(context).translate("wrongformatdate")}";
     } else {
       return null;
     }
@@ -115,9 +115,9 @@ class _SignUpState extends State<SignUp> {
 
   String errorDob_y() {
     if (yearController.text.isEmpty) {
-      return "Empty Field";
+      return "${AppLocalizations.of(context).translate("emptyField")}";
     } else if (yearController.text.length != 4) {
-      return "wrong format";
+      return "${AppLocalizations.of(context).translate("wrongformatdate")}";
     } else {
       return null;
     }
@@ -232,7 +232,7 @@ class _SignUpState extends State<SignUp> {
                       .center, //Center Row contents vertically,
                   children: <Widget>[
                     Text(
-                      "Registro",
+                      "${AppLocalizations.of(context).translate("register")}",
                       style: TextStyle(color: Colors.black, fontSize: 30),
                     ),
                   ],
@@ -254,7 +254,7 @@ class _SignUpState extends State<SignUp> {
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(),
                                 labelText:
-                                    'Nombre de Usuario', //to-do Emoji handling
+                                    '${AppLocalizations.of(context).translate("username")}', //to-do Emoji handling
                                 prefixIcon:
                                     Icon(Icons.person), //to-do Traduciones
                                 errorText: errorsAll ? errorUserName() : null,
@@ -285,7 +285,7 @@ class _SignUpState extends State<SignUp> {
                             },
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(),
-                                labelText: 'Nombre',
+                                labelText: '${AppLocalizations.of(context).translate("name")}',
                                 prefixIcon: Icon(Icons.person),
                                 errorText: errorsAll ? errorName() : null,
                                 suffixIcon: nameController.text.length > 0
@@ -315,7 +315,7 @@ class _SignUpState extends State<SignUp> {
                             },
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(),
-                                labelText: 'Apellido',
+                                labelText: '${AppLocalizations.of(context).translate("surname")}',
                                 prefixIcon: Icon(Icons.person),
                                 errorText: errorsAll ? errorSurName() : null,
                                 suffixIcon: surNameController.text.length > 0
@@ -345,7 +345,7 @@ class _SignUpState extends State<SignUp> {
                             },
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(),
-                                labelText: 'Correo Electrónico',
+                                labelText: 'Email',
                                 prefixIcon: Icon(Icons.mail),
                                 errorText: errorsAll ? errorEmail() : null,
                                 suffixIcon: emailController.text.length > 0
@@ -376,7 +376,7 @@ class _SignUpState extends State<SignUp> {
                             obscureText: true,
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(),
-                                labelText: 'Contraseña',
+                                labelText: '${AppLocalizations.of(context).translate("password")}',
                                 prefixIcon: Icon(Icons.lock),
                                 errorText: errorsAll ? errorPass() : null,
                                 suffixIcon: passController.text.length > 0
@@ -407,7 +407,7 @@ class _SignUpState extends State<SignUp> {
                             obscureText: true,
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(),
-                                labelText: 'Repetir Contraseña',
+                                labelText: '${AppLocalizations.of(context).translate("repeatpass")}',
                                 prefixIcon: Icon(Icons.lock),
                                 errorText: errorsAll ? errorPassR() : null,
                                 suffixIcon: passRController.text.length > 0
@@ -478,7 +478,7 @@ class _SignUpState extends State<SignUp> {
                         child: RaisedButton(
                             textColor: Colors.white,
                             color: Colors.blue,
-                            child: Text('Siguiente'),
+                            child: Text('${AppLocalizations.of(context).translate("next")}'),
                             onPressed: () {
                               setState(() {
                                 //encryption();
