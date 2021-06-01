@@ -574,7 +574,6 @@ class UserController {
       Map<String, String> body = {
         'email': email,
       };
-      print('ctrl ' + email);
       // Make POST request
       http.Response response =
           await http.post(uri, headers: headers, body: jsonEncode(body));
