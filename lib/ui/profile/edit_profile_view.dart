@@ -89,7 +89,7 @@ class _EditProfileViewState extends State<EditProfileView> {
   void getCategories() async {
     List<String> cat = await UserController.getCategories(globals.id);
     categories = cat;
-    //categoriesToInt();
+    categoriesToInt();
   }
 
   //UPDATE USER
@@ -300,9 +300,12 @@ class _EditProfileViewState extends State<EditProfileView> {
   //Widget para tener un edit text standard y no volver a repetir siempre lo mismo
   Widget editTextProfile(TextEditingController controller, String hintText) {
     return Container(
-        constraints: BoxConstraints.expand(height: 50, width: 100),
+        //constraints: BoxConstraints.expand(height: 50, width: 100),
+        //color: Colors.pink,
         child: TextField(
           controller: controller,
+          maxLines: controller == bioController ? 4 : 1,
+          keyboardType: controller == bioController ? TextInputType.multiline :  null,
           style: TextStyle(
               fontSize: 15,
               //color: Color(0xff0962ff),

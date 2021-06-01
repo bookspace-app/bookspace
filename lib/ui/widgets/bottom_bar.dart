@@ -38,11 +38,11 @@ class _BookspaceBottomBarState extends State<BookspaceBottomBar> {
               }
             ),
             IconButton(
-              icon: Icon(Icons.chat_rounded),
+              icon: Icon(Icons.search),
               color: globals.secondary,
               iconSize: 40,
-              tooltip: 'Chats',
-              onPressed: () => widget.callback('chatList'),
+              tooltip: 'Search',
+              onPressed: () => widget.callback('search'),
             ),
             IconButton(
               icon: Icon(Icons.text_fields),

@@ -175,7 +175,7 @@ class _MainViewState extends State<MainView> {
                   ];
                 }),
               ]
-            : ((_rendered == 'home')
+            : null /*((_rendered == 'home')
                 ? [
                     IconButton(
                       icon: Icon(Icons.search),
@@ -185,7 +185,7 @@ class _MainViewState extends State<MainView> {
                       },
                     )
                   ] //
-                : null),
+                : null)*/,
       ),
       body: widget.view ??
           Container(
