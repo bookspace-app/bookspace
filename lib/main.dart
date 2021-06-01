@@ -49,7 +49,8 @@ class _MyAppState extends State<MyApp> {
         scaffoldBackgroundColor: globals.theme_1,
         primarySwatch: globals.primary,
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        canvasColor: globals.theme ? Colors.white : Color.fromRGBO(117, 121, 125, 1),
+        canvasColor:
+            globals.theme ? Colors.white : Color.fromRGBO(117, 121, 125, 1),
       ),
       //darkTheme: ThemeData.dark(),
       // home: MainView(),
@@ -98,7 +99,7 @@ class _MyAppState extends State<MyApp> {
         return supportedLocales.first;
       },
 
-      initialRoute: '/', // TODO : SignIn
+      initialRoute: '/login', // TODO : SignIn
       routes: {
         // When navigating to the "/" route, build the Home widget.
         '/login': (context) => SignIn(),
