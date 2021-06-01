@@ -145,7 +145,7 @@ class UserController {
       String requestBody = response.body;
 
       print('Response status: $statusCode\n Response body: $requestBody\n');
-      if (statusCode == 200) {
+      if (statusCode == 200 || statusCode == 201) {
         user = User.fromJson(json.decode(response.body));
       }
     } catch (e) {
@@ -557,5 +557,38 @@ class UserController {
       print('error caught: $e');
     }
     return -1;
+  }
+
+  //RECUPERAR CONTRASEÑA
+  static Future<bool> recupera(String email) async {
+    try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/forgotPassword");
+
+      // Define headers
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
+
+      //Define body
+      Map<String, String> body = {
+        'email': email,
+      };
+      // Make POST request
+      http.Response response =
+          await http.post(uri, headers: headers, body: jsonEncode(body));
+
+      // Request status and body
+      int statusCode = response.statusCode;
+      String requestBody = response.body;
+
+      print('Response status: $statusCode\n Response body: $requestBody\n');
+      if (statusCode == 200) {
+        return true;
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return false;
   }
 }
