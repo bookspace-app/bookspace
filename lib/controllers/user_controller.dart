@@ -152,7 +152,7 @@ class UserController {
 
   //UPDATE USER
   static Future<bool> updateUser(String username, String name, String email,
-      String descripcion, int id) async {
+      String descripcion, int id, String token) async {
     User user;
     try {
       Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id");
@@ -162,6 +162,7 @@ class UserController {
         //"Authorization": "JWT $authToken",
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'auth': token,
       };
 
       //Define body
@@ -199,6 +200,7 @@ class UserController {
         //"Authorization": "JWT $authToken",
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'auth': 'AUTH',
       };
 
       //Define body
