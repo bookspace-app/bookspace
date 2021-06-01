@@ -32,7 +32,7 @@ class _SignUp2State extends State<SignUp2> {
   }
 
   void updateDesc(String descp, int id) async {
-    UserController.updateDesc(descp, id, globals.token);
+    UserController.updateDesc(descp, id);
   }
 
   Future getImageCamera() async {
