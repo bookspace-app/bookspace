@@ -153,6 +153,7 @@ class _PublicationHeroState extends State<PublicationHero> {
                         fontWeight:
                             atTitle ? FontWeight.bold : FontWeight.normal,
                         fontSize: atTitle ? 20 : 16,
+                        color: globals.theme ? Colors.black : Colors.white
                       ))
           ],
         ),
@@ -229,7 +230,7 @@ class _PublicationHeroState extends State<PublicationHero> {
                                     fontWeight: FontWeight.bold,
                                     color: _myLike
                                         ? Colors.green[400]
-                                        : Colors.black,
+                                        : globals.theme ? Colors.black : Colors.white,
                                   ),
                                 ),
                                 Container(
@@ -252,7 +253,7 @@ class _PublicationHeroState extends State<PublicationHero> {
                                     child: Icon(Icons.thumb_up,
                                         color: _myLike
                                             ? Colors.green[400]
-                                            : Colors.black),
+                                            : globals.theme ? Colors.black : Colors.white),
                                   ),
                                 )
                               ])))),
@@ -277,7 +278,7 @@ class _PublicationHeroState extends State<PublicationHero> {
                                     fontWeight: FontWeight.bold,
                                     color: _myDislike
                                         ? Colors.red[400]
-                                        : Colors.black,
+                                        : globals.theme ? Colors.black : Colors.white,
                                   ),
                                 ),
                                 Container(
@@ -301,7 +302,7 @@ class _PublicationHeroState extends State<PublicationHero> {
                                     child: Icon(Icons.thumb_down,
                                         color: _myDislike
                                             ? Colors.red[400]
-                                            : Colors.black),
+                                            : globals.theme ? Colors.black : Colors.white),
                                   ),
                                 )
                               ])))),
@@ -327,7 +328,7 @@ class _PublicationHeroState extends State<PublicationHero> {
                                           fontWeight: FontWeight.bold,
                                           color: _myVote
                                               ? Colors.yellow[800]
-                                              : Colors.black,
+                                              : globals.theme ? Colors.black : Colors.white,
                                         ),
                                       ),
                                       Container(
@@ -345,7 +346,7 @@ class _PublicationHeroState extends State<PublicationHero> {
                                           child: Icon(Icons.remove_red_eye,
                                               color: _myVote
                                                   ? Colors.yellow[800]
-                                                  : Colors.black),
+                                                  : globals.theme ? Colors.black : Colors.white),
                                         ),
                                       )
                                     ])))),
@@ -373,6 +374,7 @@ class _PublicationHeroState extends State<PublicationHero> {
                                   style: TextStyle(
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.bold,
+                                    color: globals.theme ? Colors.black : Colors.white
                                     // color: _myVote ? Colors.green[400] : Colors.black,
                                   ),
                                 ),
@@ -385,6 +387,7 @@ class _PublicationHeroState extends State<PublicationHero> {
                                     },
                                     child: Icon(
                                       Icons.reply,
+                                      color: globals.theme ? Colors.black : Colors.white
                                       // color: _myVote ? Colors.green[400] : Colors.black
                                     ),
                                   ),

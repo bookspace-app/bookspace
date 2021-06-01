@@ -128,6 +128,42 @@ class _ProfileViewState extends State<ProfileView> {
       return ListView(children: <Widget>[
         Container(
           //TO-DO Test containers paddings with different lenght fields
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
+          decoration: BoxDecoration(
+            gradient: globals.rankTrans(_user.rank) == 2 ? LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+                  Colors.amber,
+                  Colors.white,
+                  Colors.amber,
+                  Colors.white,
+                  Colors.amber,
+                ],
+              ) : globals.rankTrans(_user.rank) == 4 ? LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+                  globals.primary,
+                  Colors.white,
+                ],
+              ) : globals.rankTrans(_user.rank) == 3 ? LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+                  Colors.amber,
+                  Colors.white,
+                  Colors.amber,
+                ],
+              ) : globals.rankTrans(_user.rank) == 1 ? LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+                  Colors.amber,
+                  globals.primary,
+                ],
+              ) : null,
+          ),
           child: Column(
             children: [
               Row(
@@ -171,6 +207,7 @@ class _ProfileViewState extends State<ProfileView> {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18.0,
+                            color: globals.theme ? Colors.black : Colors.white
                           ),
                         ),
                       ),
@@ -180,6 +217,7 @@ class _ProfileViewState extends State<ProfileView> {
                             "${_user.name}",
                             style: TextStyle(
                               fontSize: 16.0,
+                              color: globals.theme ? Colors.black : Colors.white
                             ),
                           )),
                       Container(
@@ -218,7 +256,13 @@ class _ProfileViewState extends State<ProfileView> {
                     ],
                   )
                 ],
-              ),
+              ),      
+            ],
+          ),
+        ),
+        Container (
+          child: Column(
+            children: [
               Row(
                 children: [
                   Container(
@@ -227,7 +271,7 @@ class _ProfileViewState extends State<ProfileView> {
                     child: Text(
                       "${AppLocalizations.of(context).translate("favgenres")}",
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 18.0),
+                          fontWeight: FontWeight.bold, fontSize: 18.0, color: globals.theme ? Colors.black : Colors.white),
                     ),
                   ),
                 ],
@@ -259,14 +303,15 @@ class _ProfileViewState extends State<ProfileView> {
                   ],
                 ),
               )
-            ],
+            ]
           ),
         ),
+
         Container(
             padding: EdgeInsets.fromLTRB(15, 10, 0, 0),
             child: Text(
               '${AppLocalizations.of(context).translate("mypubls")}',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0, color: globals.theme ? Colors.black : Colors.white),
             )),
         for (var index = 0; index < _myPublications.length; index++)
           Column(

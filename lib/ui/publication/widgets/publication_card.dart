@@ -58,7 +58,7 @@ class PublicationCard extends StatelessWidget {
                                 fontSize: 20.0,
                                 fontWeight: FontWeight.bold,
                                 color:
-                                    _myVote ? Colors.green[400] : Colors.black,
+                                    _myVote ? Colors.green[400] : globals.theme ? Colors.black : Colors.white,
                               ),
                             ),
                           ),
@@ -70,7 +70,7 @@ class PublicationCard extends StatelessWidget {
                             },
                             child: Icon(Icons.thumb_up,
                                 color:
-                                    _myVote ? Colors.green[400] : Colors.black),
+                                    _myVote ? Colors.green[400] : globals.theme ? Colors.black : Colors.white),
                           ),
                         ),
                       ],
@@ -90,7 +90,7 @@ class PublicationCard extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                                 color: _myFavorite
                                     ? Colors.yellow[800]
-                                    : Colors.black,
+                                    : globals.theme ? Colors.black : Colors.white,
                               ),
                             ),
                           ),
@@ -104,7 +104,7 @@ class PublicationCard extends StatelessWidget {
                               Icons.remove_red_eye,
                               color: _myFavorite
                                   ? Colors.yellow[800]
-                                  : Colors.black,
+                                  : globals.theme ? Colors.black : Colors.white,
                             ),
                           ),
                         ),
@@ -125,7 +125,7 @@ class PublicationCard extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                                 color: _myResponse
                                     ? Colors.green[400]
-                                    : Colors.black,
+                                    : globals.theme ? Colors.black : Colors.white,
                               ),
                             ),
                           ),
@@ -139,7 +139,7 @@ class PublicationCard extends StatelessWidget {
                                   Icons.reply,
                                   color: _myResponse
                                       ? Colors.green[400]
-                                      : Colors.black,
+                                      : globals.theme ? Colors.black : Colors.white,
                                 ))),
                       ],
                     )
@@ -158,6 +158,7 @@ class PublicationCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,
+                        color: globals.theme ? Colors.black : Colors.white
                       ),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 3,
@@ -205,14 +206,7 @@ class PublicationCard extends StatelessWidget {
                             ),
                           
                         ]
-                      )
-                      
-                      /*child: Text(
-                        "${publication.tags}",
-                        style: TextStyle(
-                          fontSize: 15.0,
-                        ),
-                      */
+                      )                    
                     ),
                   Container(
                       width: MediaQuery.of(context).size.width * 0.7,
@@ -222,6 +216,7 @@ class PublicationCard extends StatelessWidget {
                         "${TimeAgo.timeAgoSinceDate(publication.dop)} @${publication.author?.username}",
                         style: TextStyle(
                           fontSize: 15.0,
+                          color: globals.theme ? Colors.black : Colors.white
                         ),
                       ))
                 ],

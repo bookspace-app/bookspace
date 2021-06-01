@@ -61,6 +61,7 @@ class ResponseCard extends StatelessWidget {
               style: TextStyle(
                 fontWeight: atTitle? FontWeight.bold: FontWeight.normal,
                 fontSize: atTitle? 20: 16,
+                color: globals.theme ? Colors.black : Colors.white
               )
             )
           ],

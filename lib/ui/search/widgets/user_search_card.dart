@@ -1,5 +1,6 @@
 import 'package:bookspace/models/user.dart';
 import 'package:flutter/material.dart';
+import 'package:bookspace/globals.dart' as globals;
 
 class UserSearchCard extends StatelessWidget {
   final User user;
@@ -11,13 +12,13 @@ class UserSearchCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Color.fromRGBO(243, 247, 250, 1),
+      color: globals.theme ? Color.fromRGBO(243, 247, 250, 1) : Color.fromRGBO(117, 121, 125, 1),//Color.fromRGBO(243, 247, 250, 1),
       width: double.infinity,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget> [
           Container(      //chat pic container
-            //color: Colors.green[200],
+            color: globals.theme ? Color.fromRGBO(243, 247, 250, 1) : Color.fromRGBO(117, 121, 125, 1),//Colors.green[200],
             width: MediaQuery.of(context).size.width *0.25,
             padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
             child: Column(
@@ -39,7 +40,7 @@ class UserSearchCard extends StatelessWidget {
             )
           ),
           Container(
-            //color: Colors.yellow,
+            color: globals.theme ? Color.fromRGBO(243, 247, 250, 1) : Color.fromRGBO(117, 121, 125, 1),
             padding: EdgeInsets.fromLTRB(0, 5, 15, 5),
             height: MediaQuery.of(context).size.width * 0.22, //85,
             child: Column(

@@ -86,5 +86,9 @@
     "camera": "Cámara",
     "gallery": "Galería",
     "joined": "Se unió el dia",
-    "mypubls": "Mis publicaciones"
+    "mypubls": "Mis publicaciones",
+    "logout": "Cerrar sesión",
+    "day": "Día",
+    "night": "Noche",
+    "changestyle": "Cambiar tema"
 }

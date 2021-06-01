@@ -462,6 +462,34 @@ dictionary = {
         'es': 'Mis publicaciones'
     },
 
+    #CONFIGURATION  TRANSLATIONS
+
+    'logout': {
+        'en': 'Log out',
+        'ca': "Tancar sessió",
+        'es': 'Cerrar sesión'
+    },
+    'mypubls': {
+        'en': 'My posts',
+        'ca': "Les meves publicacions",
+        'es': 'Mis publicaciones'
+    },
+    'day': {
+        'en': 'Day',
+        'ca': "Dia",
+        'es': 'Día'
+    },
+    'night': {
+        'en': 'Night',
+        'ca': "Nit",
+        'es': 'Noche'
+    },
+    'changestyle': {
+        'en': 'Change style',
+        'ca': "Cambiar el tema",
+        'es': 'Cambiar tema'
+    },   
+
 }
 
 for lang in locales:

@@ -309,6 +309,8 @@ class _EditProfileViewState extends State<EditProfileView> {
               //fontWeight: FontWeight.bold
             ),
           decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
             border: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey),
               borderRadius: BorderRadius.circular(8),
@@ -340,7 +342,8 @@ class _EditProfileViewState extends State<EditProfileView> {
         title,
         style: TextStyle(
           fontSize: 16,
-          fontWeight: FontWeight.bold
+          fontWeight: FontWeight.bold,
+          color: globals.theme ? Colors.black : Colors.white
         ),
       ),
     );

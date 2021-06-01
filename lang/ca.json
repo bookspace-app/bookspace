@@ -86,5 +86,9 @@
     "camera": "Caméra",
     "gallery": "Galeria",
     "joined": "Es va unir el dia",
-    "mypubls": "Es va unir el dia"
+    "mypubls": "Les meves publicacions",
+    "logout": "Tancar sessió",
+    "day": "Dia",
+    "night": "Nit",
+    "changestyle": "Cambiar el tema"
 }

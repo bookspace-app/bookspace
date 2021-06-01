@@ -7,9 +7,15 @@ Color secondary = getMaterial(0xFF314211);
 Color tertiary = getMaterial(0xFF313211);
 Color gray = getMaterial(0xFFD9D9D9);
 
-Color day_1 = getMaterial(0xFFFAC640);
+bool theme = true;
+Color theme_1 = theme ? getMaterial(0xFFF3F7FA) : getMaterial(0xFF46484A);
+Color txtcolor = getMaterial(0xFFFFFFFF);
 Color day_2 = getMaterial(0xFF314211);
 Color day_3 = getMaterial(0xFF313211);
+
+Color night_1 = getMaterial(0xFF121212);
+Color night_2 = getMaterial(0xFFFFFFFF);
+Color night_3 = getMaterial(0xFFFFFFFF);
 
 int id = 1;
 String token;
@@ -53,3 +59,18 @@ List<S2Choice<int>> genres = [
   S2Choice<int>(value: 34, title: 'romantic'),
   S2Choice<int>(value: 35, title: 'other'),
 ];
+
+  double rankTrans (String rank) {
+    switch (rank) {
+      case "WORKER":
+        return 4;
+      case "SOLDIER":
+        return 3;
+      case "HAREM":
+        return 2;
+      case "QUEEN":
+        return 1;
+      default:
+        return null;
+    }
+  }

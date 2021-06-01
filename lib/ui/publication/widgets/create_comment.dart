@@ -118,7 +118,7 @@ class _CreateCommentState extends State<CreateComment> {
                     textColor: Colors.white,
                     color: Color.fromRGBO(250, 198, 65, 1),
                     child: Text(
-                      'Publicar',
+                      '${AppLocalizations.of(context).translate("publicar")}',
                       style: TextStyle(
                         fontSize: 18.0, color: Colors.black),
                       ),

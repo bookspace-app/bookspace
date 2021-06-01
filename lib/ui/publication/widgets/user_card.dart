@@ -102,6 +102,8 @@ class _UsercardState extends State<UserCard> {
     getfav(widget.commentId, 'dislike');
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -111,8 +113,42 @@ class _UsercardState extends State<UserCard> {
               color: widget.principal ? Colors.yellow[200] : Colors.grey[200],
               border: Border.all(
                 color: widget.principal ? Colors.yellow[300] : Colors.grey[300],
+                width: 5 + (-1 * globals.rankTrans(widget.author.rank))
               ),
-              borderRadius: BorderRadius.all(Radius.circular(5))),
+              gradient: globals.rankTrans(widget.author.rank) == 2 ? LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+                  Colors.amber,
+                  Colors.white,
+                  Colors.amber,
+                  Colors.white,
+                  Colors.amber,
+                ],
+              ) : globals.rankTrans(widget.author.rank) == 4 ? LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+                  globals.primary,
+                  Colors.white,
+                ],
+              ) : globals.rankTrans(widget.author.rank) == 3 ? LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+                  Colors.amber,
+                  Colors.white,
+                  Colors.amber,
+                ],
+              ) : globals.rankTrans(widget.author.rank) == 1 ? LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+                  Colors.amber,
+                  globals.primary,
+                ],
+              ) : null,
+              borderRadius: BorderRadius.all(Radius.circular(5) * globals.rankTrans(widget.author.rank))),
           child: Column(children: <Widget>[
             Container(
               height: 50,

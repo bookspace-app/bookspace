@@ -149,7 +149,7 @@ class _SearchViewState extends State<SearchView> {
       height: double.infinity,
       width: MediaQuery.of(context).size.width * 0.5,
       child: RaisedButton(
-        color: selectedPublis? globals.primary: Colors.white,
+        color: selectedPublis? globals.primary : globals.theme ? Colors.white : Color.fromRGBO(117, 121, 125, 1),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(0),
         ),
@@ -166,7 +166,7 @@ class _SearchViewState extends State<SearchView> {
       height: double.infinity,
       width: MediaQuery.of(context).size.width * 0.5,
       child: RaisedButton(
-        color: !selectedPublis? globals.primary: Colors.white,
+        color: !selectedPublis? globals.primary : globals.theme ? Colors.white : Color.fromRGBO(117, 121, 125, 1),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(0),
         ),
@@ -243,6 +243,7 @@ class _SearchViewState extends State<SearchView> {
                 child: DropdownButton(
                   hint: Text(AppLocalizations.of(context).translate('filter')),
                   value: _selectedGenre,
+                  style: TextStyle(color: globals.theme ? Colors.black : Colors.white),
                   onChanged: (newGenre) {
                     setState(() =>_selectedGenre = newGenre);
                     if (_selectedGenre == 'all') {

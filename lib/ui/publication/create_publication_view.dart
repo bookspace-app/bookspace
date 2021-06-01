@@ -99,7 +99,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Color.fromRGBO(243, 247, 250, 1),
+        color: globals.theme ? Color.fromRGBO(243, 247, 250, 1) : Color.fromRGBO(70, 72, 74, 1),
         child: ListView(children: <Widget>[
           Container(
               child: Column(
@@ -110,6 +110,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                   Text(
                     "${AppLocalizations.of(context).translate("titulo")}",
                     style: TextStyle(
+                      color: globals.theme ? Colors.black : Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 18.0,
                     ),
@@ -160,6 +161,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18.0,
+                      color: globals.theme ? Colors.black : Colors.white,
                     ),
                   ),
                 ]),
@@ -242,6 +244,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18.0,
+                      color: globals.theme ? Colors.black : Colors.white,
                     ),
                   ),
                 ]),
@@ -300,6 +303,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18.0,
+                      color: globals.theme ? Colors.black : Colors.white,
                     ),
                   ),
                 ]),
