@@ -77,5 +77,18 @@
     "all": "Tots",
     "filter": "Filtrar per categoria",
     "publications": "Publicacions",
-    "users": "Usuaris"
+    "users": "Usuaris",
+    "save": "Desar",
+    "username": "Nom d'usuari",
+    "name": "Nom",
+    "favgenres": "Gèneres preferits",
+    "choosepic": "Tria una imatge de perfil",
+    "camera": "Caméra",
+    "gallery": "Galeria",
+    "joined": "Es va unir el dia",
+    "mypubls": "Les meves publicacions",
+    "logout": "Tancar sessió",
+    "day": "Dia",
+    "night": "Nit",
+    "changestyle": "Cambiar el tema"
 }

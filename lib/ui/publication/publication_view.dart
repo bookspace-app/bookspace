@@ -228,6 +228,7 @@ class _PublicationViewState extends State<PublicationView> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 15.0,
+                    color: globals.theme ? Colors.black : Colors.white
                   ),
                 ),
               ),

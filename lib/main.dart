@@ -46,9 +46,12 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Bookspace',
       theme: ThemeData(
+        scaffoldBackgroundColor: globals.theme_1,
         primarySwatch: globals.primary,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        canvasColor: globals.theme ? Colors.white : Color.fromRGBO(117, 121, 125, 1),
       ),
+      //darkTheme: ThemeData.dark(),
       // home: MainView(),
 
       // All App's supportes locales
@@ -95,7 +98,7 @@ class _MyAppState extends State<MyApp> {
         return supportedLocales.first;
       },
 
-      initialRoute: '/login', // TODO : SignIn
+      initialRoute: '/', // TODO : SignIn
       routes: {
         // When navigating to the "/" route, build the Home widget.
         '/login': (context) => SignIn(),

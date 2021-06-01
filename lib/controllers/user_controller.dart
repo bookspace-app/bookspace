@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:bookspace/globals.dart';
 import 'package:bookspace/models/publication.dart';
 import 'package:bookspace/models/tag.dart';
@@ -6,6 +7,9 @@ import 'package:intl/intl.dart';
 import 'package:bookspace/config.dart';
 import 'package:bookspace/models/user.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
+import 'package:async/async.dart';
+import 'package:http_parser/http_parser.dart';
 
 class UserController {
   // GET user by ID
@@ -190,7 +194,8 @@ class UserController {
   }
 
   //UPDATE USER DESCRIPTION
-  static Future<bool> updateDesc(String descripcion, int id) async {
+  static Future<bool> updateDesc(
+      String descripcion, int id) async {
     User user;
     try {
       Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id");
@@ -249,9 +254,8 @@ class UserController {
       print('Response status: $statusCode\n Response body: $requestBody\n');
       if (statusCode == 200) {
         var tagsJson = jsonDecode(response.body);
-        print(tagsJson);
         categories = tagsJson != null ? List.from(tagsJson) : null;
-        print(categories);
+        
         /*Map map = jsonDecode(response.body);
         categories = map["favCategories"];*/
       }
@@ -262,7 +266,8 @@ class UserController {
   }
 
   //UPDATE USER CATEGORIES
-  static Future<bool> updateCategories(List<String> cat, int id) async {
+  static Future<bool> updateCategories(
+      List<String> cat, int id, String token) async {
     List<String> category;
     try {
       Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id");
@@ -272,6 +277,7 @@ class UserController {
         //"Authorization": "JWT $authToken",
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'auth': token,
       };
 
       //Define body
@@ -317,8 +323,7 @@ class UserController {
       };
 
       // Make POST request
-      http.Response response =
-          await http.post(uri, headers: headers, body: jsonEncode(body));
+      http.Response response = await http.post(uri);
 
       // Request status and body
       int statusCode = response.statusCode;
@@ -392,5 +397,135 @@ class UserController {
       print('error caught: $e');
     }
     return publications;
+  }
+
+  static Future<String> postProfilePic(File photo, int id, String token) async {
+    Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id/profilePic");
+
+    /*try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users");
+
+      // Define headers
+      Map<String, String> headers = {
+        'Content-Type': 'multipart/form-data',
+        'Accept': 'application/json',
+      };
+
+      //Define body
+      Map<String, String> body = {
+        'username': username,
+        'name': name,
+        'email': email,
+        'password': pass,
+        'dob': dob,
+      };
+
+      // Make POST request
+      http.Response response =
+          await http.post(uri, headers: headers, body: jsonEncode(body));
+
+      // Request status and body
+      int statusCode = response.statusCode;
+      String requestBody = response.body;
+
+      print('Response status: $statusCode\n Response body: $requestBody\n');
+      if (statusCode == 200) {
+        user = User.fromJson(json.decode(response.body));
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }*/
+
+    /*var stream = http.ByteStream(DelegatingStream.typed(photo.openRead()));
+    var length = await photo.length();
+
+    var request = http.MultipartRequest('POST', uri);
+    var multipartFile = http.MultipartFile('picture', stream, length,
+        filename: basename(photo.path));
+
+    request.files.add(multipartFile);
+    var response = await request.send();
+    print(response.statusCode);
+    response.stream.transform(utf8.decoder).listen((value) {
+      print(value);
+    });*/
+
+    /*String filename = basename(photo.path);
+
+    var request = http.MultipartRequest('POST', uri);
+    var pic = await http.MultipartFile.fromPath("image", photo.path,
+        contentType: new MediaType(
+          'image',
+          'jpg',
+        ));
+    request.files.add(pic);
+    var res = await request.send();
+    print(res.statusCode);
+    res.stream.transform(utf8.decoder).listen((value) {
+      print(value);
+    });*/
+
+    /*String filename = basename(photo.path);
+    var length = await photo.length();
+
+    var request = http.MultipartRequest('POST', uri);
+    request.files.add(http.MultipartFile(
+        'file', File(filename).readAsBytes().asStream(), length,
+        filename: filename.split("/").last));
+    var res = await request.send();
+    res.stream.transform(utf8.decoder).listen((value) {
+      print(value);
+    });*/
+  }
+
+  // GET profile PHOTO
+  static Future<String> getProfilePic(int id) async {
+    String path;
+    try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id/profilePicPath");
+
+      // Define headers
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
+
+      // Make GET request
+      http.Response response = await http.get(uri, headers: headers);
+
+      // Request status and body
+      int statusCode = response.statusCode;
+      String requestBody = response.body;
+
+      print('Response status: $statusCode\n Response body: $requestBody\n');
+      if (statusCode == 200) {
+        path = response.body;
+        print(path);
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return path;
+  }
+
+  static Future<Map<String, dynamic>> loginGoogle() async {
+    try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "oauth2/authorization/google");
+
+      // Make POST request
+      http.Response response = await http.post(uri);
+
+      // Request status and body
+      int statusCode = response.statusCode;
+      Map<String, dynamic> requestBody = jsonDecode(response.body) as Map;
+
+      print('Response status: $statusCode\n Response body: $requestBody\n');
+      if (statusCode == 200) {
+        return requestBody;
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return null;
   }
 }

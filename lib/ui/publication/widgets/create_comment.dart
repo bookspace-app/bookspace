@@ -108,34 +108,35 @@ class _CreateCommentState extends State<CreateComment> {
                   CrossAxisAlignment.center, //Center Row contents vertically,
               children: <Widget>[
                 SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.30,
-                    height: 35,
-                    child: RaisedButton(
-                        textColor: Colors.white,
-                        color: Color.fromRGBO(250, 198, 65, 1),
-                        child: Text(
-                          'Publicar',
-                          style: TextStyle(fontSize: 18.0, color: Colors.black),
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            errorsContent =
-                                (errorContent() != null) ? true : false;
-                          });
-                          print(errorsContent);
-                          if (!errorsContent) {
-                            myComment = Comment();
-                            myComment.authorId = (globals.id).toInt();
-                            myComment.content = contentController.text;
-                            myComment.mentions =
-                                ExtractUsernames(contentController.text);
-                            myComment.parentId = widget.commentId;
-                            myComment.publicationId = (widget.id).toInt();
-                            createComment();
-                            myComment.content = '';
-                            widget.notifyOnNewComment();
-                          }
-                        }))
+                  width: MediaQuery.of(context).size.width * 0.30,
+                  height: 35,
+                  child: RaisedButton(
+                    textColor: Colors.white,
+                    color: Color.fromRGBO(250, 198, 65, 1),
+                    child: Text(
+                      '${AppLocalizations.of(context).translate("publicar")}',
+                      style: TextStyle(
+                        fontSize: 18.0, color: Colors.black),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          errorsContent = (errorContent() != null) ? true : false;
+                        });
+                        print(errorsContent);
+                        if (!errorsContent) {
+                          myComment = Comment();
+                          myComment.authorId = (globals.id).toInt();
+                          myComment.content = contentController.text;
+                          myComment.mentions = ExtractUsernames(contentController.text);
+                          myComment.parentId = widget.commentId;
+                          myComment.publicationId = (widget.id).toInt();
+                          createComment();
+                          myComment.content = '';
+                          widget.notifyOnNewComment();
+                        }
+                      }
+                    )
+                )
               ],
             ),
           )
