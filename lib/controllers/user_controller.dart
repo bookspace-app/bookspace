@@ -195,7 +195,7 @@ class UserController {
 
   //UPDATE USER DESCRIPTION
   static Future<bool> updateDesc(
-      String descripcion, int id, String token) async {
+      String descripcion, int id) async {
     User user;
     try {
       Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id");
@@ -205,7 +205,7 @@ class UserController {
         //"Authorization": "JWT $authToken",
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'auth': token,
+        'auth': 'AUTH',
       };
 
       //Define body

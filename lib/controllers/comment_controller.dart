@@ -82,13 +82,14 @@ class CommentController {
 
   // POST comments
 
-  static Future<bool> createComment(Comment comment) async {
+  static Future<bool> createComment(Comment comment, String token) async {
     Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/comments");
 
     try {
       Map<String, String> headers = {
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
+        'auth': token,
       };
 
       Map<String, dynamic> commentMap = comment.toJson();

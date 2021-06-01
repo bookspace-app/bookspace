@@ -10,17 +10,13 @@ import 'package:bookspace/globals.dart' as globals;
 import 'package:flutter/services.dart';
 
 class CreateComment extends StatefulWidget {
-
   final int id;
   final commentId;
   final Function() notifyOnNewComment;
 
-  CreateComment({
-    Key key,
-    this.id,
-    this.commentId,
-    @required this.notifyOnNewComment
-  }) : super(key: key);
+  CreateComment(
+      {Key key, this.id, this.commentId, @required this.notifyOnNewComment})
+      : super(key: key);
 
   @override
   _CreateCommentState createState() => _CreateCommentState();
@@ -42,7 +38,7 @@ class _CreateCommentState extends State<CreateComment> {
   }
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     print("Publi id: ${widget.id}");
     print("Comment id: ${widget.commentId}");
@@ -58,7 +54,8 @@ class _CreateCommentState extends State<CreateComment> {
   }
 
   void createComment() async {
-    bool response = await CommentController.createComment(myComment);
+    bool response =
+        await CommentController.createComment(myComment, globals.token);
     print(globals.id);
     if (response) {
       print('THIS HAS WORKED');
@@ -76,40 +73,39 @@ class _CreateCommentState extends State<CreateComment> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(15, 2, 15, 5),
-      child: Column(
-        children: <Widget>[
+        padding: EdgeInsets.fromLTRB(15, 2, 15, 5),
+        child: Column(children: <Widget>[
           Row(
             children: [
               Expanded(
-                child: TextFormField(
-                  controller: contentController,
-                  onChanged: (text) {
-                    setState(() {});
-                  },
-                  keyboardType: TextInputType.multiline,
-                  maxLines: 4,
-                  inputFormatters: [
-                    new LengthLimitingTextInputFormatter(2000),
-                  ], //TO-DO Define length of publication's description
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(),
-                    counterText:
-                      '${contentController.text.length}' + '/2000',
-                    contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                    errorText: errorsContent ? errorContent() : null,
-                  )
-                )  
-              ),
+                  child: TextFormField(
+                      controller: contentController,
+                      onChanged: (text) {
+                        setState(() {});
+                      },
+                      keyboardType: TextInputType.multiline,
+                      maxLines: 4,
+                      inputFormatters: [
+                        new LengthLimitingTextInputFormatter(2000),
+                      ], //TO-DO Define length of publication's description
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(),
+                        counterText:
+                            '${contentController.text.length}' + '/2000',
+                        contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        errorText: errorsContent ? errorContent() : null,
+                      ))),
             ],
           ),
           Container(
             padding: EdgeInsets.fromLTRB(15, 0, 15, 5),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center, //Center Row contents horizontally,
-              crossAxisAlignment: CrossAxisAlignment.center, //Center Row contents vertically,
+              mainAxisAlignment:
+                  MainAxisAlignment.center, //Center Row contents horizontally,
+              crossAxisAlignment:
+                  CrossAxisAlignment.center, //Center Row contents vertically,
               children: <Widget>[
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.30,
@@ -142,10 +138,8 @@ class _CreateCommentState extends State<CreateComment> {
                     )
                 )
               ],
-            ), 
+            ),
           )
-        ]
-      )
-    );
+        ]));
   }
 }
