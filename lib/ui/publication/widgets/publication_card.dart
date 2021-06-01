@@ -75,7 +75,7 @@ class _PublicationCardState extends State<PublicationCard> {
       //color: Colors.yellow,
       width: double.infinity,
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        //crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
               //color: Colors.green[200],
@@ -285,7 +285,7 @@ class _PublicationCardState extends State<PublicationCard> {
                             color: globals.theme ? Colors.black : Colors.white),
                       ))
                 ],
-              ))
+              )),
         ],
       ),
     );
