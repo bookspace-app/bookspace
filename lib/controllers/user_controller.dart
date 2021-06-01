@@ -145,7 +145,7 @@ class UserController {
       String requestBody = response.body;
 
       print('Response status: $statusCode\n Response body: $requestBody\n');
-      if (statusCode == 200) {
+      if (statusCode == 200 || statusCode == 201) {
         user = User.fromJson(json.decode(response.body));
       }
     } catch (e) {
