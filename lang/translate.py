@@ -612,6 +612,12 @@ dictionary = {
         'es': 'Envía'
     },     
 
+    #ACTIVITY  TRANSLATIONS 
+    'nomentions': {
+        'en': 'Your mentions will be displayed here',
+        'ca': "Aquí es mostraran les teves mencions",
+        'es': 'Aquí se mostrarán tus menciones'
+    },    
 
 }
 

@@ -113,5 +113,6 @@
     "ty": "Gracias",
     "resetconfirm1": "Se ha enviado un correo a la dirección electrónica",
     "resetconfirm2": "para restablecer la contraseña",
-    "send": "Envía"
+    "send": "Envía",
+    "nomentions": "Aquí se mostrarán tus menciones"
 }

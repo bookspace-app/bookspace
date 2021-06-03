@@ -113,5 +113,6 @@
     "ty": "Gràcies",
     "resetconfirm1": "S'ha enviat un correu a l'adreça electrònica",
     "resetconfirm2": "per reestablir la seva contrasenya",
-    "send": "Envia"
+    "send": "Envia",
+    "nomentions": "Aquí es mostraran les teves mencions"
 }

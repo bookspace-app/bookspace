@@ -113,5 +113,6 @@
     "ty": "Thanks",
     "resetconfirm1": "An email has been sent to the email address",
     "resetconfirm2": "to reset password",
-    "send": "Send"
+    "send": "Send",
+    "nomentions": "Your mentions will be displayed here"
 }
