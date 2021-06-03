@@ -29,16 +29,17 @@ class _ProfileViewState extends State<ProfileView> {
   bool trobatFirebase = false;
   var img;
 
-  void getCategories() async {
-    List<String> cat = await UserController.getCategories(globals.id);
+  void getCategories(int catid) async {
+    List<String> cat = await UserController.getCategories(catid);
     setState(() {
       categories = cat;
     });
   }
 
-  void getProfilePic() async {
-    UserController.getProfilePic(globals.id).then((photoPath) {
+  void getProfilePic(int picid) async {
+    UserController.getProfilePic(picid).then((photoPath) {
       setState(() {
+        print("ESTO ES PATH $photoPath");
         if (photoPath.endsWith('/')) {
           trobatFirebase = false;
         } else {
@@ -70,8 +71,12 @@ class _ProfileViewState extends State<ProfileView> {
     User user = await UserController.getUserByUsername(username);
     if (!disposed) {
       setState(() => _user = user);
-      if (_user != null)
+      if (_user != null) {
         getPublications(_user);
+        getProfilePic(_user.id);
+        getProfilePic(_user.id);
+        getCategories(_user.id); 
+      }
       else {
         Future.delayed(Duration(milliseconds: 500)).then((_) {
           setState(() {
@@ -99,13 +104,16 @@ class _ProfileViewState extends State<ProfileView> {
     super.initState();
     if (widget.id == null && widget.username == null) {
       getUser(globals.id);
+      getCategories(globals.id);
+      getProfilePic(globals.id); 
     } else if (widget.id == null && widget.username != null) {
       getUserByUsername(widget.username);
     } else if (widget.id != null && widget.username == null) {
       getUser(widget.id);
+      getCategories(widget.id);
+      getProfilePic(widget.id);    
     }
-    getCategories();
-    getProfilePic();
+
   }
 
   bool disposed = false;

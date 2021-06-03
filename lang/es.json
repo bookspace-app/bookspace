@@ -38,6 +38,7 @@
     "longPass": "La contraseña no puede tener más de 20 caracteres",
     "invalidPass": "La contraseña tiene que contener al menos \nuna mayúscula, una minúscula, un número y un simbolo",
     "nomatchPass": "Las contraseñas no coinciden",
+    "dob": "Fecha de nacimiento",
     "action": "Acción",
     "adventure": "Aventura",
     "literary": "Literaria",

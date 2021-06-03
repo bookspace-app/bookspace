@@ -38,6 +38,7 @@
     "longPass": "La contrasenya no pot tenir més de 20 caràcters",
     "invalidPass": "La contrasenya ha de contenir almenys \nuna majúscula, una minúscula, un nombre i un símbol",
     "nomatchPass": "Les contrasenyes no coincideixen",
+    "dob": "Data de naixement",
     "action": "Acció",
     "adventure": "Aventura",
     "literary": "Literària",

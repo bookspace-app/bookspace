@@ -206,6 +206,11 @@ dictionary = {
         'ca': 'Les contrasenyes no coincideixen',
         'es': 'Las contraseñas no coinciden'
     },
+    'dob': {
+        'en': 'Date of Birth',
+        'ca': 'Data de naixement',
+        'es': 'Fecha de nacimiento'
+    },    
 
 
     #GENRES TRANSLATIONS

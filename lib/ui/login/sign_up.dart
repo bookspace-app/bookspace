@@ -180,7 +180,7 @@ class _SignUpState extends State<SignUp> {
     else if (passController.text.length > 20)
       return "${AppLocalizations.of(context).translate("longPass")}";
     else if (!RegExp(
-            r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~?.,]).{6,}$')
+            r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~?.,_-]).{6,}$')
         .hasMatch(passController.text)) {
       return "${AppLocalizations.of(context).translate("invalidPass")}";
     }
@@ -395,8 +395,7 @@ class _SignUpState extends State<SignUp> {
                 padding: EdgeInsets.fromLTRB(30, 1, 30, 15),
                 child: Row(
                   //mainAxisAlignment: MainAxisAlignment.center, //Center Row contents horizontally,
-                  crossAxisAlignment: CrossAxisAlignment
-                      .center, //Center Row contents vertically,
+                  crossAxisAlignment: CrossAxisAlignment.center, //Center Row contents vertically,
                   children: <Widget>[
                     Expanded(
                         child: TextFormField(
@@ -422,6 +421,19 @@ class _SignUpState extends State<SignUp> {
                   ],
                 ),
               ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(30, 1, 30, 15),
+                child: Row(
+                  //mainAxisAlignment: MainAxisAlignment.center, //Center Row contents horizontally,
+                  crossAxisAlignment: CrossAxisAlignment
+                      .center, //Center Row contents vertically,
+                  children: <Widget>[
+                    Expanded(
+                      child: Text("${AppLocalizations.of(context).translate("dob")}"),
+                    )
+                  ],
+                ),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -432,7 +444,7 @@ class _SignUpState extends State<SignUp> {
                       controller: dayController,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
-                        hintText: "D",
+                        hintText: "DD",
                         errorText: errorsAll ? errorDob_d() : null,
                       ),
                     ),
@@ -444,7 +456,7 @@ class _SignUpState extends State<SignUp> {
                       controller: monthController,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
-                        hintText: "M",
+                        hintText: "MM",
                         errorText: errorsAll ? errorDob_m() : null,
                       ),
                     ),
@@ -457,7 +469,7 @@ class _SignUpState extends State<SignUp> {
                       controller: yearController,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
-                        hintText: "Y",
+                        hintText: "YYYY",
                         errorText: errorsAll ? errorDob_y() : null,
                       ),
                     ),
