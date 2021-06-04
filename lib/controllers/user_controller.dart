@@ -409,14 +409,8 @@ class UserController {
     // get file length
     var length = await _image.length();
 
-    // string to uri
-    //var uri = Uri.parse("enter here upload URL");
-
     // create multipart request
     var request = new http.MultipartRequest("POST", uri);
-
-    // if you need more parameters to parse, add those like this. i added "user_id". here this "user_id" is a key of the API request
-    //request.fields["user_id"] = "text";
 
     // multipart that takes file.. here this "image_file" is a key of the API request
     var multipartFile = new http.MultipartFile('profilePic', stream, length, filename: basename(_image.path));
@@ -468,6 +462,33 @@ class UserController {
     }
     return path;
   }
+
+  // Delete PROFILE PIC by id
+  static Future<int> deleteProfilePic(int id) async {
+    Publication publication;
+    try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id/profilePic");
+
+      // Define headers
+      Map<String, String> headers = {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+      };
+
+      // Make GET request
+      http.Response response = await http.delete(uri, headers: headers);
+
+      // Request status and body
+      int statusCode = response.statusCode;
+
+      print('Delete response status: $statusCode\n');
+      return statusCode;
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return null;
+  }
+
 
   static Future<Map<String, dynamic>> loginGoogle() async {
     try {
