@@ -43,7 +43,8 @@ class PublicationController {
   }
 
   // Get ALL publications or get publications of a specific user (specify URI)
-  static Future<List<Publication>> getPublications([String URI, String genre]) async {
+  static Future<List<Publication>> getPublications(
+      [String URI, String genre]) async {
     List<Publication> publications = [];
     try {
       Uri uri = Uri.https(
@@ -51,10 +52,7 @@ class PublicationController {
           (URI == null)
               ? '$API/publications'
               : RegExp(r'(?<=.com).*$').stringMatch(URI).toString(),
-          (genre == null)
-              ? null
-              : { 'sort' : genre }
-            );
+          (genre == null) ? null : {'sort': genre});
 
       // Define headers
       Map<String, String> headers = {
@@ -88,9 +86,10 @@ class PublicationController {
   }
 
   // POST publications
-  static Future<Publication> createPublication(Publication publication, String token) async {
+  static Future<Publication> createPublication(
+      Publication publication, String token) async {
     Publication publicationRet;
-    
+
     Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications");
 
     try {
@@ -107,9 +106,11 @@ class PublicationController {
       http.Response response =
           await http.post(uri, headers: headers, body: body);
 
-      print('Create publication response code: ${response.statusCode}: ${response.body}\n');
+      print(
+          'Create publication response code: ${response.statusCode}: ${response.body}\n');
       if (response.statusCode == 200) {
-        return publicationRet = Publication.fromJson(json.decode(response.body));
+        return publicationRet =
+            Publication.fromJson(json.decode(response.body));
       }
     } catch (e) {
       print('error caught: $e');
@@ -119,7 +120,8 @@ class PublicationController {
   }
 
   //update publiction
-  static Future<bool> editPublication(Publication publication, int id) async {
+  static Future<bool> editPublication(
+      Publication publication, int id, String token) async {
     Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/publications/$id");
     try {
       //define headers
@@ -127,6 +129,7 @@ class PublicationController {
         //"Authorization": "JWT $authToken",
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'auth': token,
       };
 
       //Define body
