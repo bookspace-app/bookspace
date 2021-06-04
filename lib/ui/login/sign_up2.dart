@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:bookspace/globals.dart' as globals;
 
@@ -27,6 +28,9 @@ class _SignUp2State extends State<SignUp2> {
   final picker = ImagePicker();
   User _user;
   List<String> categories;
+  String _path;
+  PickedFile _imageFile;
+  final ImagePicker _picker = ImagePicker();
 
   void updateCategories(List<String> categories, int id) {
     UserController.updateCategories(categories, id, globals.token);
@@ -37,24 +41,26 @@ class _SignUp2State extends State<SignUp2> {
   }
 
   Future getImageCamera() async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
+    final pickedFile = await _picker.getImage(source: ImageSource.camera);
 
     setState(() {
-      _image = File(pickedFile.path);
+      _imageFile = pickedFile;
     });
+    _path = pickedFile.path;
   }
 
   Future getImageGallery() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    final pickedFile = await _picker.getImage(source: ImageSource.gallery);
 
     setState(() {
-      _image = File(pickedFile.path);
+      _imageFile = pickedFile;
     });
+    _path = pickedFile.path;
   }
 
   Future erraseImage() async {
     setState(() {
-      _image = null;
+      _imageFile = null;
     });
   }
 
@@ -94,6 +100,12 @@ class _SignUp2State extends State<SignUp2> {
             ),
           );
         });
+  }
+
+  //POST PROFILE PICTURE
+  void updatePhoto(String path) async {
+    File pic = File(_imageFile.path);
+    String absolutePath = await UserController.postProfilePic(pic.path, pic, widget.id);
   }
 
   @override
@@ -147,14 +159,12 @@ class _SignUp2State extends State<SignUp2> {
                     child: CircleAvatar(
                       radius: 60,
                       backgroundColor: globals.primary,
-                      child: _image != null
+                      child: _imageFile != null
                           ? ClipRRect(
                               borderRadius: BorderRadius.circular(60),
-                              child: Image.file(
-                                _image,
-                                width: 110,
-                                height: 110,
-                                fit: BoxFit.cover,
+                              child: CircleAvatar(
+                                radius: 80,
+                                backgroundImage: FileImage(File(_imageFile.path))
                               ),
                             )
                           : Container(
@@ -281,6 +291,7 @@ class _SignUp2State extends State<SignUp2> {
                           updateDesc(descController.text, widget.id);
                           //updateCategories(categories, widget.id);
                           //TO-DO Puts descripcion, tags favoritas, profile pic
+                          updatePhoto(_path);
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => SignIn()),

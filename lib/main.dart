@@ -103,7 +103,7 @@ class _MyAppState extends State<MyApp> {
       routes: {
         // When navigating to the "/" route, build the Home widget.
         '/login': (context) => SignIn(),
-        //'/': (context) => MainView(renderIndex: 'home', view: HomeView()),
+        '/': (context) => MainView(renderIndex: 'home', view: HomeView()),
         '/home': (context) => MainView(renderIndex: 'home', view: HomeView()),
         // When navigating to the "/profile" route, build the Profile widget.
         '/profile': (context) =>

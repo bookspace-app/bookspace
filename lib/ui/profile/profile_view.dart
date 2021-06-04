@@ -74,7 +74,6 @@ class _ProfileViewState extends State<ProfileView> {
       if (_user != null) {
         getPublications(_user);
         getProfilePic(_user.id);
-        getProfilePic(_user.id);
         getCategories(_user.id); 
       }
       else {

@@ -32,12 +32,13 @@ class _SignInState extends State<SignIn> {
   String pas;
   int idUser;
   String token;
+
+
   void getALLuser() async {
     List<User> users = await UserController.getAllusers();
     if (!disposed) {
       setState(() => _users = users);
     }
-    print(users);
   }
 
   void getUser(int id) async {
@@ -119,6 +120,10 @@ class _SignInState extends State<SignIn> {
   void initState() {
     super.initState();
     getALLuser();
+  }
+
+  Future<bool> logout(int id, String auth) async {
+    return UserController.logout(id, auth);
   }
 
   @override
@@ -241,9 +246,7 @@ class _SignInState extends State<SignIn> {
                         error = errorsUserName | errorsPass;
                       });
                       if (!error) {
-                        postlogin(usernameController.text,
-                                passwordController.text)
-                            .then((value) {
+                        postlogin(usernameController.text,passwordController.text).then((value) {
                           //falta comprovar contraseña
                           Navigator.push(
                             context,

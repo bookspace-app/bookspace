@@ -109,8 +109,7 @@ class _EditProfileViewState extends State<EditProfileView> {
   //POST PROFILE PICTURE
   void updatePhoto(String path) async {
     File pic = File(_imageFile.path);
-    absolutePath =
-        await UserController.postProfilePic(pic, globals.id, globals.token);
+    absolutePath = await UserController.postProfilePic(pic.path, pic,globals.id);
   }
 
   bool disposed = false;

@@ -399,83 +399,44 @@ class UserController {
     return publications;
   }
 
-  static Future<String> postProfilePic(File photo, int id, String token) async {
+  static Future<String> postProfilePic(String filename, File _image, int id) async {
+    
     Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id/profilePic");
+    String url = "https://bookspace-app.herokuapp.com$API/users/$id/profilePic";
 
-    /*try {
-      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users");
+    // open a byteStream
+    var stream = new http.ByteStream(DelegatingStream.typed(_image.openRead()));
+    // get file length
+    var length = await _image.length();
 
-      // Define headers
-      Map<String, String> headers = {
-        'Content-Type': 'multipart/form-data',
-        'Accept': 'application/json',
-      };
+    // string to uri
+    //var uri = Uri.parse("enter here upload URL");
 
-      //Define body
-      Map<String, String> body = {
-        'username': username,
-        'name': name,
-        'email': email,
-        'password': pass,
-        'dob': dob,
-      };
+    // create multipart request
+    var request = new http.MultipartRequest("POST", uri);
 
-      // Make POST request
-      http.Response response =
-          await http.post(uri, headers: headers, body: jsonEncode(body));
+    // if you need more parameters to parse, add those like this. i added "user_id". here this "user_id" is a key of the API request
+    //request.fields["user_id"] = "text";
 
-      // Request status and body
-      int statusCode = response.statusCode;
-      String requestBody = response.body;
+    // multipart that takes file.. here this "image_file" is a key of the API request
+    var multipartFile = new http.MultipartFile('profilePic', stream, length, filename: basename(_image.path));
 
-      print('Response status: $statusCode\n Response body: $requestBody\n');
-      if (statusCode == 200) {
-        user = User.fromJson(json.decode(response.body));
-      }
-    } catch (e) {
-      print('error caught: $e');
-    }*/
-
-    /*var stream = http.ByteStream(DelegatingStream.typed(photo.openRead()));
-    var length = await photo.length();
-
-    var request = http.MultipartRequest('POST', uri);
-    var multipartFile = http.MultipartFile('picture', stream, length,
-        filename: basename(photo.path));
-
+    // add file to multipart
     request.files.add(multipartFile);
-    var response = await request.send();
-    print(response.statusCode);
-    response.stream.transform(utf8.decoder).listen((value) {
-      print(value);
-    });*/
 
-    /*String filename = basename(photo.path);
+    // send request to upload image
+    await request.send().then((response) async {
+      // listen for response
+      response.stream.transform(utf8.decoder).listen((value) {
+        print(value);
+      });
 
-    var request = http.MultipartRequest('POST', uri);
-    var pic = await http.MultipartFile.fromPath("image", photo.path,
-        contentType: new MediaType(
-          'image',
-          'jpg',
-        ));
-    request.files.add(pic);
-    var res = await request.send();
-    print(res.statusCode);
-    res.stream.transform(utf8.decoder).listen((value) {
-      print(value);
-    });*/
+    }).catchError((e) {
+      print(e);
+    });
 
-    /*String filename = basename(photo.path);
-    var length = await photo.length();
+    return "xd";
 
-    var request = http.MultipartRequest('POST', uri);
-    request.files.add(http.MultipartFile(
-        'file', File(filename).readAsBytes().asStream(), length,
-        filename: filename.split("/").last));
-    var res = await request.send();
-    res.stream.transform(utf8.decoder).listen((value) {
-      print(value);
-    });*/
   }
 
   // GET profile PHOTO

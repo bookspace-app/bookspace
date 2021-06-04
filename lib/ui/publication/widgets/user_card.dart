@@ -21,6 +21,8 @@ class UserCard extends StatefulWidget {
   final bool principal;
   final bool isPublication;
   final Function() notifyOnChange;
+  final int id;
+  final String username;
 
   int likes;
   int dislikes;
@@ -42,6 +44,8 @@ class UserCard extends StatefulWidget {
       this.replies,
       this.myVote,
       this.myVoted,
+      this.id, 
+      this.username,
       @required this.notifyOnChange})
       : super(key: key);
 
@@ -57,6 +61,7 @@ class _UsercardState extends State<UserCard> {
   int likes = 0;
   int dislikes = 0;
   int replies = 0;
+  User _user;
 
   void deleteP(int id) async {
     var statuscode =
@@ -108,11 +113,36 @@ class _UsercardState extends State<UserCard> {
     }
   }
 
+  bool trobatFirebase = false;
+  var img;
+
+  void getProfilePic(int picid) async {
+    UserController.getProfilePic(picid).then((photoPath) {
+      setState(() {
+        print("ESTO ES PATH $photoPath");
+        if (photoPath.endsWith('/')) {
+          trobatFirebase = false;
+        } else {
+          img = NetworkImage(photoPath);
+          trobatFirebase = true;
+        }
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     getfav(widget.commentId, 'like');
     getfav(widget.commentId, 'dislike');
+    getProfilePic(widget.id);
+  }
+
+  bool disposed = false;
+  @override
+  void dispose() {
+    disposed = true;
+    super.dispose();
   }
 
   @override
@@ -180,7 +210,15 @@ class _UsercardState extends State<UserCard> {
                         // color: Colors.blue[200],
                         child: Row(
                           children: <Widget>[
-                            Image.asset('./assets/images/No_pic.png'),
+                            ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: CircleAvatar(
+                                radius: 25,
+                                backgroundImage: !trobatFirebase
+                                    ? AssetImage('assets/images/No_pic.png')
+                                    : img),
+                            ),
+                            //Image.asset('./assets/images/No_pic.png'),
                             Container(
                                 padding: EdgeInsets.only(left: 10),
                                 child: Column(
@@ -285,7 +323,12 @@ class _UsercardState extends State<UserCard> {
                           if (widget.isPublication) {
                             deleteP(widget.commentId);
                             widget.notifyOnChange();
-                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomeView()
+                              ),
+                            );
                           } else {
                             deleteC(widget.commentId);
                             widget.notifyOnChange();
