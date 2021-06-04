@@ -88,7 +88,31 @@ class _SearchViewState extends State<SearchView> {
     if (!disposed){
       setState(() => _users = users);
       setState(() => _selectedUsers = _users);
+      getProfilePics();
     }
+  }
+
+
+  List<NetworkImage> _selectedPics = [];
+  List<bool> _trobatsFirebase = [];
+  
+  void getProfilePics() async {
+
+    _selectedPics.length = _selectedUsers.length;
+    _trobatsFirebase.length = _selectedUsers.length;
+
+    for (var xd = 0; xd < _selectedUsers.length; xd++){
+      UserController.getProfilePic(_selectedUsers[xd].id).then((photoPath) {
+        setState(() {
+          if (photoPath.endsWith('/')) {
+            _trobatsFirebase[xd] = false;
+          } else {
+            _selectedPics[xd] = NetworkImage(photoPath);
+            _trobatsFirebase[xd] = true;
+          }
+        });
+      });
+    }  
   }
 
   void search(String text) {
@@ -133,6 +157,7 @@ class _SearchViewState extends State<SearchView> {
     super.initState();
     getPublications();
     getUsers();
+
   }
 
   bool disposed = false;
@@ -313,7 +338,9 @@ class _SearchViewState extends State<SearchView> {
                       ? PublicationCard(
                         publication: _selected[index]
                       ) : UserSearchCard(
-                        user: _selectedUsers[index]
+                        user: _selectedUsers[index],
+                        img: _selectedPics[index],
+                        trobatFirebase: _trobatsFirebase[index],
                       ), // on tap llevar a la view de la publicacion
                     ), 
                     Divider() 

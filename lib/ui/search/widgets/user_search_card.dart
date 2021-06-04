@@ -1,13 +1,20 @@
+import 'package:bookspace/controllers/user_controller.dart';
 import 'package:bookspace/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:bookspace/globals.dart' as globals;
 
 class UserSearchCard extends StatelessWidget {
   final User user;
+  final NetworkImage img;
+  final bool trobatFirebase;
+
   const UserSearchCard({
     Key key,
-    this.user
+    this.user,
+    this.img,
+    this.trobatFirebase
   }) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +34,12 @@ class UserSearchCard extends StatelessWidget {
               children: <Widget> [
                 Container(
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: Image.asset(
-                      './assets/images/No_pic.png',         //TO-DO show chat pic
-                      height: 75,
-                      width: 75,
-                      fit: BoxFit.fill,  
-                    ),
+                    borderRadius: BorderRadius.circular(20),
+                    child: CircleAvatar(
+                      radius: 25,
+                      backgroundImage: !trobatFirebase
+                        ? AssetImage('assets/images/No_pic.png')
+                        : img),
                   )
                 ),
               ]
@@ -89,6 +95,6 @@ class UserSearchCard extends StatelessWidget {
           )
         ],
       ),
-    );
+    );    
   }
 }
