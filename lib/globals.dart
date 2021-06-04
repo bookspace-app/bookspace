@@ -17,7 +17,7 @@ Color night_1 = getMaterial(0xFF121212);
 Color night_2 = getMaterial(0xFFFFFFFF);
 Color night_3 = getMaterial(0xFFFFFFFF);
 
-int id = 1;
+int id;
 String token;
 double bottomBarHeight = 60.0;
 

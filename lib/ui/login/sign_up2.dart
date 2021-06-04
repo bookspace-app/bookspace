@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:smart_select/smart_select.dart';
 
 import 'package:bookspace/globals.dart' as globals;
 
@@ -27,17 +28,29 @@ class _SignUp2State extends State<SignUp2> {
   File _image;
   final picker = ImagePicker();
   User _user;
-  List<String> categories;
   String _path;
   PickedFile _imageFile;
   final ImagePicker _picker = ImagePicker();
+  List<String> categories = [];
+  List<int> selectedGenres = [0];
 
-  void updateCategories(List<String> categories, int id) {
-    UserController.updateCategories(categories, id, globals.token);
+  void updateCategories() {
+    if (selectedGenres.length > 1) {
+      categoriesToString();
+    }
+    UserController.updateCategories(categories, widget.id, 'AUTH');
   }
 
   void updateDesc(String descp, int id) async {
     UserController.updateDesc(descp, id);
+  }
+
+  void categoriesToString() {
+    categories = [];
+    for (int i = 0; i < selectedGenres.length - 1; i++) {
+      String title = globals.genres[selectedGenres[i + 1] - 1].title;
+      categories.add(title);
+    }
   }
 
   Future getImageCamera() async {
@@ -242,34 +255,35 @@ class _SignUp2State extends State<SignUp2> {
             ),
           ),
           Container(
-              //color: Colors.orange,
-              padding: EdgeInsets.fromLTRB(30, 10, 30, 0),
-              child: TextFieldTags(
-                  tagsStyler: TagsStyler(
-                      tagTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                      tagDecoration: BoxDecoration(
-                        color: Colors.blue[300],
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      tagCancelIcon: Icon(Icons.cancel,
-                          size: 18.0, color: Colors.blue[900]),
-                      tagPadding: const EdgeInsets.all(6.0)),
-                  textFieldStyler: TextFieldStyler(
-                      isDense: false,
-                      helperText: "",
-                      hintText: '${AppLocalizations.of(context).translate("favgenresdesc")}'),
-                  onTag: (tag) {
-                    //categories.add(tag);
-                  },
-                  onDelete: (tag) {
-                    /*bool trobat = false;
-                    for (int i = 0; i < categories.length && !trobat; i++) {
-                      if (categories[i] == tag) {
-                        categories.removeAt(i);
-                        trobat = true;
-                      }
-                    }*/
-                  })),
+            padding: EdgeInsets.fromLTRB(15, 2, 15, 0),
+            child: Row(children: [
+              Expanded(
+                child: SmartSelect<int>.multiple(
+                  title: "",
+                modalFilter: true,
+                modalTitle:
+                    "${AppLocalizations.of(context).translate("favgenres")}",
+                placeholder: '',
+                modalHeaderStyle: S2ModalHeaderStyle(
+                  backgroundColor: globals.primary,
+                  textStyle: TextStyle(color: Colors.black),
+                  iconTheme: IconThemeData(color: Colors.black, opacity: 1),
+                  actionsIconTheme: IconThemeData(color: Colors.black, opacity: 1),
+                  centerTitle: true,
+                ),
+                value: selectedGenres,
+                choiceItems:
+                    globals.genres.map<S2Choice<int>>((S2Choice<int> x) {
+                  return S2Choice<int>(
+                    value: x.value,
+                    title: AppLocalizations.of(context).translate(x.title),
+                  );
+                }).toList(),
+                onChange: (state) =>
+                    setState(() => selectedGenres = state.value),
+              )),
+            ]),
+          ),
           Container(
             //color: Colors.pink,
             padding: EdgeInsets.symmetric(vertical: 30),
@@ -291,6 +305,7 @@ class _SignUp2State extends State<SignUp2> {
                           updateDesc(descController.text, widget.id);
                           //updateCategories(categories, widget.id);
                           //TO-DO Puts descripcion, tags favoritas, profile pic
+                          updateCategories();
                           updatePhoto(_path);
                           Navigator.push(
                             context,
