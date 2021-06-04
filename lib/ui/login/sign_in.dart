@@ -33,7 +33,6 @@ class _SignInState extends State<SignIn> {
   int idUser;
   String token;
 
-
   void getALLuser() async {
     List<User> users = await UserController.getAllusers();
     if (!disposed) {
@@ -87,8 +86,23 @@ class _SignInState extends State<SignIn> {
     }
   }
 
+  Future<bool> logged(String email) async {
+    int id;
+    User user = await UserController.getMail(email);
+    if (!disposed) {
+      id = user.id;
+    }
+    Map<String, dynamic> response = await UserController.gettoken(id);
+    if (response != null) {
+      logout(int.parse(response["userId"]), response["token"]);
+      return true;
+    }
+    return false;
+  }
+
   String errorUserName() {
-    if (usernameController.text.isEmpty) return "${AppLocalizations.of(context).translate("emptyField")}";
+    if (usernameController.text.isEmpty)
+      return "${AppLocalizations.of(context).translate("emptyField")}";
     for (var i = 0; i < _users.length; i++) {
       if (usernameController.text == _users[i].email) {
         pas = _users[i].password;
@@ -100,9 +114,11 @@ class _SignInState extends State<SignIn> {
   }
 
   String errorPass() {
-    if (passwordController.text.isEmpty) return "${AppLocalizations.of(context).translate("emptyField")}";
+    if (passwordController.text.isEmpty)
+      return "${AppLocalizations.of(context).translate("emptyField")}";
     //user.password check
-    if (passwordController.text != pas) return "${AppLocalizations.of(context).translate("wrongpass")}";
+    if (passwordController.text != pas)
+      return "${AppLocalizations.of(context).translate("wrongpass")}";
     return null;
   }
 
@@ -178,7 +194,8 @@ class _SignInState extends State<SignIn> {
                   },
                   obscureText: isPasswordHiden,
                   decoration: InputDecoration(
-                      labelText: '${AppLocalizations.of(context).translate("password")}',
+                      labelText:
+                          '${AppLocalizations.of(context).translate("password")}',
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.lock),
                       errorText: error ? errorPass() : null,
@@ -210,7 +227,8 @@ class _SignInState extends State<SignIn> {
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('${AppLocalizations.of(context).translate("loginwith")}'),
+                          Text(
+                              '${AppLocalizations.of(context).translate("loginwith")}'),
                           Container(
                             constraints: BoxConstraints.expand(
                                 height: 40.0, width: 60.0),
@@ -224,7 +242,8 @@ class _SignInState extends State<SignIn> {
             Container(
                 height: 40,
                 child: ElevatedButton(
-                    child: Text('${AppLocalizations.of(context).translate("login")}',
+                    child: Text(
+                        '${AppLocalizations.of(context).translate("login")}',
                         style: TextStyle(
                           color: Colors.black, /*fontFamily: "Schyler"*/
                         )),
@@ -246,7 +265,10 @@ class _SignInState extends State<SignIn> {
                         error = errorsUserName | errorsPass;
                       });
                       if (!error) {
-                        postlogin(usernameController.text,passwordController.text).then((value) {
+                        logged(usernameController.text);
+                        postlogin(usernameController.text,
+                                passwordController.text)
+                            .then((value) {
                           //falta comprovar contraseña
                           Navigator.push(
                             context,
