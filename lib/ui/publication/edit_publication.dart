@@ -54,7 +54,8 @@ class _EditPublicationViewState extends State<EditPublicationView> {
   }
 
   void createPublication() async {
-    await PublicationController.editPublication(myPublication, widget.id);
+    await PublicationController.editPublication(
+        myPublication, widget.id, globals.token);
     print(globals.id);
     print(widget.id);
     Navigator.pushAndRemoveUntil(
