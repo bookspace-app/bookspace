@@ -86,7 +86,7 @@ class _SignInState extends State<SignIn> {
     }
   }
 
-  Future<bool> logged(String email) async {
+  Future<void> logged(String email) async {
     int id;
     User user = await UserController.getMail(email);
     if (!disposed) {
@@ -95,9 +95,8 @@ class _SignInState extends State<SignIn> {
     Map<String, dynamic> response = await UserController.gettoken(id);
     if (response != null) {
       logout(int.parse(response["userId"]), response["token"]);
-      return true;
     }
-    return false;
+    await postlogin(usernameController.text, passwordController.text);
   }
 
   String errorUserName() {
@@ -265,10 +264,7 @@ class _SignInState extends State<SignIn> {
                         error = errorsUserName | errorsPass;
                       });
                       if (!error) {
-                        logged(usernameController.text);
-                        postlogin(usernameController.text,
-                                passwordController.text)
-                            .then((value) {
+                        logged(usernameController.text).then((value) {
                           //falta comprovar contraseña
                           Navigator.push(
                             context,
