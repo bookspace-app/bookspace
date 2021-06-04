@@ -44,7 +44,7 @@ class UserCard extends StatefulWidget {
       this.replies,
       this.myVote,
       this.myVoted,
-      this.id, 
+      this.id,
       this.username,
       @required this.notifyOnChange})
       : super(key: key);
@@ -108,8 +108,42 @@ class _UsercardState extends State<UserCard> {
     print(rep);
     if (rep == 200) {
       setState(() => reported = 1);
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Report registered'),
+            content: Text('Publication reported successfully'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     } else if (rep == -1) {
       setState(() => reported = 2);
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Report already registered'),
+            content: Text('You have already reported this publication'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 
@@ -211,12 +245,12 @@ class _UsercardState extends State<UserCard> {
                         child: Row(
                           children: <Widget>[
                             ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: CircleAvatar(
-                                radius: 25,
-                                backgroundImage: !trobatFirebase
-                                    ? AssetImage('assets/images/No_pic.png')
-                                    : img),
+                              borderRadius: BorderRadius.circular(20),
+                              child: CircleAvatar(
+                                  radius: 25,
+                                  backgroundImage: !trobatFirebase
+                                      ? AssetImage('assets/images/No_pic.png')
+                                      : img),
                             ),
                             //Image.asset('./assets/images/No_pic.png'),
                             Container(
@@ -326,8 +360,7 @@ class _UsercardState extends State<UserCard> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => HomeView()
-                              ),
+                                  builder: (context) => HomeView()),
                             );
                           } else {
                             deleteC(widget.commentId);
@@ -355,49 +388,27 @@ class _UsercardState extends State<UserCard> {
                       } else if (value == 'Reportar') {
                         if (widget.isPublication) {
                           report(globals.id, widget.commentId);
-                          if (reported == 1) {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text('Report registered'),
-                                  content:
-                                      Text('Publication reported successfully'),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text('OK'),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          } else if (reported == 2) {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text('Report already registered'),
-                                  content: Text(
-                                      'You have already reported this publication'),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text('OK'),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          }
                           widget.notifyOnChange();
                           //Navigator.pop(context);
                         } else {
-                          print('tapc');
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Acción no permitida'),
+                                content:
+                                    Text('No puedes reportar un comentario'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                           widget.notifyOnChange();
                         }
                       }

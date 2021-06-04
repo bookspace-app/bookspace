@@ -112,6 +112,13 @@ class _EditProfileViewState extends State<EditProfileView> {
     absolutePath = await UserController.postProfilePic(pic.path, pic,globals.id);
   }
 
+  Future erraseImage() async {
+    UserController.deleteProfilePic(_id);
+    setState(() {
+      fetPhotoCamera = false;
+    });
+  }
+
   bool disposed = false;
   @override
   void dispose() {
@@ -273,7 +280,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                 TextButton.icon(
                     onPressed: () {
                       takePhoto(ImageSource.camera);
-                      //savePhoto();
+                      Navigator.of(context).pop();
                     },
                     icon: Icon(Icons.camera_alt),
                     label: Text('${AppLocalizations.of(context).translate("camera")}', style: TextStyle(color: Colors.black)
@@ -285,10 +292,21 @@ class _EditProfileViewState extends State<EditProfileView> {
                 TextButton.icon(
                     onPressed: () {
                       takePhoto(ImageSource.gallery);
-                      //savePhoto();
+                      Navigator.of(context).pop();
                     },
                     icon: Icon(Icons.image),
                     label: Text('${AppLocalizations.of(context).translate("gallery")}', style: TextStyle(color: Colors.black))
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                TextButton.icon(
+                    onPressed: () {
+                      erraseImage();
+                      Navigator.of(context).pop();
+                    },
+                    icon: Icon(Icons.clear),
+                    label: Text('${AppLocalizations.of(context).translate("errasepic")}', style: TextStyle(color: Colors.black))
                 )
               ],
             )
