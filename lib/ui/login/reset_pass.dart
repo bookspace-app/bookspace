@@ -1,3 +1,5 @@
+import 'package:bookspace/app_localizations.dart';
+import 'package:bookspace/controllers/user_controller.dart';
 import 'package:bookspace/ui/login/sign_in.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,15 +15,19 @@ class Reset extends StatefulWidget {
 class _ResetState extends State<Reset> {
   final _controller = TextEditingController();
 
+  Future<void> recupera(String email) async {
+    bool b = await UserController.recupera(email);
+  }
+
   @override
   void initState() {
     super.initState();
     _controller.addListener(() {
-      final String text = _controller.text.toLowerCase();
+      final String text = _controller.text;
       _controller.value = _controller.value.copyWith(
         text: text,
         selection:
-        TextSelection(baseOffset: text.length, extentOffset: text.length),
+            TextSelection(baseOffset: text.length, extentOffset: text.length),
         composing: TextRange.empty,
       );
     });
@@ -48,14 +54,14 @@ class _ResetState extends State<Reset> {
                 size: 80.0,
               ),
               Text(
-                'Has olvidat la teva contrasenya?',
+                '${AppLocalizations.of(context).translate("forgotpass")}',
                 style: TextStyle(
                   fontSize: 20,
                   color: globals.secondary,
                 ),
               ),
               Text(
-                'Introdrueix la teva adreça electrònica. En breus rebràs un correu per restablir la nova contrasenya.',
+                '${AppLocalizations.of(context).translate("resetdesc")}',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14,
@@ -69,9 +75,9 @@ class _ResetState extends State<Reset> {
                   prefixIcon: Icon(Icons.email_outlined),
                   suffixIcon: IconButton(
                     icon: Icon(Icons.backspace_rounded),
-                      onPressed: () => _controller.clear(),
+                    onPressed: () => _controller.clear(),
                   ),
-                  hintText: 'Introdrueix la teva adreça electrònica',
+                  hintText: '${AppLocalizations.of(context).translate("resetemaildesc")}',
                   labelText: 'Email *',
                 ),
                 /* onSaved: (String? value) {
@@ -86,9 +92,9 @@ class _ResetState extends State<Reset> {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: const Text('Gràcies!'),
+                        title: Text('${AppLocalizations.of(context).translate("ty")}!'),
                         content: Text(
-                            'S´ha enviat un correu a l´adreça electrònica "$value" per reestablir la seva contrasenya'),
+                            '${AppLocalizations.of(context).translate("resetconfirm1")} "$value" ${AppLocalizations.of(context).translate("resetconfirm2")}'),
                         actions: <Widget>[
                           TextButton(
                             onPressed: () {
@@ -108,28 +114,31 @@ class _ResetState extends State<Reset> {
               ),
               ElevatedButton(
                 onPressed: () {
+                  recupera(_controller.text);
                   showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text('Gràcies!'),
-                          content: Text(
-                              'S´ha enviat un correu a la seva adreça electrònica per reestablir la seva contrasenya'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                                _controller.clear();
-                              },
-                              child: const Text('OK'),
-                            ),
-                          ],
-                        );
-                      },
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('${AppLocalizations.of(context).translate("ty")}!'),
+                        content: Text(
+                            '${AppLocalizations.of(context).translate("resetconfirm1")} ${AppLocalizations.of(context).translate("resetconfirm2")}'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SignIn()),
+                              );
+                            },
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      );
+                    },
                   );
-                  //TODO:navigation to user gmail?
                 },
-                child: const Text('Envia'),
+                child: Text('${AppLocalizations.of(context).translate("send")}'),
               ),
             ],
           ),

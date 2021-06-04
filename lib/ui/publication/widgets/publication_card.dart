@@ -1,9 +1,11 @@
+import 'package:bookspace/controllers/publication_controller.dart';
 import 'package:bookspace/models/publication.dart';
+import 'package:bookspace/models/user.dart';
 import 'package:bookspace/utils/humanize.dart';
 import 'package:flutter/material.dart';
 import 'package:bookspace/globals.dart' as globals;
 
-class PublicationCard extends StatelessWidget {
+class PublicationCard extends StatefulWidget {
   // Read attributes from
   final Publication publication;
 
@@ -12,19 +14,58 @@ class PublicationCard extends StatelessWidget {
     this.publication,
   }) : super(key: key);
 
+  @override
+  _PublicationCardState createState() => _PublicationCardState();
+}
+
+class _PublicationCardState extends State<PublicationCard> {
   bool _myVote = false;
+  bool _myDislike = false;
   bool _myFavorite = false;
   bool _myResponse = false;
+  List<User> _users = [];
 
   int tagsSize = 0;
   int printedTags = 0;
 
   void tagsSpace() {
-    for (var j = 0; j < publication.tags.length && tagsSize <= 24; j++){
-      printedTags = j + 1; 
-      tagsSize = publication.tags[j].length;
+    for (var j = 0; j < widget.publication.tags.length && tagsSize <= 24; j++) {
+      printedTags = j + 1;
+      tagsSize = widget.publication.tags[j].length;
       if (tagsSize > 24) printedTags = j;
     }
+  }
+
+  void getfav(int Pid, String action) async {
+    List<User> users = await PublicationController.getfav(Pid, action);
+    setState(() => _users = users);
+    if (action == 'fav') {
+      for (var i = 0; i < _users.length; i++) {
+        (globals.id == _users[i].id)
+            ? setState(() => _myFavorite = true)
+            : setState(() => _myFavorite = false);
+      }
+    } else if (action == 'like') {
+      for (var i = 0; i < _users.length; i++) {
+        (globals.id == _users[i].id)
+            ? setState(() => _myVote = true)
+            : setState(() => _myVote = false);
+      }
+    } else if (action == 'dislike') {
+      for (var i = 0; i < _users.length; i++) {
+        (globals.id == _users[i].id)
+            ? setState(() => _myDislike = true)
+            : setState(() => _myDislike = false);
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getfav(widget.publication.id, 'fav');
+    getfav(widget.publication.id, 'like');
+    getfav(widget.publication.id, 'dislike');
   }
 
   @override
@@ -34,7 +75,7 @@ class PublicationCard extends StatelessWidget {
       //color: Colors.yellow,
       width: double.infinity,
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        //crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
               //color: Colors.green[200],
@@ -52,13 +93,18 @@ class PublicationCard extends StatelessWidget {
                           child: Container(
                             padding: EdgeInsets.symmetric(vertical: 3),
                             child: Text(
-                              '${publication.totalLikes}',
+                              '${widget.publication.totalLikes}',
                               textAlign: TextAlign.right,
                               style: TextStyle(
                                 fontSize: 20.0,
                                 fontWeight: FontWeight.bold,
-                                color:
-                                    _myVote ? Colors.green[400] : Colors.black,
+                                color: _myVote
+                                    ? Colors.green[400]
+                                    : _myDislike
+                                        ? Colors.red[400]
+                                        : globals.theme
+                                            ? Colors.black
+                                            : Colors.white,
                               ),
                             ),
                           ),
@@ -68,9 +114,16 @@ class PublicationCard extends StatelessWidget {
                             onTap: () {
                               print('Tap');
                             },
-                            child: Icon(Icons.thumb_up,
-                                color:
-                                    _myVote ? Colors.green[400] : Colors.black),
+                            child: Icon(
+                              Icons.thumb_up,
+                              color: _myVote
+                                  ? Colors.green[400]
+                                  : _myDislike
+                                      ? Colors.red[400]
+                                      : globals.theme
+                                          ? Colors.black
+                                          : Colors.white,
+                            ),
                           ),
                         ),
                       ],
@@ -83,14 +136,16 @@ class PublicationCard extends StatelessWidget {
                           child: Container(
                             padding: EdgeInsets.symmetric(vertical: 3),
                             child: Text(
-                              '${publication.views}',
+                              '${widget.publication.views}',
                               textAlign: TextAlign.right,
                               style: TextStyle(
                                 fontSize: 20.0,
                                 fontWeight: FontWeight.bold,
                                 color: _myFavorite
                                     ? Colors.yellow[800]
-                                    : Colors.black,
+                                    : globals.theme
+                                        ? Colors.black
+                                        : Colors.white,
                               ),
                             ),
                           ),
@@ -104,7 +159,9 @@ class PublicationCard extends StatelessWidget {
                               Icons.remove_red_eye,
                               color: _myFavorite
                                   ? Colors.yellow[800]
-                                  : Colors.black,
+                                  : globals.theme
+                                      ? Colors.black
+                                      : Colors.white,
                             ),
                           ),
                         ),
@@ -118,14 +175,16 @@ class PublicationCard extends StatelessWidget {
                           child: Container(
                             padding: EdgeInsets.symmetric(vertical: 3),
                             child: Text(
-                              '${publication.comments}',
+                              '${widget.publication.comments}',
                               textAlign: TextAlign.right,
                               style: TextStyle(
                                 fontSize: 20.0,
                                 fontWeight: FontWeight.bold,
                                 color: _myResponse
                                     ? Colors.green[400]
-                                    : Colors.black,
+                                    : globals.theme
+                                        ? Colors.black
+                                        : Colors.white,
                               ),
                             ),
                           ),
@@ -139,7 +198,9 @@ class PublicationCard extends StatelessWidget {
                                   Icons.reply,
                                   color: _myResponse
                                       ? Colors.green[400]
-                                      : Colors.black,
+                                      : globals.theme
+                                          ? Colors.black
+                                          : Colors.white,
                                 ))),
                       ],
                     )
@@ -154,11 +215,11 @@ class PublicationCard extends StatelessWidget {
                     // color: Colors.orange,
                     // would be publication.name
                     child: Text(
-                      publication.title,
+                      widget.publication.title,
                       style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                      ),
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          color: globals.theme ? Colors.black : Colors.white),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 3,
                     ),
@@ -167,16 +228,20 @@ class PublicationCard extends StatelessWidget {
                       width: MediaQuery.of(context).size.width * 0.7,
                       // color: Colors.green,
                       padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                      child: Row ( 
-                        children: [
-                          for (var i = 0; i < printedTags; i++)
-                          Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 0), 
-                            child: Container (
+                      child: Row(children: [
+                        for (var i = 0; i < printedTags; i++)
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(2, 0, 2, 0),
+                            child: Container(
                               padding: EdgeInsets.fromLTRB(2, 0, 2, 0),
                               //color: globals.gray,
-                              decoration: BoxDecoration(color: globals.gray ,border: Border.all(color: globals.gray), borderRadius: BorderRadius.all(Radius.circular(5)) ), 
+                              decoration: BoxDecoration(
+                                  color: globals.gray,
+                                  border: Border.all(color: globals.gray),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5))),
                               child: Text(
-                                " ${publication.tags[i]} ",
+                                " ${widget.publication.tags[i]} ",
                                 style: TextStyle(
                                   backgroundColor: globals.gray,
                                   color: Colors.white,
@@ -186,46 +251,41 @@ class PublicationCard extends StatelessWidget {
                               ),
                             ),
                           ),
-                          if (tagsSize > 24) 
-                            Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 0), 
-                              child: Container (
-                                padding: EdgeInsets.fromLTRB(2, 0, 2, 0),
-                                //color: globals.gray,
-                                decoration: BoxDecoration(color: globals.gray ,border: Border.all(color: globals.gray), borderRadius: BorderRadius.all(Radius.circular(5)) ), 
-                                child: Text(
-                                  " ... ",
-                                  style: TextStyle(
-                                    backgroundColor: globals.gray,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15.0,
-                                  ),
+                        if (tagsSize > 24)
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(2, 0, 2, 0),
+                            child: Container(
+                              padding: EdgeInsets.fromLTRB(2, 0, 2, 0),
+                              //color: globals.gray,
+                              decoration: BoxDecoration(
+                                  color: globals.gray,
+                                  border: Border.all(color: globals.gray),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5))),
+                              child: Text(
+                                " ... ",
+                                style: TextStyle(
+                                  backgroundColor: globals.gray,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15.0,
                                 ),
                               ),
                             ),
-                          
-                        ]
-                      )
-                      
-                      /*child: Text(
-                        "${publication.tags}",
-                        style: TextStyle(
-                          fontSize: 15.0,
-                        ),
-                      */
-                    ),
+                          ),
+                      ])),
                   Container(
                       width: MediaQuery.of(context).size.width * 0.7,
                       // color: Colors.green,
                       // would be publication.name
                       child: Text(
-                        "${TimeAgo.timeAgoSinceDate(publication.dop)} @${publication.author?.username}",
+                        "${TimeAgo.timeAgoSinceDate(widget.publication.dop)} @${widget.publication.author?.username}",
                         style: TextStyle(
-                          fontSize: 15.0,
-                        ),
+                            fontSize: 15.0,
+                            color: globals.theme ? Colors.black : Colors.white),
                       ))
                 ],
-              ))
+              )),
         ],
       ),
     );

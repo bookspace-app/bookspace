@@ -150,9 +150,15 @@ for n in `seq 1 100`; do
 RANDUSER=$(( $((RANDOM * ($ENDUSER-$INIUSER+1) / 32768 + INIUSER)) ))
 RANDPUBLI=$(( $((RANDOM * ($ENDRANGE-$INIRANGE+1) / 32768 + INIRANGE)) ))
 curl -X POST "https://bookspace-app.herokuapp.com/api/publications/$RANDPUBLI/like/$RANDUSER" -H "accept: */*" -H "auth: AUTH"
+curl -X GET "https://bookspace-app.herokuapp.com/api/publications/$RANDPUBLI" -H "accept: */*"
 done
 for n in `seq 1 50`; do 
 RANDUSER=$(( $((RANDOM * ($ENDUSER-$INIUSER+1) / 32768 + INIUSER)) ))
 RANDPUBLI=$(( $((RANDOM * ($ENDRANGE-$INIRANGE+1) / 32768 + INIRANGE)) ))
 curl -X POST "https://bookspace-app.herokuapp.com/api/publications/$RANDPUBLI/dislike/$RANDUSER" -H "accept: */*" -H "auth: AUTH"
+curl -X GET "https://bookspace-app.herokuapp.com/api/publications/$RANDPUBLI" -H "accept: */*"
+done
+for n in `seq 1 50`; do 
+RANDPUBLI=$(( $((RANDOM * ($ENDRANGE-$INIRANGE+1) / 32768 + INIRANGE)) ))
+curl -X GET "https://bookspace-app.herokuapp.com/api/publications/$RANDPUBLI" -H "accept: */*"
 done

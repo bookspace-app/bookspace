@@ -99,8 +99,10 @@ class _MainViewState extends State<MainView> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-            AppLocalizations.of(context).translate('$_rendered').toString()),
-        backgroundColor: Colors.white,
+            AppLocalizations.of(context).translate('$_rendered').toString(),
+            style: TextStyle(color: globals.theme ? Colors.black : Colors.white),
+            ),
+        backgroundColor: globals.theme ? Colors.white : Colors.black54,
         leadingWidth: 100,
         leading: Image.asset('./assets/images/logo.png',
             fit: BoxFit
@@ -137,8 +139,7 @@ class _MainViewState extends State<MainView> {
                           Icon(Icons.edit),
                           Container(
                             margin: EdgeInsets.only(left: 10),
-                            child: Text(AppLocalizations.of(context)
-                                .translate("editProfile")),
+                            child: Text(AppLocalizations.of(context).translate("editProfile")),
                           )
                         ],
                       ),
@@ -150,8 +151,7 @@ class _MainViewState extends State<MainView> {
                           Icon(Icons.brightness_low_rounded),
                           Container(
                             margin: EdgeInsets.only(left: 10),
-                            child: Text(AppLocalizations.of(context)
-                                .translate("configuration")),
+                            child: Text(AppLocalizations.of(context).translate("configuration")),
                             //child: Text("Configuration"),
                           )
                         ],
@@ -175,7 +175,7 @@ class _MainViewState extends State<MainView> {
                   ];
                 }),
               ]
-            : ((_rendered == 'home')
+            : null /*((_rendered == 'home')
                 ? [
                     IconButton(
                       icon: Icon(Icons.search),
@@ -185,7 +185,7 @@ class _MainViewState extends State<MainView> {
                       },
                     )
                   ] //
-                : null),
+                : null)*/,
       ),
       body: widget.view ??
           Container(

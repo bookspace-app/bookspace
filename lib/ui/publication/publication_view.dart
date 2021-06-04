@@ -216,6 +216,12 @@ class _PublicationViewState extends State<PublicationView> {
                 dop: (widget.isPublication) ? _publication.dop : _comment.dop,
                 principal: true,
                 isPublication: widget.isPublication,
+                id: (widget.isPublication)
+                    ? _publication.author.id
+                    : _comment.author.id,
+                username: (widget.isPublication)
+                    ? _publication.author.username
+                    : _comment.author.username,
               ),
               // The container shows the total
               // number of responses
@@ -228,6 +234,7 @@ class _PublicationViewState extends State<PublicationView> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 15.0,
+                    color: globals.theme ? Colors.black : Colors.white
                   ),
                 ),
               ),
@@ -248,6 +255,8 @@ class _PublicationViewState extends State<PublicationView> {
                                 ? _publication.id
                                 : _comment.id,
                             author: _comments[i].author,
+                            id: _comments[i].author.id,
+                            username: _comments[i].author.username,
                             dop: _comments[i].dop,
                             principal: false,
                             isPublication: false,

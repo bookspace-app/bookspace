@@ -1,3 +1,4 @@
+import 'package:bookspace/app_localizations.dart';
 import 'package:bookspace/controllers/mention_controller.dart';
 import 'package:bookspace/models/mention.dart';
 import 'package:bookspace/ui/activity/widgets/mention_card.dart';
@@ -51,8 +52,12 @@ class _ActivityViewState extends State<ActivityView> {
   Widget build(BuildContext context) {
     if (_mentions != null) {
       return Container(
-        color: Color.fromRGBO(243, 247, 250, 1),
-        child: ListView(
+        color: globals.theme_1,//Color.fromRGBO(243, 247, 250, 1),
+        child: _mentions.length == 0 ? Container (
+            alignment: Alignment.center,
+            child: Text("${AppLocalizations.of(context).translate("nomentions")}")        
+          )
+         : ListView(
           children: List.generate(_mentions.length, (index) {
           return Column(children: <Widget>[
             //Container(height: (index == 0)?10:0),

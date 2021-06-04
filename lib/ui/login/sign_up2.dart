@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:bookspace/app_localizations.dart';
 import 'package:bookspace/ui/login/sign_in.dart';
 import 'package:bookspace/ui/login/sign_up.dart';
 import 'package:bookspace/controllers/user_controller.dart';
@@ -6,6 +7,7 @@ import 'package:bookspace/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:textfield_tags/textfield_tags.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:bookspace/globals.dart' as globals;
@@ -26,9 +28,12 @@ class _SignUp2State extends State<SignUp2> {
   final picker = ImagePicker();
   User _user;
   List<String> categories;
+  String _path;
+  PickedFile _imageFile;
+  final ImagePicker _picker = ImagePicker();
 
   void updateCategories(List<String> categories, int id) {
-    UserController.updateCategories(categories, id);
+    UserController.updateCategories(categories, id, globals.token);
   }
 
   void updateDesc(String descp, int id) async {
@@ -36,24 +41,26 @@ class _SignUp2State extends State<SignUp2> {
   }
 
   Future getImageCamera() async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
+    final pickedFile = await _picker.getImage(source: ImageSource.camera);
 
     setState(() {
-      _image = File(pickedFile.path);
+      _imageFile = pickedFile;
     });
+    _path = pickedFile.path;
   }
 
   Future getImageGallery() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    final pickedFile = await _picker.getImage(source: ImageSource.gallery);
 
     setState(() {
-      _image = File(pickedFile.path);
+      _imageFile = pickedFile;
     });
+    _path = pickedFile.path;
   }
 
   Future erraseImage() async {
     setState(() {
-      _image = null;
+      _imageFile = null;
     });
   }
 
@@ -67,14 +74,14 @@ class _SignUp2State extends State<SignUp2> {
                 children: <Widget>[
                   new ListTile(
                       leading: new Icon(Icons.photo_library),
-                      title: new Text('Galería'),
+                      title: new Text('${AppLocalizations.of(context).translate("gallery")}'),
                       onTap: () {
                         getImageGallery();
                         Navigator.of(context).pop();
                       }),
                   new ListTile(
                     leading: new Icon(Icons.photo_camera),
-                    title: new Text('Cámara'),
+                    title: new Text('${AppLocalizations.of(context).translate("camera")}'),
                     onTap: () {
                       getImageCamera();
                       Navigator.of(context).pop();
@@ -82,7 +89,7 @@ class _SignUp2State extends State<SignUp2> {
                   ),
                   new ListTile(
                     leading: new Icon(Icons.clear),
-                    title: new Text('Eliminar Foto'),
+                    title: new Text('${AppLocalizations.of(context).translate("errasepic")}'),
                     onTap: () {
                       erraseImage();
                       Navigator.of(context).pop();
@@ -93,6 +100,12 @@ class _SignUp2State extends State<SignUp2> {
             ),
           );
         });
+  }
+
+  //POST PROFILE PICTURE
+  void updatePhoto(String path) async {
+    File pic = File(_imageFile.path);
+    String absolutePath = await UserController.postProfilePic(pic.path, pic, widget.id);
   }
 
   @override
@@ -119,7 +132,7 @@ class _SignUp2State extends State<SignUp2> {
                   CrossAxisAlignment.center, //Center Row contents vertically,
               children: <Widget>[
                 Text(
-                  "Foto de Perfil", //to-do TRADUCIONES
+                  "${AppLocalizations.of(context).translate("profilepic")}", //to-do TRADUCIONES
                   style: TextStyle(
                       color: Colors.black, //to-do Cambiar color letras
                       fontSize: 14),
@@ -146,14 +159,12 @@ class _SignUp2State extends State<SignUp2> {
                     child: CircleAvatar(
                       radius: 60,
                       backgroundColor: globals.primary,
-                      child: _image != null
+                      child: _imageFile != null
                           ? ClipRRect(
                               borderRadius: BorderRadius.circular(60),
-                              child: Image.file(
-                                _image,
-                                width: 110,
-                                height: 110,
-                                fit: BoxFit.cover,
+                              child: CircleAvatar(
+                                radius: 80,
+                                backgroundImage: FileImage(File(_imageFile.path))
                               ),
                             )
                           : Container(
@@ -182,7 +193,7 @@ class _SignUp2State extends State<SignUp2> {
                   CrossAxisAlignment.center, //Center Row contents vertically,
               children: <Widget>[
                 Text(
-                  "Descripción:", //to-do TRADUCIONES
+                  "${AppLocalizations.of(context).translate("descripcion")}:", //to-do TRADUCIONES
                   style: TextStyle(
                       color: Colors.black, //to-do Cambiar color letras
                       fontSize: 14),
@@ -210,7 +221,7 @@ class _SignUp2State extends State<SignUp2> {
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(),
                                 hintText:
-                                    "Explicanos quién eres y que te gusta",
+                                    "${AppLocalizations.of(context).translate("userdescdesc")}",
                                 counterText:
                                     '${descController.text.length}' + '/500'))),
                   ])),
@@ -222,7 +233,7 @@ class _SignUp2State extends State<SignUp2> {
                   CrossAxisAlignment.center, //Center Row contents vertically,
               children: <Widget>[
                 Text(
-                  "Categorias favoritas:", //to-do TRADUCIONES
+                  "${AppLocalizations.of(context).translate("favgenres")}:", //to-do TRADUCIONES
                   style: TextStyle(
                       color: Colors.black, //to-do Cambiar color letras
                       fontSize: 14),
@@ -246,7 +257,7 @@ class _SignUp2State extends State<SignUp2> {
                   textFieldStyler: TextFieldStyler(
                       isDense: false,
                       helperText: "",
-                      hintText: 'Escribe los temas que más te interesan'),
+                      hintText: '${AppLocalizations.of(context).translate("favgenresdesc")}'),
                   onTag: (tag) {
                     //categories.add(tag);
                   },
@@ -274,12 +285,13 @@ class _SignUp2State extends State<SignUp2> {
                     child: RaisedButton(
                         textColor: Colors.white,
                         color: Colors.blue,
-                        child: Text('Completar registro'),
+                        child: Text('${AppLocalizations.of(context).translate("completeregister")}'),
                         onPressed: () {
                           print(widget.id);
                           updateDesc(descController.text, widget.id);
                           //updateCategories(categories, widget.id);
                           //TO-DO Puts descripcion, tags favoritas, profile pic
+                          updatePhoto(_path);
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => SignIn()),

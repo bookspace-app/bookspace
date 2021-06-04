@@ -50,9 +50,8 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
   }
 
   void createPublication(Publication myPublication) async {
-
-    Publication response = await PublicationController.createPublication(myPublication, globals.token);
-
+    Publication response = await PublicationController.createPublication(
+        myPublication, globals.token);
   }
 
 //Error Check
@@ -99,7 +98,9 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Color.fromRGBO(243, 247, 250, 1),
+        color: globals.theme
+            ? Color.fromRGBO(243, 247, 250, 1)
+            : Color.fromRGBO(70, 72, 74, 1),
         child: ListView(children: <Widget>[
           Container(
               child: Column(
@@ -110,6 +111,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                   Text(
                     "${AppLocalizations.of(context).translate("titulo")}",
                     style: TextStyle(
+                      color: globals.theme ? Colors.black : Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 18.0,
                     ),
@@ -160,6 +162,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18.0,
+                      color: globals.theme ? Colors.black : Colors.white,
                     ),
                   ),
                 ]),
@@ -222,7 +225,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                           maxLines: 4,
                           inputFormatters: [
                             new LengthLimitingTextInputFormatter(2000),
-                          ], //TO-DO Define length of publication's description
+                          ], 
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.white,
@@ -242,6 +245,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18.0,
+                      color: globals.theme ? Colors.black : Colors.white,
                     ),
                   ),
                 ]),
@@ -258,29 +262,32 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
               Container(
                 padding: EdgeInsets.fromLTRB(15, 2, 15, 0),
                 child: Row(children: [
-                  Expanded(  
-                    child: SmartSelect<int>.single(
-                      title: "",
-                      modalFilter: true,
-                      modalTitle: "${AppLocalizations.of(context).translate("genero")}",
-                      placeholder: "",
-                      modalHeaderStyle: S2ModalHeaderStyle(
-                        backgroundColor: globals.primary,
-                        textStyle: TextStyle(color: Colors.black),
-                        iconTheme: IconThemeData(color: Colors.black, opacity: 1),
-                        actionsIconTheme: IconThemeData(color: Colors.black, opacity: 1),
-                        centerTitle: true,
-                      ),
-                      value: selectedGenre,
-                      choiceItems: globals.genres.map<S2Choice<int>>((S2Choice<int> x) {
-                        return S2Choice<int>(
-                          value: x.value,
-                          title: AppLocalizations.of(context).translate(x.title),
-                        );
-                      }).toList(),
-                      onChange: (state) => setState(() => selectedGenre = state.value),
-                    )
-                  ),
+                  Expanded(
+                      child: SmartSelect<int>.single(
+                    title: "",
+                    modalFilter: true,
+                    modalTitle:
+                        "${AppLocalizations.of(context).translate("genero")}",
+                    placeholder: "",
+                    modalHeaderStyle: S2ModalHeaderStyle(
+                      backgroundColor: globals.primary,
+                      textStyle: TextStyle(color: Colors.black),
+                      iconTheme: IconThemeData(color: Colors.black, opacity: 1),
+                      actionsIconTheme:
+                          IconThemeData(color: Colors.black, opacity: 1),
+                      centerTitle: true,
+                    ),
+                    value: selectedGenre,
+                    choiceItems:
+                        globals.genres.map<S2Choice<int>>((S2Choice<int> x) {
+                      return S2Choice<int>(
+                        value: x.value,
+                        title: AppLocalizations.of(context).translate(x.title),
+                      );
+                    }).toList(),
+                    onChange: (state) =>
+                        setState(() => selectedGenre = state.value),
+                  )),
                 ]),
               ),
               Container(
@@ -291,7 +298,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                     style: TextStyle(fontSize: 12.0, color: Colors.red),
                   ),
                 ]),
-              ), 
+              ),
               Container(
                 padding: EdgeInsets.fromLTRB(15, 5, 15, 2),
                 child: Row(children: [
@@ -300,6 +307,7 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18.0,
+                      color: globals.theme ? Colors.black : Colors.white,
                     ),
                   ),
                 ]),
@@ -326,7 +334,8 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                           tagCancelIcon: Icon(Icons.cancel,
-                              size: 18.0, color: Colors.red),//color: Colors.blue[900]),
+                              size: 18.0,
+                              color: Colors.red), //color: Colors.blue[900]),
                           tagPadding: const EdgeInsets.all(6.0)),
                       textFieldStyler: TextFieldStyler(
                         isDense: false,
@@ -343,8 +352,10 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                 //color: Colors.pink,
                 padding: EdgeInsets.fromLTRB(15, 0, 15, 5),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center, //Center Row contents horizontally,
-                  crossAxisAlignment: CrossAxisAlignment.center, //Center Row contents vertically,
+                  mainAxisAlignment: MainAxisAlignment
+                      .center, //Center Row contents horizontally,
+                  crossAxisAlignment: CrossAxisAlignment
+                      .center, //Center Row contents vertically,
                   children: <Widget>[
                     SizedBox(
                         width: MediaQuery.of(context).size.width * 0.30,
@@ -359,31 +370,36 @@ class _CreatePublicationViewState extends State<CreatePublicationView> {
                             ),
                             onPressed: () {
                               setState(() {
-                                errorsTitle = (errorTitle() != null) ? true : false;
-                                errorsDesc = (errorDesc() != null) ? true : false;
-                                errorsGenre = (errorGenre() != null) ? true : false;
-                                errorsAll = errorsTitle | errorsDesc | errorsGenre;
+                                errorsTitle =
+                                    (errorTitle() != null) ? true : false;
+                                errorsDesc =
+                                    (errorDesc() != null) ? true : false;
+                                errorsGenre =
+                                    (errorGenre() != null) ? true : false;
+                                errorsAll =
+                                    errorsTitle | errorsDesc | errorsGenre;
                               });
                               if (!errorsAll) {
                                 myPublication = Publication();
                                 myPublication.title = titleController.text;
                                 myPublication.content = descController.text;
                                 myPublication.authorId = globals.id;
-                                myPublication.category = globals.genres[selectedGenre - 1].title;
+                                myPublication.category =
+                                    globals.genres[selectedGenre - 1].title;
                                 myPublication.tags = selectedTags;
-                                myPublication.mentions = ExtractUsernames(descController.text);
+                                myPublication.mentions =
+                                    ExtractUsernames(descController.text);
 
-                                createPublication(myPublication); 
-                                /*
-                                Navigator.push(context, // TODO: pass id to PublicationView
+                                createPublication(myPublication);
+
+                                Navigator.push(
+                                  context, // TODO: pass id to PublicationView
                                   MaterialPageRoute(
-                                    builder: (context) => MainView(
-                                      renderIndex: 'home',
-                                      view: HomeView(),
-                                    )
-                                  ),
+                                      builder: (context) => MainView(
+                                            renderIndex: 'home',
+                                            view: HomeView(),
+                                          )),
                                 );
-                                */
                               }
                             }))
                   ],

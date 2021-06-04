@@ -1,23 +1,31 @@
+import 'package:bookspace/controllers/user_controller.dart';
 import 'package:bookspace/models/user.dart';
 import 'package:flutter/material.dart';
+import 'package:bookspace/globals.dart' as globals;
 
 class UserSearchCard extends StatelessWidget {
   final User user;
+  final NetworkImage img;
+  final bool trobatFirebase;
+
   const UserSearchCard({
     Key key,
-    this.user
+    this.user,
+    this.img,
+    this.trobatFirebase
   }) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Color.fromRGBO(243, 247, 250, 1),
+      color: globals.theme ? Color.fromRGBO(243, 247, 250, 1) : Color.fromRGBO(117, 121, 125, 1),//Color.fromRGBO(243, 247, 250, 1),
       width: double.infinity,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget> [
           Container(      //chat pic container
-            //color: Colors.green[200],
+            color: globals.theme ? Color.fromRGBO(243, 247, 250, 1) : Color.fromRGBO(117, 121, 125, 1),//Colors.green[200],
             width: MediaQuery.of(context).size.width *0.25,
             padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
             child: Column(
@@ -26,20 +34,19 @@ class UserSearchCard extends StatelessWidget {
               children: <Widget> [
                 Container(
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: Image.asset(
-                      './assets/images/No_pic.png',         //TO-DO show chat pic
-                      height: 75,
-                      width: 75,
-                      fit: BoxFit.fill,  
-                    ),
+                    borderRadius: BorderRadius.circular(20),
+                    child: CircleAvatar(
+                      radius: 25,
+                      backgroundImage: !trobatFirebase
+                        ? AssetImage('assets/images/No_pic.png')
+                        : img),
                   )
                 ),
               ]
             )
           ),
           Container(
-            //color: Colors.yellow,
+            color: globals.theme ? Color.fromRGBO(243, 247, 250, 1) : Color.fromRGBO(117, 121, 125, 1),
             padding: EdgeInsets.fromLTRB(0, 5, 15, 5),
             height: MediaQuery.of(context).size.width * 0.22, //85,
             child: Column(
@@ -88,6 +95,6 @@ class UserSearchCard extends StatelessWidget {
           )
         ],
       ),
-    );
+    );    
   }
 }

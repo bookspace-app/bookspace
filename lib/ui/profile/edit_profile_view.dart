@@ -49,6 +49,10 @@ class _EditProfileViewState extends State<EditProfileView> {
   List<String> categories = [];
   String _path;
   List<int> selectedGenres = [0];
+  String absolutePath;
+  bool trobatFirebase = false;
+  bool fetPhotoCamera = false;
+  var img;
 
   //GET USER
   void getUser() async {
@@ -67,16 +71,31 @@ class _EditProfileViewState extends State<EditProfileView> {
     _id = _user.id;
   }
 
+  void getProfilePic() async {
+    String photoPath = await UserController.getProfilePic(globals.id);
+    setState(() {
+      img = NetworkImage(photoPath);
+      if (photoPath.endsWith('/')) {
+        trobatFirebase = false;
+        fetPhotoCamera = false;
+      } else {
+        trobatFirebase = true;
+        fetPhotoCamera = true;
+      }
+    });
+  }
+
   //GET CATEGORIES
   void getCategories() async {
     List<String> cat = await UserController.getCategories(globals.id);
     categories = cat;
-    //categoriesToInt();
+    categoriesToInt();
   }
 
   //UPDATE USER
   void putUser(String username, name, email, descrition, int id) async {
-    UserController.updateUser(username, name, email, descrition, id);
+    UserController.updateUser(
+        username, name, email, descrition, id, globals.token);
   }
 
   //UPDATE CATEGORIES
@@ -84,7 +103,13 @@ class _EditProfileViewState extends State<EditProfileView> {
     if (selectedGenres.length > 1) {
       categoriesToString();
     }
-    UserController.updateCategories(categories, _id);
+    UserController.updateCategories(categories, _id, globals.token);
+  }
+
+  //POST PROFILE PICTURE
+  void updatePhoto(String path) async {
+    File pic = File(_imageFile.path);
+    absolutePath = await UserController.postProfilePic(pic.path, pic,globals.id);
   }
 
   bool disposed = false;
@@ -96,9 +121,10 @@ class _EditProfileViewState extends State<EditProfileView> {
 
   @override
   void initState() {
-    super.initState();
     getUser();
     getCategories();
+    getProfilePic();
+    super.initState();
   }
 
   @override
@@ -108,46 +134,34 @@ class _EditProfileViewState extends State<EditProfileView> {
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 40),
         children: [
           imageProfile(),
-          titlePreEditText('Nombre'),
-          editTextProfile(nameController, 'Nombre'),
-          titlePreEditText('Nombre de Usuario'),
-          editTextProfile(usernameController, 'Nombre de Usuario'),
+          titlePreEditText('${AppLocalizations.of(context).translate("name")}'),
+          editTextProfile(nameController, '${AppLocalizations.of(context).translate("name")}'),
+          titlePreEditText('${AppLocalizations.of(context).translate("username")}'),
+          editTextProfile(usernameController, '${AppLocalizations.of(context).translate("username")}'),
           titlePreEditText('Email'),
           editTextProfile(emailController, 'Email'),
-          titlePreEditText('Biografia'),
-          editTextProfile(bioController, 'Description'),
-          titlePreEditText('Categorias'),
-          Container(
-            padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-            child: Row(children: [
-              Text(
-                "${AppLocalizations.of(context).translate("generoDesc")}",
-                style: TextStyle(fontSize: 14.0, color: Colors.grey),
-              ),
-            ]),
-          ),
+          titlePreEditText('${AppLocalizations.of(context).translate("descripcion")}'),
+          editTextProfile(bioController, '${AppLocalizations.of(context).translate("descripcion")}'),
+          titlePreEditText('${AppLocalizations.of(context).translate("favgenres")}'),
 
           //EDIT TEXT CATEGORIES. No lo hago con el metodo "editTextProfile" porque es distinto a los demás
           Container(
             padding: EdgeInsets.fromLTRB(15, 2, 15, 0),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey[700], width: 1),
-              borderRadius: BorderRadius.circular(10),
-            ),
+
             child: Row(children: [
               Expanded(
-                  child: SmartSelect<int>.multiple(
+                child: SmartSelect<int>.multiple(
+                  title: "",
                 modalFilter: true,
                 modalTitle:
                     "${AppLocalizations.of(context).translate("genero")}",
-                placeholder: 'Escoge el género literario que más se adecue',
-                modalFilterHint: "HEY",
+                placeholder: '',
                 modalHeaderStyle: S2ModalHeaderStyle(
                   backgroundColor: globals.primary,
                   textStyle: TextStyle(color: Colors.black),
                   iconTheme: IconThemeData(color: Colors.black, opacity: 1),
-                  actionsIconTheme:
-                      IconThemeData(color: Colors.black, opacity: 1),
+                  actionsIconTheme: IconThemeData(color: Colors.black, opacity: 1),
+                  centerTitle: true,
                 ),
                 value: selectedGenres,
                 choiceItems:
@@ -177,7 +191,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   _bio = bioController.text;
                   putUser(_username, _name, _email, _bio, _id);
                   updateCategories();
-                  //updatePhoto(_path);
+                  updatePhoto(_path);
 
                   Navigator.push(
                     context,
@@ -189,11 +203,11 @@ class _EditProfileViewState extends State<EditProfileView> {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                    primary: Colors.grey,
-                    onPrimary: Colors.black,
+                    primary: Color.fromRGBO(250, 198, 65, 1),
+                    onPrimary: Color.fromRGBO(250, 198, 65, 1),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5.0))),
-                child: Text('Submit',
+                child: Text('${AppLocalizations.of(context).translate("save")}',
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.black,
@@ -210,12 +224,14 @@ class _EditProfileViewState extends State<EditProfileView> {
       child: Stack(
         children: [
           CircleAvatar(
-            radius: 80,
-            backgroundImage: _imageFile == null
-                ? AssetImage('assets/images/No_pic.png')
-                : FileImage(File(_imageFile.path)),
-            //AssetImage(_user.profilePicUri),
-          ),
+              radius: 80,
+              backgroundImage: !fetPhotoCamera
+                  ? AssetImage('assets/images/No_pic.png')
+                  : !trobatFirebase
+                      ? FileImage(File(_imageFile.path))
+                      : img
+              //AssetImage(_user.profilePicUri),
+              ),
           Positioned(
               bottom: 20,
               right: 20,
@@ -244,7 +260,7 @@ class _EditProfileViewState extends State<EditProfileView> {
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
           children: [
-            Text('Escoge una foto de perfil',
+            Text('${AppLocalizations.of(context).translate("choosepic")}',
                 style: TextStyle(
                   fontSize: 20,
                 )),
@@ -260,7 +276,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                       //savePhoto();
                     },
                     icon: Icon(Icons.camera_alt),
-                    label: Text('Cámera')),
+                    label: Text('${AppLocalizations.of(context).translate("camera")}', style: TextStyle(color: Colors.black)
+                  ),
+                ),
                 SizedBox(
                   width: 20,
                 ),
@@ -270,7 +288,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                       //savePhoto();
                     },
                     icon: Icon(Icons.image),
-                    label: Text('Galeria'))
+                    label: Text('${AppLocalizations.of(context).translate("gallery")}', style: TextStyle(color: Colors.black))
+                )
               ],
             )
           ],
@@ -280,14 +299,20 @@ class _EditProfileViewState extends State<EditProfileView> {
   //Widget para tener un edit text standard y no volver a repetir siempre lo mismo
   Widget editTextProfile(TextEditingController controller, String hintText) {
     return Container(
-        constraints: BoxConstraints.expand(height: 50, width: 100),
+        //constraints: BoxConstraints.expand(height: 50, width: 100),
+        //color: Colors.pink,
         child: TextField(
           controller: controller,
+          maxLines: controller == bioController ? 4 : 1,
+          keyboardType: controller == bioController ? TextInputType.multiline :  null,
           style: TextStyle(
               fontSize: 15,
               //color: Color(0xff0962ff),
-              fontWeight: FontWeight.bold),
+              //fontWeight: FontWeight.bold
+            ),
           decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
             border: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey),
               borderRadius: BorderRadius.circular(8),
@@ -318,7 +343,9 @@ class _EditProfileViewState extends State<EditProfileView> {
       child: Text(
         title,
         style: TextStyle(
-          fontSize: 15,
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: globals.theme ? Colors.black : Colors.white
         ),
       ),
     );
@@ -328,6 +355,8 @@ class _EditProfileViewState extends State<EditProfileView> {
     final pickedFile = await _picker.getImage(source: source);
     setState(() {
       _imageFile = pickedFile;
+      fetPhotoCamera = true;
+      trobatFirebase = false;
     });
     _path = pickedFile.path;
   }

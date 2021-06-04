@@ -9,6 +9,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:bookspace/globals.dart' as globals;
 
+
 class PublicationHero extends StatefulWidget {
   final publication;
   final bool isPublication;
@@ -150,10 +151,10 @@ class _PublicationHeroState extends State<PublicationHero> {
                   : TextSpan(
                       text: '${m.group(0)}',
                       style: TextStyle(
-                        fontWeight:
-                            atTitle ? FontWeight.bold : FontWeight.normal,
-                        fontSize: atTitle ? 20 : 16,
-                      ))
+                          fontWeight:
+                              atTitle ? FontWeight.bold : FontWeight.normal,
+                          fontSize: atTitle ? 20 : 16,
+                          color: globals.theme ? Colors.black : Colors.white))
           ],
         ),
       );
@@ -169,44 +170,45 @@ class _PublicationHeroState extends State<PublicationHero> {
                   Expanded(
                       child: Container(
                           padding: EdgeInsets.all(10),
-                          child: ParsedContent(widget.publication.title, true)
-                      )
-                  )
+                          child: ParsedContent(widget.publication.title, true)))
                 ],
               )
             : Container(),
         (widget.isPublication)
-          ? Container(
-              padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
-              child: Container(
-                alignment: Alignment.centerLeft, 
-                child:Wrap(
-                  alignment: WrapAlignment.start,
-                  //direction: Axis.horizontal,
-                  //crossAxisAlignment: WrapCrossAlignment.start,
-                  children: <Widget>[
-                    for (var i = 0; i < widget.publication.tags.length; i++)
-                    Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 5), 
-                      child: Container (
-                        padding: EdgeInsets.fromLTRB(2, 0, 2, 0),
-                        //color: globals.gray,
-                        decoration: BoxDecoration(color: globals.gray ,border: Border.all(color: globals.gray), borderRadius: BorderRadius.all(Radius.circular(5)) ), 
-                        child: Text(
-                          " ${widget.publication.tags[i]} ",
-                          style: TextStyle(
-                            backgroundColor: globals.gray,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15.0,
+            ? Container(
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
+                child: Container(
+                    alignment: Alignment.centerLeft,
+                    child: Wrap(
+                      alignment: WrapAlignment.start,
+                      //direction: Axis.horizontal,
+                      //crossAxisAlignment: WrapCrossAlignment.start,
+                      children: <Widget>[
+                        for (var i = 0; i < widget.publication.tags.length; i++)
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(2, 0, 2, 5),
+                            child: Container(
+                              padding: EdgeInsets.fromLTRB(2, 0, 2, 0),
+                              //color: globals.gray,
+                              decoration: BoxDecoration(
+                                  color: globals.gray,
+                                  border: Border.all(color: globals.gray),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5))),
+                              child: Text(
+                                " ${widget.publication.tags[i]} ",
+                                style: TextStyle(
+                                  backgroundColor: globals.gray,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15.0,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-              )
-            )
-          : Container(),  
+                      ],
+                    )))
+            : Container(),
         // Upvotes module
         Row(
           children: <Widget>[
@@ -229,7 +231,9 @@ class _PublicationHeroState extends State<PublicationHero> {
                                     fontWeight: FontWeight.bold,
                                     color: _myLike
                                         ? Colors.green[400]
-                                        : Colors.black,
+                                        : globals.theme
+                                            ? Colors.black
+                                            : Colors.white,
                                   ),
                                 ),
                                 Container(
@@ -252,7 +256,9 @@ class _PublicationHeroState extends State<PublicationHero> {
                                     child: Icon(Icons.thumb_up,
                                         color: _myLike
                                             ? Colors.green[400]
-                                            : Colors.black),
+                                            : globals.theme
+                                                ? Colors.black
+                                                : Colors.white),
                                   ),
                                 )
                               ])))),
@@ -277,7 +283,9 @@ class _PublicationHeroState extends State<PublicationHero> {
                                     fontWeight: FontWeight.bold,
                                     color: _myDislike
                                         ? Colors.red[400]
-                                        : Colors.black,
+                                        : globals.theme
+                                            ? Colors.black
+                                            : Colors.white,
                                   ),
                                 ),
                                 Container(
@@ -301,7 +309,9 @@ class _PublicationHeroState extends State<PublicationHero> {
                                     child: Icon(Icons.thumb_down,
                                         color: _myDislike
                                             ? Colors.red[400]
-                                            : Colors.black),
+                                            : globals.theme
+                                                ? Colors.black
+                                                : Colors.white),
                                   ),
                                 )
                               ])))),
@@ -327,7 +337,9 @@ class _PublicationHeroState extends State<PublicationHero> {
                                           fontWeight: FontWeight.bold,
                                           color: _myVote
                                               ? Colors.yellow[800]
-                                              : Colors.black,
+                                              : globals.theme
+                                                  ? Colors.black
+                                                  : Colors.white,
                                         ),
                                       ),
                                       Container(
@@ -345,7 +357,9 @@ class _PublicationHeroState extends State<PublicationHero> {
                                           child: Icon(Icons.remove_red_eye,
                                               color: _myVote
                                                   ? Colors.yellow[800]
-                                                  : Colors.black),
+                                                  : globals.theme
+                                                      ? Colors.black
+                                                      : Colors.white),
                                         ),
                                       )
                                     ])))),
@@ -371,10 +385,13 @@ class _PublicationHeroState extends State<PublicationHero> {
                                       : '${widget.publication.replies}',
                                   textAlign: TextAlign.right,
                                   style: TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold,
-                                    // color: _myVote ? Colors.green[400] : Colors.black,
-                                  ),
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: globals.theme
+                                          ? Colors.black
+                                          : Colors.white
+                                      // color: _myVote ? Colors.green[400] : Colors.black,
+                                      ),
                                 ),
                                 Container(
                                   padding: EdgeInsets.only(left: 10),
@@ -383,10 +400,12 @@ class _PublicationHeroState extends State<PublicationHero> {
                                       print('Tap');
                                       widget.scrollOnReply();
                                     },
-                                    child: Icon(
-                                      Icons.reply,
-                                      // color: _myVote ? Colors.green[400] : Colors.black
-                                    ),
+                                    child: Icon(Icons.reply,
+                                        color: globals.theme
+                                            ? Colors.black
+                                            : Colors.white
+                                        // color: _myVote ? Colors.green[400] : Colors.black
+                                        ),
                                   ),
                                 )
                               ])))),

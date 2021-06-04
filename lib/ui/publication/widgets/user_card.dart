@@ -1,5 +1,6 @@
 import 'package:bookspace/controllers/comment_controller.dart';
 import 'package:bookspace/controllers/publication_controller.dart';
+import 'package:bookspace/controllers/user_controller.dart';
 import 'package:bookspace/models/user.dart';
 import 'package:bookspace/ui/home/home_view.dart';
 import 'package:bookspace/ui/main_view.dart';
@@ -20,6 +21,8 @@ class UserCard extends StatefulWidget {
   final bool principal;
   final bool isPublication;
   final Function() notifyOnChange;
+  final int id;
+  final String username;
 
   int likes;
   int dislikes;
@@ -41,6 +44,8 @@ class UserCard extends StatefulWidget {
       this.replies,
       this.myVote,
       this.myVoted,
+      this.id, 
+      this.username,
       @required this.notifyOnChange})
       : super(key: key);
 
@@ -51,10 +56,12 @@ class UserCard extends StatefulWidget {
 class _UsercardState extends State<UserCard> {
   bool myVote = false;
   bool myVoted = false;
+  int reported = 0;
   List<User> _users = [];
   int likes = 0;
   int dislikes = 0;
   int replies = 0;
+  User _user;
 
   void deleteP(int id) async {
     var statuscode =
@@ -95,11 +102,47 @@ class _UsercardState extends State<UserCard> {
     }
   }
 
+  Future<void> report(int Uid, int Pid) async {
+    var rep = await UserController.report(Uid, Pid, globals.token);
+    print('holaaaaaaaa');
+    print(rep);
+    if (rep == 200) {
+      setState(() => reported = 1);
+    } else if (rep == -1) {
+      setState(() => reported = 2);
+    }
+  }
+
+  bool trobatFirebase = false;
+  var img;
+
+  void getProfilePic(int picid) async {
+    UserController.getProfilePic(picid).then((photoPath) {
+      setState(() {
+        print("ESTO ES PATH $photoPath");
+        if (photoPath.endsWith('/')) {
+          trobatFirebase = false;
+        } else {
+          img = NetworkImage(photoPath);
+          trobatFirebase = true;
+        }
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     getfav(widget.commentId, 'like');
     getfav(widget.commentId, 'dislike');
+    getProfilePic(widget.id);
+  }
+
+  bool disposed = false;
+  @override
+  void dispose() {
+    disposed = true;
+    super.dispose();
   }
 
   @override
@@ -110,9 +153,52 @@ class _UsercardState extends State<UserCard> {
           decoration: BoxDecoration(
               color: widget.principal ? Colors.yellow[200] : Colors.grey[200],
               border: Border.all(
-                color: widget.principal ? Colors.yellow[300] : Colors.grey[300],
-              ),
-              borderRadius: BorderRadius.all(Radius.circular(5))),
+                  color:
+                      widget.principal ? Colors.yellow[300] : Colors.grey[300],
+                  width: 5 + (-1 * globals.rankTrans(widget.author.rank))),
+              gradient: globals.rankTrans(widget.author.rank) == 2
+                  ? LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      colors: [
+                        Colors.amber,
+                        Colors.white,
+                        Colors.amber,
+                        Colors.white,
+                        Colors.amber,
+                      ],
+                    )
+                  : globals.rankTrans(widget.author.rank) == 4
+                      ? LinearGradient(
+                          begin: Alignment.topRight,
+                          end: Alignment.bottomLeft,
+                          colors: [
+                            globals.primary,
+                            Colors.white,
+                          ],
+                        )
+                      : globals.rankTrans(widget.author.rank) == 3
+                          ? LinearGradient(
+                              begin: Alignment.topRight,
+                              end: Alignment.bottomLeft,
+                              colors: [
+                                Colors.amber,
+                                Colors.white,
+                                Colors.amber,
+                              ],
+                            )
+                          : globals.rankTrans(widget.author.rank) == 1
+                              ? LinearGradient(
+                                  begin: Alignment.topRight,
+                                  end: Alignment.bottomLeft,
+                                  colors: [
+                                    Colors.amber,
+                                    globals.primary,
+                                  ],
+                                )
+                              : null,
+              borderRadius: BorderRadius.all(
+                  Radius.circular(5) * globals.rankTrans(widget.author.rank))),
           child: Column(children: <Widget>[
             Container(
               height: 50,
@@ -124,7 +210,15 @@ class _UsercardState extends State<UserCard> {
                         // color: Colors.blue[200],
                         child: Row(
                           children: <Widget>[
-                            Image.asset('./assets/images/No_pic.png'),
+                            ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: CircleAvatar(
+                                radius: 25,
+                                backgroundImage: !trobatFirebase
+                                    ? AssetImage('assets/images/No_pic.png')
+                                    : img),
+                            ),
+                            //Image.asset('./assets/images/No_pic.png'),
                             Container(
                                 padding: EdgeInsets.only(left: 10),
                                 child: Column(
@@ -229,7 +323,12 @@ class _UsercardState extends State<UserCard> {
                           if (widget.isPublication) {
                             deleteP(widget.commentId);
                             widget.notifyOnChange();
-                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomeView()
+                              ),
+                            );
                           } else {
                             deleteC(widget.commentId);
                             widget.notifyOnChange();
@@ -252,6 +351,54 @@ class _UsercardState extends State<UserCard> {
                               );
                             },
                           );
+                        }
+                      } else if (value == 'Reportar') {
+                        if (widget.isPublication) {
+                          report(globals.id, widget.commentId);
+                          if (reported == 1) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Report registered'),
+                                  content:
+                                      Text('Publication reported successfully'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          } else if (reported == 2) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Report already registered'),
+                                  content: Text(
+                                      'You have already reported this publication'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }
+                          widget.notifyOnChange();
+                          //Navigator.pop(context);
+                        } else {
+                          print('tapc');
+                          widget.notifyOnChange();
                         }
                       }
                     }, itemBuilder: (BuildContext context) {
@@ -276,6 +423,18 @@ class _UsercardState extends State<UserCard> {
                               Container(
                                 margin: EdgeInsets.only(left: 10),
                                 child: Text('Borrar'),
+                              )
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem(
+                          value: 'Reportar',
+                          child: Row(
+                            children: [
+                              Icon(Icons.warning),
+                              Container(
+                                margin: EdgeInsets.only(left: 10),
+                                child: Text('Reportar'),
                               )
                             ],
                           ),

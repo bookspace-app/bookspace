@@ -1,6 +1,10 @@
+import 'package:bookspace/app_localizations.dart';
 import 'package:bookspace/controllers/user_controller.dart';
+import 'package:bookspace/ui/home/home_view.dart';
 import 'package:bookspace/ui/login/sign_in.dart';
 import 'package:bookspace/ui/profile/edit_profile_view.dart';
+import 'package:bookspace/ui/profile/profile_view.dart';
+import 'package:bookspace/utils/get_swatch.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
@@ -26,6 +30,16 @@ class _ConfigViewState extends State<ConfigView> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
@@ -36,7 +50,7 @@ class _ConfigViewState extends State<ConfigView> {
           Row(
             children: [
               Text(
-                "Change screen mode: ",
+                "${AppLocalizations.of(context).translate("changestyle")}: ",
                 style: TextStyle(
                   fontSize: 20,
                 ),
@@ -44,16 +58,19 @@ class _ConfigViewState extends State<ConfigView> {
               Container(
                 padding: EdgeInsets.all(10),
                 child: LiteRollingSwitch(
-                  value: true,
-                  textOn: "Day",
-                  textOff: "Night",
-                  colorOn: Colors.yellow[200],
+                  value: globals.theme,
+                  textOn: "${AppLocalizations.of(context).translate("day")}",
+                  textOff: "${AppLocalizations.of(context).translate("night")}",
+                  colorOn: Colors.yellow[400],
                   colorOff: Colors.blueGrey[500],
                   iconOn: Icons.wb_sunny_outlined,
                   iconOff: FontAwesome5.moon,
                   textSize: 18,
                   onChanged: (bool position) {
-                    print("the button is $position");
+                    globals.theme = position ? true : false;
+                    globals.theme_1 = globals.theme
+                        ? getMaterial(0xFFF3F7FA)
+                        : getMaterial(0xFF46484A);
                   },
                 ),
               ),
@@ -63,12 +80,12 @@ class _ConfigViewState extends State<ConfigView> {
           Container(
             child: ElevatedButton(
               child: Text(
-                'Log out',
-                style: TextStyle(fontSize: 20),
+                '${AppLocalizations.of(context).translate("logout")}',
+                style: TextStyle(fontSize: 20, color: Colors.black),
               ),
               style: ElevatedButton.styleFrom(
-                  primary: Colors.grey,
-                  onPrimary: Colors.black,
+                  primary: Color.fromRGBO(250, 198, 65, 1),
+                  onPrimary: Color.fromRGBO(250, 198, 65, 1),
                   shape: new RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(5.0))),
               onPressed: () {
@@ -77,6 +94,23 @@ class _ConfigViewState extends State<ConfigView> {
                   context,
                   MaterialPageRoute(builder: (context) => SignIn()),
                 );
+              },
+            ),
+          ),
+          Divider(thickness: 3, height: 30),
+          Container(
+            child: ElevatedButton(
+              child: Text(
+                'Go back',
+                style: TextStyle(fontSize: 20, color: Colors.black),
+              ),
+              style: ElevatedButton.styleFrom(
+                  primary: Color.fromRGBO(250, 198, 65, 1),
+                  onPrimary: Color.fromRGBO(250, 198, 65, 1),
+                  shape: new RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(5.0))),
+              onPressed: () {
+                Navigator.pop(context);
               },
             ),
           )
