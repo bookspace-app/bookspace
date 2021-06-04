@@ -368,6 +368,63 @@ class UserController {
     return false;
   }
 
+//Get user email
+  static Future<User> getMail(String email) async {
+    User user;
+    try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/email/$email");
+
+      // Define headers
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
+
+      // Make GET request
+      http.Response response = await http.get(uri, headers: headers);
+
+      // Request status and body
+      int statusCode = response.statusCode;
+      String requestBody = response.body;
+
+      print('Response status: $statusCode\n Response body: $requestBody\n');
+      if (statusCode == 200) {
+        user = User.fromJson(json.decode(response.body));
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return user;
+  }
+
+  //get token usuario
+  static Future<Map<String, dynamic>> gettoken(int id) async {
+    try {
+      Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/token/$id");
+
+      // Define headers
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
+
+      // Make POST request
+      http.Response response = await http.get(uri, headers: headers);
+
+      // Request status and body
+      int statusCode = response.statusCode;
+      Map<String, dynamic> requestBody = jsonDecode(response.body) as Map;
+
+      print('Response status: $statusCode\n Response body: $requestBody\n');
+      if (statusCode == 200) {
+        return requestBody;
+      }
+    } catch (e) {
+      print('error caught: $e');
+    }
+    return null;
+  }
+
   //get user favorite publications
   static Future<List<Publication>> getPublications(int id) async {
     List<Publication> publications = [];
@@ -399,8 +456,8 @@ class UserController {
     return publications;
   }
 
-  static Future<String> postProfilePic(String filename, File _image, int id) async {
-    
+  static Future<String> postProfilePic(
+      String filename, File _image, int id) async {
     Uri uri = Uri.https(BACKEND_AUTHORITY, "$API/users/$id/profilePic");
     String url = "https://bookspace-app.herokuapp.com$API/users/$id/profilePic";
 
@@ -419,7 +476,8 @@ class UserController {
     //request.fields["user_id"] = "text";
 
     // multipart that takes file.. here this "image_file" is a key of the API request
-    var multipartFile = new http.MultipartFile('profilePic', stream, length, filename: basename(_image.path));
+    var multipartFile = new http.MultipartFile('profilePic', stream, length,
+        filename: basename(_image.path));
 
     // add file to multipart
     request.files.add(multipartFile);
@@ -430,13 +488,11 @@ class UserController {
       response.stream.transform(utf8.decoder).listen((value) {
         print(value);
       });
-
     }).catchError((e) {
       print(e);
     });
 
     return "xd";
-
   }
 
   // GET profile PHOTO
