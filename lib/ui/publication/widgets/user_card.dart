@@ -56,6 +56,8 @@ class UserCard extends StatefulWidget {
 class _UsercardState extends State<UserCard> {
   bool myVote = false;
   bool myVoted = false;
+  bool myVoteC = false;
+  bool myVotedC = false;
   int reported = 0;
   List<User> _users = [];
   int likes = 0;
@@ -169,6 +171,8 @@ class _UsercardState extends State<UserCard> {
     super.initState();
     getfav(widget.commentId, 'like');
     getfav(widget.commentId, 'dislike');
+    //getlikesComment(widget.commentId, 'like');
+    //getlikesComment(widget.commentId, 'dislike');
     getProfilePic(widget.id);
   }
 
